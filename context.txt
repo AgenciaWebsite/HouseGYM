@@ -1,0 +1,40 @@
+Proyecto: HouseGYM
+
+STACK
+Frontend = HTML, Tailwind, JavaScript
+Backend = Php - 7.4
+Base de datos = MySQL/MariaDB
+
+Metodos =
+MVC = modelos, Vistas, Controladores
+Modulos dinamicos =
+1. Base de Datos (MySQL): Tabla con columnas como id, titulo, descripcion, precio e imagen_url.
+2. Backend (API): PHP consulta la base de datos y entrega datos en JSON.
+3. Frontend (HTML/JS): JavaScript hace peticion al backend, recibe lista de objetos y llena el molde del pop-up.
+
+Parametros del Gimnasio (HouseGYM):
+- Actores: usuarios, administrador.
+- Entidades: maquinas, rutina global, rutina personalizada, dieta y ejercicios, catalogo.
+
+Administrador:
+- Puede agregar/borrar usuarios.
+- Crea todo el USUARIO (cedula y contraseña).
+- Puede activar y desactivar rutinas personalizadas.
+- Tiene un motor de busqueda.
+- Puede modificar/crear/eliminar toda la informacion sobre el USUARIO, rutina global, rutina personalizada, maquinas, ejercicios y dietas.
+
+Usuario:
+- Puede ver informacion de la rutina global y maquinas (predeterminado).
+- Si pagó rutina personalizada, tiene acceso a ella y a la dieta.
+- La dieta y la rutina personalizada son independientes (puede tener una, otra, ambas o ninguna).
+
+Entidades detalle:
+- Rutina global: contiene ejercicios y maquinas.
+- Rutina personalizada: contiene ejercicios y maquinas (solo para usuarios que pagaron).
+- Dieta: 3 tipos (hipercalorica, normocalorica, hipocalorica).
+- Maquinas: Foto, Nombre de la maquina, ubicacion (piso 2 al 4) y descripcion.
+- Ejercicio: Foto, Nombre del ejercicio, descripcion, grupo muscular al que pertenece.
+- Catalogo: contiene los ejercicios y maquinas.
+
+Base de datos:
+- Existe un archivo housegym.sql con las tablas y base de datos (revisar carpeta database).
