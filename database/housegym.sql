@@ -207,6 +207,7 @@ CREATE TABLE `rutina_personalizada_detalle` (
 
 CREATE TABLE `usuarios` (
   `id_usuario` int(11) NOT NULL,
+    `nombre` varchar(100) NOT NULL,
   `cedula` int(20) NOT NULL,
   `contrasena` varchar(255) NOT NULL,
   `activo` tinyint(1) NOT NULL DEFAULT 1,
@@ -254,6 +255,7 @@ CREATE TABLE `v_rutina_global` (
 --
 CREATE TABLE `v_rutina_personalizada` (
 `cedula` int(20)
+,`nombre_usuario` varchar(100)
 ,`rutina` varchar(100)
 ,`ejercicio` varchar(100)
 ,`foto_url` varchar(255)
@@ -291,7 +293,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_rutina_personalizada`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_rutina_personalizada`  AS SELECT `u`.`cedula` AS `cedula`, `rp`.`nombre` AS `rutina`, `e`.`nombre` AS `ejercicio`, `e`.`foto_url` AS `foto_url`, `e`.`descripcion` AS `descripcion`, `g`.`nombre` AS `grupo_muscular`, `m`.`nombre` AS `maquina`, `rpd`.`series` AS `series`, `rpd`.`repeticiones` AS `repeticiones`, `d`.`tipo` AS `dieta`, `d`.`descripcion` AS `dieta_descripcion` FROM ((((((`rutina_personalizada_detalle` `rpd` join `rutina_personalizada` `rp` on(`rp`.`id_rutina_pers` = `rpd`.`id_rutina_pers`)) join `usuarios` `u` on(`u`.`id_usuario` = `rp`.`id_usuario`)) join `ejercicios` `e` on(`e`.`id_ejercicio` = `rpd`.`id_ejercicio`)) join `grupo_muscular` `g` on(`g`.`id_grupo` = `e`.`id_grupo`)) left join `maquinas` `m` on(`m`.`id_maquina` = `rpd`.`id_maquina`)) left join `dietas` `d` on(`d`.`id_dieta` = `rp`.`id_dieta`)) WHERE `rp`.`activa` = 1 AND `u`.`plan_personalizado` = 1 ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_rutina_personalizada`  AS SELECT `u`.`cedula` AS `cedula`, `u`.`nombre` AS `nombre_usuario`, `rp`.`nombre` AS `rutina`, `e`.`nombre` AS `ejercicio`, `e`.`foto_url` AS `foto_url`, `e`.`descripcion` AS `descripcion`, `g`.`nombre` AS `grupo_muscular`, `m`.`nombre` AS `maquina`, `rpd`.`series` AS `series`, `rpd`.`repeticiones` AS `repeticiones`, `d`.`tipo` AS `dieta`, `d`.`descripcion` AS `dieta_descripcion` FROM ((((((`rutina_personalizada_detalle` `rpd` join `rutina_personalizada` `rp` on(`rp`.`id_rutina_pers` = `rpd`.`id_rutina_pers`)) join `usuarios` `u` on(`u`.`id_usuario` = `rp`.`id_usuario`)) join `ejercicios` `e` on(`e`.`id_ejercicio` = `rpd`.`id_ejercicio`)) join `grupo_muscular` `g` on(`g`.`id_grupo` = `e`.`id_grupo`)) left join `maquinas` `m` on(`m`.`id_maquina` = `rpd`.`id_maquina`)) left join `dietas` `d` on(`d`.`id_dieta` = `rp`.`id_dieta`)) WHERE `rp`.`activa` = 1 AND `u`.`plan_personalizado` = 1 ;
 
 --
 -- Índices para tablas volcadas
@@ -503,3 +505,6 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+ALTER TABLE usuarios ADD nombre varchar(100) NOT NULL AFTER id_usuario;

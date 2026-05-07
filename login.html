@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -95,6 +95,9 @@
                 <span class="block mt-1 text-transparent bg-clip-text bg-gradient-red">HouseGYM</span>
             </h2>
             <p class="text-[#8a8a8a] text-sm font-medium mt-3">Ingresa con tu cuenta de usuario</p>
+            <div id="loginError"
+                class="hidden mt-4 rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-left text-sm font-medium text-red-200">
+            </div>
         </div>
 
         <!-- Form -->
@@ -110,7 +113,9 @@
                                 d="M4 9h16 M4 15h16 M10 3L8 21 M16 3l-2 18" />
                         </svg>
                     </div>
-                    <input type="text" inputmode="numeric" name="cedula" placeholder="Documento" required
+                    <input type="text" inputmode="numeric" pattern="[0-9]*"
+                        oninput="this.value = this.value.replace(/\D/g, '')" name="cedula" placeholder="Documento"
+                        required
                         class="w-full pl-11 pr-4 py-3.5 rounded-xl text-sm text-white placeholder-[#8a8a8a]/40
                         bg-[#1a1a1a] border border-white/[0.06]
                         transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]
@@ -128,7 +133,7 @@
                                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                     </div>
-                    <input type="password" name="password" placeholder="••••••••" required
+                    <input type="password" name="password" placeholder="*******" required
                         class="w-full pl-11 pr-4 py-3.5 rounded-xl text-sm text-white placeholder-[#8a8a8a]/40
                         bg-[#1a1a1a] border border-white/[0.06]
                         transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]
@@ -160,6 +165,22 @@
         </form>
     </div>
 
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const error = params.get('error');
+        const messages = {
+            faltan_datos: 'Ingresa usuario y contrasena.',
+            credenciales_invalidas: 'Las credenciales no coinciden con un usuario activo.',
+            conexion: 'No se pudo conectar con la base de datos.',
+            no_autorizado: 'Inicia sesion como administrador para entrar al panel.',
+        };
+
+        if (error) {
+            const box = document.getElementById('loginError');
+            box.textContent = messages[error] || 'No se pudo iniciar sesion.';
+            box.classList.remove('hidden');
+        }
+    </script>
 </body>
 
 </html>
