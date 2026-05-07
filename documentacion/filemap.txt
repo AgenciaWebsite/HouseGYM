@@ -1,0 +1,31 @@
+# Mapa de Archivos - HouseGYM
+
+## Archivos de Raíz
+- **admin.html**: Interfaz gráfica del panel de administrador (Dashboard). Contiene la estructura visual, estilos enlazados (admin.css) y lógica en JS (fetch) para comunicarse con el backend.
+- **admin.css**: Archivo de estilos separado dedicado exclusivamente a la apariencia de admin.html.
+- **login.html**: Interfaz gráfica de inicio de sesión para administradores y usuarios.
+- **login.css**: Archivo de estilos separado dedicado al diseño del login.
+- **login.php**: Script backend que recibe las credenciales POST, valida contra la base de datos (tanto en la tabla admins como en usuarios) e inicia la sesión (session_start). Redirige según el rol.
+- **logout.php**: Script sencillo que destruye la sesión actual y redirige a la página de login.
+- **admin_api.php**: Antiguo monolito de API, ahora refactorizado como enrutador principal para la interfaz de admin. Inicializa las clases del namespace App\Controllers y procesa las peticiones.
+- **context.txt**: Archivo de documentación inicial que explica el stack tecnológico, roles de usuarios, entidades y estructura global del proyecto.
+
+## Carpeta app/Core/
+- **Database.php**: Implementa el patrón Singleton para devolver una única instancia PDO. Lee variables de entorno o usa parámetros por defecto para conectar a MySQL.
+
+## Carpeta app/Controllers/
+- **AdminController.php**: Recibe las peticiones de admin_api.php, valida permisos de sesión, invoca a AdminModel para obtener/modificar datos y emite respuestas en JSON. Maneja las acciones de crear usuario, ver dashboard, buscar, y eliminar usuario.
+
+## Carpeta app/Models/
+- **AdminModel.php**: Contiene todas las consultas SQL preparadas para el panel de administración. Obtiene métricas (scalarCount), busca usuarios/máquinas/ejercicios (searchGlobal), e inserta datos vinculando las rutinas y dietas.
+
+## Carpeta database/
+- **housegym.sql**: Dump completo de la base de datos que incluye estructura de tablas (usuarios, admins, dietas, rutinas, etc.), triggers de auto-población y datos semilla.
+- **conexion.php**: Archivo procedural legacy de conexión a base de datos. (Reemplazado arquitectónicamente por app/Core/Database.php, pero mantenido por compatibilidad legacy de scripts como login.php).
+
+## Carpeta documentacion/
+- **foldermap.txt**: Documenta la funcionalidad de cada directorio en el proyecto.
+- **filemap.txt**: Este archivo; documenta la funcionalidad técnica de cada archivo fuente.
+
+## Carpeta referencias/
+- **usuarios.html**: Vista de destino del botón "Ver todos" del dashboard de administrador.

@@ -1,0 +1,22 @@
+# Mapa de Carpetas - HouseGYM
+
+app/
+    Contiene la lógica central del patrón MVC (Model-View-Controller) para el backend en PHP.
+    
+    app/Core/
+        Contiene clases fundamentales y configuraciones base del sistema, por ejemplo, la conexión PDO (Database.php) implementada con el patrón Singleton.
+        
+    app/Controllers/
+        Contiene los controladores que reciben las peticiones HTTP del frontend, procesan los datos a través de los Modelos y devuelven respuestas (generalmente en formato JSON).
+        
+    app/Models/
+        Contiene las clases responsables de toda la interacción con la base de datos MySQL/MariaDB.
+        
+database/
+    Contiene scripts de base de datos, en específico el archivo housegym.sql que define la estructura (tablas, vistas, triggers) y datos iniciales. También contiene el script legacy de conexión (conexion.php) que ha sido refactorizado al core.
+    
+documentacion/
+    Directorio creado para alojar todos los documentos explicativos, manuales, filemaps y foldermaps que explican la estructura del código y los requerimientos funcionales del sistema.
+    
+referencias/
+    Contiene posibles dependencias externas, librerías, iconos, archivos temporales, o vistas en progreso (como usuarios.html) usadas por los roles de usuario que no son administrador.

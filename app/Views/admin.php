@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Administrador - HouseGYM</title>
-  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="assets/admin.css">
 </head>
 
 <body>
@@ -47,7 +47,7 @@
         Dashboard
       </div>
 
-      <div class="nav-item" onclick="setSection('usuarios')">
+      <div class="nav-item" onclick="window.location.href='index.php?route=admin_usuarios'">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
           <circle cx="9" cy="7" r="4" />
@@ -101,7 +101,7 @@
 
     <!-- Sidebar Footer -->
     <div class="sidebar-footer">
-      <div class="nav-item nav-item--logout" onclick="window.location='logout.php'">
+      <div class="nav-item nav-item--logout" onclick="window.location='index.php?route=logout'">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -260,9 +260,17 @@
                 <div class="toggle-label-sub">Acceso a dietas de pago</div>
               </div>
               <label class="toggle-switch">
-                <input type="checkbox" id="toggleDieta" onchange="updateToggleState('dieta', this.checked)">
+                <input type="checkbox" id="toggleDieta" onchange="toggleDietaSelect(this.checked)">
                 <span class="toggle-switch__track"></span>
               </label>
+            </div>
+            <div id="dietaSelectContainer" style="display: none; margin-top: 10px;">
+              <label class="form-label" style="font-size: 12px; margin-bottom: 4px;">Tipo de Dieta</label>
+              <select id="selectDieta" class="form-input" style="padding: 8px; font-size: 14px;">
+                <option value="1">Hipercalórica</option>
+                <option value="2">Normocalórica</option>
+                <option value="3">Hipocalórica</option>
+              </select>
             </div>
           </div>
 
@@ -288,7 +296,7 @@
               <div class="card__accent-bar"></div>
               <span class="card__title">Ultimos Registrados</span>
             </div>
-            <span class="card__link" onclick="setSection('usuarios')">Ver todos</span>
+            <span class="card__link" onclick="window.location.href='index.php?route=admin_usuarios'">Ver todos</span>
           </div>
           <div id="userList"><!-- Populated by JS --></div>
         </div>
@@ -409,17 +417,17 @@
     }
 
     /* ── API ── */
-    const API_URL = 'admin_api.php';
+    const API_URL = 'index.php';
 
     async function apiRequest(resource, options = {}) {
-      const response = await fetch(`${API_URL}?resource=${resource}`, {
+      const response = await fetch(`${API_URL}?route=admin_api&resource=${resource}`, {
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
         ...options,
       });
 
       if (response.status === 401) {
-        window.location.href = 'login.html?error=no_autorizado';
+        window.location.href = 'index.php?route=login&error=no_autorizado';
         return null;
       }
 
@@ -520,8 +528,13 @@
       document.getElementById('userPassword').value = '';
       document.getElementById('toggleRutina').checked = false;
       document.getElementById('toggleDieta').checked = false;
+      document.getElementById('dietaSelectContainer').style.display = 'none';
       document.getElementById('successMsg').style.display = 'none';
       document.querySelectorAll('.form-input').forEach(i => i.style.borderColor = '');
+    }
+
+    function toggleDietaSelect(checked) {
+      document.getElementById('dietaSelectContainer').style.display = checked ? 'block' : 'none';
     }
 
     async function addUser() {
@@ -546,7 +559,7 @@
             cedula: cedula.value.trim(),
             contrasena: password.value,
             plan_personalizado: document.getElementById('toggleRutina').checked ? 1 : 0,
-            dieta: document.getElementById('toggleDieta').checked ? 1 : 0,
+            dieta: document.getElementById('toggleDieta').checked ? document.getElementById('selectDieta').value : 0,
           }),
         });
         clearForm();
@@ -648,7 +661,7 @@
         loadDashboard();
       })
       .catch(() => {
-        window.location.href = 'login.html?error=no_autorizado';
+        window.location.href = 'index.php?route=login&error=no_autorizado';
       });
   </script>
 

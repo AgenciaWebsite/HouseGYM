@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ingreso - HouseGYM</title>
-  <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="assets/login.css">
 </head>
 
 <body>
@@ -32,7 +32,7 @@
     </div>
 
     <!-- Form -->
-    <form action="login.php" method="POST" class="login-form">
+    <form action="index.php?route=login" method="POST" class="login-form">
 
       <!-- Cedula -->
       <div class="field">

@@ -1,0 +1,501 @@
+/* =============================================
+   HouseGYM — Admin Usuarios Styles
+   Solo estilos específicos de admin_usuarios.html
+   Las variables, sidebar, topbar, search y
+   componentes base vienen de admin.css
+   ============================================= */
+
+/* ── Layout principal ── */
+.gu-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* ── Paneles ── */
+.gu-panel {
+  background-color: var(--black-card);
+  border: 1px solid var(--gray-border2);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* ── Panel izquierdo: lista ── */
+.gu-panel--list {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 180px);
+}
+
+/* ── Barra de búsqueda interna ── */
+.gu-search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--gray-border);
+}
+.gu-search-bar svg {
+  position: absolute;
+  left: 28px;
+  color: var(--gray-faint);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+.gu-search-input {
+  width: 100%;
+  background: var(--gray-dark);
+  border: 1px solid var(--gray-border2);
+  border-radius: 10px;
+  padding: 9px 36px 9px 36px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  color: var(--white-soft);
+  outline: none;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.gu-search-input::placeholder { color: var(--gray-faint); }
+.gu-search-input:focus {
+  border-color: rgba(229,26,44,0.4);
+  background: var(--black-card);
+  box-shadow: 0 0 0 3px rgba(229,26,44,0.06);
+}
+.gu-search-clear {
+  position: absolute;
+  right: 28px;
+  background: none;
+  border: none;
+  color: var(--gray-faint);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  transition: color 0.2s, background 0.2s;
+}
+.gu-search-clear:hover { color: var(--white-soft); background: var(--gray-mid); }
+
+/* ── Header de la lista (resultados) ── */
+.gu-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--gray-faint);
+  border-bottom: 1px solid var(--gray-border);
+}
+.gu-list-count {
+  font-size: 10px;
+  color: var(--gray-dimmer);
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* ── Lista de usuarios ── */
+.gu-user-list {
+  overflow-y: auto;
+  flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-mid) transparent;
+}
+.gu-user-list::-webkit-scrollbar { width: 4px; }
+.gu-user-list::-webkit-scrollbar-track { background: transparent; }
+.gu-user-list::-webkit-scrollbar-thumb { background: var(--gray-mid); border-radius: 2px; }
+
+.gu-user-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--gray-border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.gu-user-row:last-child { border-bottom: none; }
+.gu-user-row:hover { background-color: var(--gray-dark); }
+.gu-user-row--active {
+  background: linear-gradient(90deg, rgba(229,26,44,0.08) 0%, transparent 100%);
+  border-left: 2px solid var(--red);
+}
+.gu-user-row__left { display: flex; align-items: center; gap: 11px; }
+.gu-user-row__right { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+
+.gu-user-avatar {
+  width: 34px; height: 34px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+  border: 1px solid #2e2e2e;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--red);
+}
+.gu-user-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--white-soft);
+}
+.gu-user-doc {
+  font-size: 11px;
+  color: var(--gray-dimmer);
+  margin-top: 1px;
+}
+
+.gu-empty {
+  padding: 28px 16px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--gray-faint);
+}
+
+/* ── Panel derecho: detalle ── */
+.gu-panel--detail {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Empty state */
+.gu-detail-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 60px 24px;
+  color: var(--gray-faint);
+  text-align: center;
+}
+.gu-detail-empty svg { color: var(--gray-faint); opacity: 0.4; }
+.gu-detail-empty p { font-size: 14px; line-height: 1.6; color: var(--gray-dimmer); }
+
+/* Detail card */
+.gu-detail-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  animation: gu-fade-in 0.2s ease;
+}
+@keyframes gu-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* User header inside detail */
+.gu-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--gray-border);
+}
+.gu-detail-avatar {
+  width: 46px; height: 46px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(229,26,44,0.2), rgba(176,16,32,0.1));
+  border: 1px solid rgba(229,26,44,0.25);
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--red);
+}
+.gu-detail-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+}
+.gu-detail-cedula {
+  font-size: 12px;
+  color: var(--gray-dim);
+  margin-top: 2px;
+}
+.gu-detail-badges {
+  margin-left: auto;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* ── Fields ── */
+.gu-fields {
+  padding: 16px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.gu-field-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--gray-border);
+  padding: 11px 0;
+  gap: 16px;
+}
+.gu-field-row:last-child { border-bottom: none; }
+.gu-field-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-light);
+  min-width: 90px;
+  flex-shrink: 0;
+}
+.gu-field-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid transparent;
+  padding: 4px 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  color: var(--white-soft);
+  outline: none;
+  text-align: right;
+  transition: border-color 0.2s;
+  border-radius: 0;
+}
+.gu-field-input::placeholder { color: var(--gray-faint); }
+.gu-field-input:focus {
+  border-bottom-color: rgba(229,26,44,0.4);
+  color: var(--white);
+}
+
+/* ── Toggle rows ── */
+.gu-toggles {
+  padding: 0 20px;
+  border-top: 1px solid var(--gray-border);
+}
+.gu-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--gray-border);
+}
+.gu-toggle-row:last-child { border-bottom: none; }
+.gu-toggle-info { display: flex; flex-direction: column; gap: 2px; }
+.gu-toggle-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-light);
+  text-decoration: none;
+  cursor: default;
+}
+.gu-toggle-sub {
+  font-size: 10.5px;
+  color: var(--gray-faint);
+}
+
+/* ── Subpanels (Dieta & Rutina) ── */
+.gu-subpanel {
+  margin: 12px 20px;
+  border: 1px solid var(--gray-border2);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--gray-dark);
+}
+.gu-subpanel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--gray-border);
+  background: var(--black-card);
+}
+.gu-subpanel__title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--gray-dim);
+}
+.gu-subpanel__body {
+  padding: 12px;
+  position: relative;
+  transition: opacity 0.3s, filter 0.3s;
+  max-height: 260px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-mid) transparent;
+}
+.gu-subpanel__body::-webkit-scrollbar { width: 4px; }
+.gu-subpanel__body::-webkit-scrollbar-thumb { background: var(--gray-mid); border-radius: 2px; }
+
+/* Blur overlay for locked subpanel */
+.gu-blur-wrap { position: relative; }
+.gu-blur-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10,10,10,0.55);
+  backdrop-filter: blur(2px);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-faint);
+  text-align: center;
+  padding: 12px;
+}
+
+/* ── Day cards ── */
+.gu-day-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.gu-day-card {
+  background: var(--black-card);
+  border: 1px solid var(--gray-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.gu-day-label {
+  padding: 5px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gray-faint);
+  border-bottom: 1px solid var(--gray-border);
+  background: var(--gray-dark);
+}
+.gu-day-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+}
+.gu-day-pdf,
+.gu-day-img {
+  width: 50px; height: 50px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: var(--gray-mid);
+  border: 1px solid var(--gray-border2);
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--gray-dim);
+}
+.gu-day-pdf svg, .gu-day-img svg { color: var(--gray-dimmer); }
+.gu-day-info { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.gu-day-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white-soft);
+}
+.gu-day-title-sm {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--gray-light);
+}
+.gu-day-desc {
+  font-size: 11px;
+  color: var(--gray-faint);
+}
+.gu-day-muscle {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--gray-dimmer);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.gu-remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--gray-faint);
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s, background 0.2s;
+}
+.gu-remove-btn:hover { color: var(--red); background: rgba(229,26,44,0.1); }
+
+/* ── Add button ── */
+.gu-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 1.5px dashed var(--gray-faint);
+  background: none;
+  color: var(--gray-dim);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.gu-add-btn:hover {
+  border-color: var(--red);
+  color: var(--red);
+  background: rgba(229,26,44,0.08);
+}
+
+/* ── Detail actions ── */
+.gu-detail-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 20px 4px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .gu-layout {
+    grid-template-columns: 300px 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .gu-layout {
+    grid-template-columns: 1fr;
+  }
+  .gu-panel--list {
+    max-height: 320px;
+  }
+}
+
+@media (max-width: 520px) {
+  .gu-detail-header {
+    flex-wrap: wrap;
+  }
+  .gu-detail-badges {
+    margin-left: 0;
+    justify-content: flex-start;
+  }
+  .gu-field-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .gu-field-input {
+    text-align: left;
+    border-bottom: 1px solid var(--gray-border2);
+    width: 100%;
+  }
+}
