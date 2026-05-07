@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ingreso - HouseGYM</title>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS CDN -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -41,155 +42,116 @@
                         'red': '0 4px 30px rgba(229, 26, 44, 0.25)',
                         'red-hover': '0 6px 40px rgba(229, 26, 44, 0.45)',
                         'card': '0 8px 32px rgba(0, 0, 0, 0.5)',
+                    },
+                    keyframes: {
+                        ripple: {
+                            '0%': { width: '0px', height: '0px', opacity: '0.15' },
+                            '100%': { width: '300px', height: '300px', opacity: '0' },
+                        }
+                    },
+                    animation: {
+                        ripple: 'ripple 0.5s ease-out forwards',
                     }
                 }
             }
         }
     </script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a;
-            color: #ffffff;
-            -webkit-font-smoothing: antialiased;
-        }
-        .font-heading {
-            font-family: 'Outfit', sans-serif;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #ff1a2e 0%, #b01020 100%);
-            box-shadow: 0 4px 30px rgba(229, 26, 44, 0.25);
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #ff3344 0%, #cc1428 100%);
-            box-shadow: 0 6px 40px rgba(229, 26, 44, 0.45);
-            transform: translateY(-2px);
-        }
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.5s, height 0.5s;
-        }
-        .btn-primary:hover::after {
-            width: 300px;
-            height: 300px;
-        }
-        .input-field {
-            background: #1a1a1a;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            color: #ffffff;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        .input-field:focus {
-            border-color: rgba(229, 26, 44, 0.5);
-            box-shadow: 0 0 15px rgba(229, 26, 44, 0.2);
-            outline: none;
-            background: #141414;
-        }
-        .bg-overlay {
-            position: relative;
-        }
-        .bg-overlay::before {
-            content: '';
-            position: absolute;
-            top: -20%;
-            left: -10%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(229, 26, 44, 0.15) 0%, transparent 70%);
-            filter: blur(60px);
-            z-index: 0;
-            pointer-events: none;
-        }
-        .bg-overlay::after {
-            content: '';
-            position: absolute;
-            bottom: -20%;
-            right: -10%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(229, 26, 44, 0.1) 0%, transparent 70%);
-            filter: blur(60px);
-            z-index: 0;
-            pointer-events: none;
-        }
-        .form-container-card {
-            position: relative;
-            z-index: 1;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease;
-        }
-        .form-container-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(229, 26, 44, 0.1);
-        }
-    </style>
 </head>
-<body class="min-h-screen flex items-center justify-center bg-gym-black bg-overlay p-4 md:p-8">
 
-    <div class="form-container-card w-full max-w-[420px] bg-gym-black-card/95 rounded-[20px] p-8 md:p-10 shadow-card border border-white/5 relative overflow-hidden group">
-        
+<body
+    class="min-h-screen flex items-center justify-center bg-[#0a0a0a] p-4 md:p-8 font-body antialiased relative overflow-hidden">
+
+    <!-- Background glows -->
+    <div class="pointer-events-none absolute -top-[20%] -left-[10%] w-[500px] h-[500px] rounded-full blur-[60px]"
+        style="background: radial-gradient(circle, rgba(229,26,44,0.15) 0%, transparent 70%);">
+    </div>
+    <div class="pointer-events-none absolute -bottom-[20%] -right-[10%] w-[500px] h-[500px] rounded-full blur-[60px]"
+        style="background: radial-gradient(circle, rgba(229,26,44,0.10) 0%, transparent 70%);">
+    </div>
+
+    <!-- Card -->
+    <div id="card" class="relative z-10 w-full max-w-[420px] bg-[#141414]/95 rounded-[20px] p-8 md:p-10 shadow-card border border-white/5 overflow-hidden group
+              transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]
+              hover:-translate-y-1 hover:shadow-[0_15px_50px_rgba(0,0,0,0.6),0_0_20px_rgba(229,26,44,0.1)]
+              backdrop-blur-[10px]">
+
         <!-- Animated top border -->
-        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-red transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
-
-        <div class="text-center mb-8">
-            <h2 class="font-heading text-3xl font-bold uppercase mb-2 tracking-tight">Ingreso a <span class="block text-transparent bg-clip-text bg-gradient-red mt-1">HouseGYM</span></h2>
-            <p class="text-gym-gray-light text-sm font-medium mt-3">Ingresa con tu cuenta de usuario</p>
+        <div
+            class="absolute top-0 left-0 w-full h-[3px] bg-gradient-red scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
         </div>
 
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h2 class="font-heading text-3xl font-bold uppercase mb-2 tracking-tight text-white">
+                Ingreso a
+                <span class="block mt-1 text-transparent bg-clip-text bg-gradient-red">HouseGYM</span>
+            </h2>
+            <p class="text-[#8a8a8a] text-sm font-medium mt-3">Ingresa con tu cuenta de usuario</p>
+        </div>
+
+        <!-- Form -->
         <form action="login.php" method="POST" class="space-y-5">
-            
-            <div class="space-y-2 relative">
-                <label class="block text-xs font-bold text-gym-white-soft uppercase tracking-wider ml-1">Correo electrónico</label>
+
+            <!-- Cedula -->
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-[#e0e0e0] uppercase tracking-wider ml-1">Cedula</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <svg class="w-5 h-5 text-gym-gray-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path></svg>
+                        <svg class="w-5 h-5 text-[#8a8a8a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 9h16 M4 15h16 M10 3L8 21 M16 3l-2 18" />
+                        </svg>
                     </div>
-                    <input type="email" name="correo" placeholder="usuario@housegym.com" required 
-                        class="input-field w-full pl-11 pr-4 py-3.5 rounded-xl text-sm placeholder-gym-gray-light/40">
+                    <input type="text" inputmode="numeric" name="cedula" placeholder="Documento" required
+                        class="w-full pl-11 pr-4 py-3.5 rounded-xl text-sm text-white placeholder-[#8a8a8a]/40
+                        bg-[#1a1a1a] border border-white/[0.06]
+                        transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]
+                        focus:outline-none focus:border-[rgba(229,26,44,0.5)] focus:shadow-[0_0_15px_rgba(229,26,44,0.2)] focus:bg-[#141414]">
                 </div>
             </div>
 
-            <div class="space-y-2 relative">
-                <label class="block text-xs font-bold text-gym-white-soft uppercase tracking-wider ml-1">Contraseña</label>
+            <!-- Contraseña -->
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-[#e0e0e0] uppercase tracking-wider ml-1">Contraseña</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <svg class="w-5 h-5 text-gym-gray-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        <svg class="w-5 h-5 text-[#8a8a8a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
                     </div>
-                    <input type="password" name="password" placeholder="••••••••" required 
-                        class="input-field w-full pl-11 pr-4 py-3.5 rounded-xl text-sm placeholder-gym-gray-light/40">
+                    <input type="password" name="password" placeholder="••••••••" required
+                        class="w-full pl-11 pr-4 py-3.5 rounded-xl text-sm text-white placeholder-[#8a8a8a]/40
+                        bg-[#1a1a1a] border border-white/[0.06]
+                        transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]
+                        focus:outline-none focus:border-[rgba(229,26,44,0.5)] focus:shadow-[0_0_15px_rgba(229,26,44,0.2)] focus:bg-[#141414]">
                 </div>
             </div>
 
-            <button type="submit" class="btn-primary w-full py-4 rounded-full font-heading font-bold text-[0.95rem] tracking-[1.5px] uppercase flex items-center justify-center gap-2 mt-8 shadow-red">
+            <!-- Submit button -->
+            <button type="submit" class="relative overflow-hidden w-full py-4 mt-8 rounded-full
+                     font-heading font-bold text-[0.95rem] tracking-[1.5px] uppercase text-white
+                     flex items-center justify-center gap-2
+                     bg-gradient-red shadow-red
+                     transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]
+                     hover:shadow-red-hover hover:-translate-y-0.5
+                     hover:bg-gradient-red-hover
+                     group/btn">
                 Ingresar
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+                <!-- Ripple overlay -->
+                <span class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <span
+                        class="w-0 h-0 rounded-full bg-white/15 group-hover/btn:w-[300px] group-hover/btn:h-[300px] transition-all duration-500 ease-out"></span>
+                </span>
             </button>
-
-            <div id="mensaje" class="text-center text-sm font-medium text-gym-red mt-2 hidden"></div>
-
-            <div class="pt-6 mt-6 border-t border-white/5 text-center">
-                <p class="text-gym-gray-light text-sm">
-                    ¿No tienes cuenta?
-                    <a href="../Registro/Index.html" class="text-gym-white hover:text-gym-red font-bold transition-colors ml-1 border-b border-transparent hover:border-gym-red pb-0.5">
-                        Regístrate aquí
-                    </a>
-                </p>
-            </div>
 
         </form>
     </div>
 
 </body>
+
 </html>
