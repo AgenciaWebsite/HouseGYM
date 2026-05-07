@@ -5,82 +5,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Administrador - HouseGYM</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            gym: {
-              black: '#0a0a0a',
-              'black-light': '#111111',
-              'black-card': '#141414',
-              'gray-dark': '#1a1a1a',
-              'gray-mid': '#2a2a2a',
-              'gray-border': '#252525',
-              'gray-light': '#8a8a8a',
-              white: '#ffffff',
-              'white-soft': '#e0e0e0',
-              red: '#e51a2c',
-              'red-bright': '#ff1a2e',
-              'red-dark': '#b01020',
-            }
-          },
-          fontFamily: {
-            heading: ['Outfit', 'sans-serif'],
-            body: ['Inter', 'sans-serif'],
-          },
-        }
-      }
-    }
-  </script>
+  <link rel="stylesheet" href="admin.css">
 </head>
 
-<body
-  class="bg-[#0a0a0a] font-body antialiased [scrollbar-color:#2a2a2a_#111] [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#111] [&::-webkit-scrollbar-thumb]:rounded-[3px] [&::-webkit-scrollbar-thumb]:bg-[#2a2a2a] [&::-webkit-scrollbar-thumb:hover]:bg-[#e51a2c]">
+<body>
 
   <!-- Background glows -->
-  <div class="pointer-events-none fixed rounded-full blur-[80px]"
-    style="width:500px;height:500px;top:-10%;right:-10%;background:radial-gradient(circle,rgba(229,26,44,0.07) 0%,transparent 70%);">
-  </div>
-  <div class="pointer-events-none fixed rounded-full blur-[80px]"
-    style="width:400px;height:400px;bottom:-10%;left:200px;background:radial-gradient(circle,rgba(229,26,44,0.05) 0%,transparent 70%);">
-  </div>
+  <div class="bg-glow bg-glow--top-right"></div>
+  <div class="bg-glow bg-glow--bottom-left"></div>
 
   <!-- SIDEBAR -->
-  <aside
-    class="sidebar fixed left-0 top-0 z-40 flex min-h-screen w-[240px] flex-col border-r border-[#1e1e1e] bg-[#111111] transition-transform duration-300 max-[900px]:-translate-x-full"
-    id="sidebar">
+  <aside class="sidebar" id="sidebar">
+
     <!-- Logo -->
-    <div class="border-b border-[#1e1e1e] px-5 pb-5 pt-6">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div
-          style="width:36px;height:36px;background:linear-gradient(135deg,#ff1a2e,#b01020);border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(229,26,44,0.35);">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo__inner">
+        <div class="sidebar-logo__icon">
           <svg width="18" height="18" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round"
               d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
           </svg>
         </div>
         <div>
-          <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:15px;color:#fff;letter-spacing:0.5px;">
-            HouseGYM</div>
-          <div style="font-size:10px;color:#e51a2c;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Admin
-            Panel</div>
+          <div class="sidebar-logo__name">HouseGYM</div>
+          <div class="sidebar-logo__sub">Admin Panel</div>
         </div>
       </div>
     </div>
 
     <!-- Nav -->
-    <nav class="flex-1 overflow-y-auto px-3 py-4">
-      <div class="px-2 pb-1.5 pt-2 mt-2 text-[10px] font-bold uppercase tracking-[1.5px] text-[#3a3a3a]">General</div>
-      <div
-        class="nav-item flex items-center gap-2.5 rounded-[10px] border border-transparent px-3 py-2.5 mb-0.5 cursor-pointer text-[13.5px] font-medium text-[#8a8a8a] transition duration-200 hover:bg-[#1a1a1a] hover:text-[#e0e0e0] [&_svg]:shrink-0 bg-[linear-gradient(135deg,rgba(229,26,44,0.15)_0%,rgba(176,16,32,0.08)_100%)] text-[#ff1a2e] border-[rgba(229,26,44,0.2)]"
-        onclick="setSection('dashboard')">
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">General</div>
+
+      <div class="nav-item nav-item--active" onclick="setSection('dashboard')">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <rect x="3" y="3" width="7" height="7" rx="1" />
           <rect x="14" y="3" width="7" height="7" rx="1" />
@@ -89,9 +46,8 @@
         </svg>
         Dashboard
       </div>
-      <div
-        class="nav-item flex items-center gap-2.5 rounded-[10px] border border-transparent px-3 py-2.5 mb-0.5 cursor-pointer text-[13.5px] font-medium text-[#8a8a8a] transition duration-200 hover:bg-[#1a1a1a] hover:text-[#e0e0e0] [&_svg]:shrink-0"
-        onclick="setSection('usuarios')">
+
+      <div class="nav-item" onclick="setSection('usuarios')">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
           <circle cx="9" cy="7" r="4" />
@@ -100,28 +56,25 @@
         Usuarios
       </div>
 
-      <div class="px-2 pb-1.5 pt-2 mt-2 text-[10px] font-bold uppercase tracking-[1.5px] text-[#3a3a3a]">Contenido</div>
-      <div
-        class="nav-item flex items-center gap-2.5 rounded-[10px] border border-transparent px-3 py-2.5 mb-0.5 cursor-pointer text-[13.5px] font-medium text-[#8a8a8a] transition duration-200 hover:bg-[#1a1a1a] hover:text-[#e0e0e0] [&_svg]:shrink-0"
-        onclick="setSection('rutina-global')">
+      <div class="nav-section-label">Contenido</div>
+
+      <div class="nav-item" onclick="setSection('rutina-global')">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
         </svg>
         Rutina Global
       </div>
-      <div
-        class="nav-item flex items-center gap-2.5 rounded-[10px] border border-transparent px-3 py-2.5 mb-0.5 cursor-pointer text-[13.5px] font-medium text-[#8a8a8a] transition duration-200 hover:bg-[#1a1a1a] hover:text-[#e0e0e0] [&_svg]:shrink-0"
-        onclick="setSection('rutinas-personalizadas')">
+
+      <div class="nav-item" onclick="setSection('rutinas-personalizadas')">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
         </svg>
         Rutinas Personalizadas
       </div>
-      <div
-        class="nav-item flex items-center gap-2.5 rounded-[10px] border border-transparent px-3 py-2.5 mb-0.5 cursor-pointer text-[13.5px] font-medium text-[#8a8a8a] transition duration-200 hover:bg-[#1a1a1a] hover:text-[#e0e0e0] [&_svg]:shrink-0"
-        onclick="setSection('maquinas')">
+
+      <div class="nav-item" onclick="setSection('maquinas')">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <rect x="2" y="7" width="4" height="10" rx="1" />
           <rect x="18" y="7" width="4" height="10" rx="1" />
@@ -129,17 +82,15 @@
         </svg>
         Maquinas
       </div>
-      <div
-        class="nav-item flex items-center gap-2.5 rounded-[10px] border border-transparent px-3 py-2.5 mb-0.5 cursor-pointer text-[13.5px] font-medium text-[#8a8a8a] transition duration-200 hover:bg-[#1a1a1a] hover:text-[#e0e0e0] [&_svg]:shrink-0"
-        onclick="setSection('ejercicios')">
+
+      <div class="nav-item" onclick="setSection('ejercicios')">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
         Ejercicios
       </div>
-      <div
-        class="nav-item flex items-center gap-2.5 rounded-[10px] border border-transparent px-3 py-2.5 mb-0.5 cursor-pointer text-[13.5px] font-medium text-[#8a8a8a] transition duration-200 hover:bg-[#1a1a1a] hover:text-[#e0e0e0] [&_svg]:shrink-0"
-        onclick="setSection('dietas')">
+
+      <div class="nav-item" onclick="setSection('dietas')">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
@@ -148,11 +99,9 @@
       </div>
     </nav>
 
-    <!-- Footer -->
-    <div class="border-t border-[#1e1e1e] px-3 py-4">
-      <div
-        class="nav-item flex items-center gap-2.5 rounded-[10px] border border-transparent px-3 py-2.5 mb-0.5 cursor-pointer text-[13.5px] font-medium text-[#8a8a8a] transition duration-200 hover:bg-[#1a1a1a] hover:text-[#e0e0e0] [&_svg]:shrink-0"
-        style="color:#e51a2c;" onclick="window.location='logout.php'">
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <div class="nav-item nav-item--logout" onclick="window.location='logout.php'">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -162,110 +111,56 @@
     </div>
   </aside>
 
-  <div id="sidebarOverlay"
-    class="fixed inset-0 z-30 hidden bg-black/60 backdrop-blur-[1px] transition-opacity duration-300"
-    onclick="closeSidebar()"></div>
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
   <!-- MAIN -->
-  <div class="ml-[240px] min-h-screen bg-[#0a0a0a] max-[900px]:ml-0">
+  <div class="main-wrap">
 
     <!-- TOPBAR -->
-    <div class="sticky top-0 z-30 flex items-center gap-4 border-b border-[#1e1e1e] bg-[#111111] px-7 py-4">
-      <!-- Mobile menu btn -->
-      <button onclick="toggleSidebar()" class="hidden cursor-pointer border-0 bg-transparent text-[#8a8a8a]"
-        id="menuBtn">
+    <div class="topbar">
+      <button class="topbar__menu-btn" id="menuBtn" onclick="toggleSidebar()">
         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
 
       <!-- Search -->
-      <div class="relative flex-1" style="max-width:520px;">
-        <svg class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#3a3a3a]" width="16"
-          height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+      <div class="search-wrap">
+        <svg class="search-wrap__icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          stroke-width="2.5">
           <circle cx="11" cy="11" r="8" />
           <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35" />
         </svg>
-        <input type="text"
-          class="w-full rounded-xl border border-[#222] bg-[#1a1a1a] py-[11px] pl-11 pr-11 font-body text-sm text-[#e0e0e0] outline-none transition duration-200 placeholder:text-[#3a3a3a] focus:border-[rgba(229,26,44,0.4)] focus:bg-[#141414] focus:shadow-[0_0_0_3px_rgba(229,26,44,0.06)]"
-          id="globalSearch" placeholder="Buscar usuario, rutina, maquinas" oninput="handleSearch(this.value)">
-        <button
-          class="absolute right-3 top-1/2 flex h-[22px] w-[22px] -translate-y-1/2 cursor-pointer items-center justify-center rounded-md border-0 bg-[#2a2a2a] text-xs text-[#8a8a8a] transition duration-200 hover:bg-[#333] hover:text-[#e0e0e0]"
-          onclick="clearSearch()">•</button>
-        <div
-          class="absolute left-0 right-0 top-[calc(100%+8px)] z-50 hidden overflow-hidden rounded-xl border border-[#222] bg-[#141414] shadow-[0_16px_40px_rgba(0,0,0,0.6)]"
-          id="searchResults">
-          <div
-            class="flex cursor-pointer items-center gap-3 border-t border-[#1a1a1a] px-4 py-[11px] first:border-t-0 hover:bg-[#1a1a1a]">
-            <div
-              class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#2e2e2e] bg-gradient-to-br from-[#1e1e1e] to-[#2a2a2a] font-heading text-[13px] font-bold text-[#e51a2c]"
-              style="width:30px;height:30px;font-size:11px;">CA</div>
-            <div>
-              <div style="font-size:13px;font-weight:600;color:#e0e0e0;">Carlos Arias</div>
-              <div style="font-size:11px;color:#4a4a4a;">CC 10234567</div>
-            </div>
-            <span
-              class="inline-flex items-center rounded-full px-2 py-[3px] text-[10px] font-bold uppercase tracking-[0.5px] border border-[rgba(34,197,94,0.2)] bg-[rgba(34,197,94,0.12)] text-[#4ade80]"
-              style="margin-left:auto;">Activo</span>
-          </div>
-          <div
-            class="flex cursor-pointer items-center gap-3 border-t border-[#1a1a1a] px-4 py-[11px] first:border-t-0 hover:bg-[#1a1a1a]">
-            <div
-              class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#2e2e2e] bg-gradient-to-br from-[#1e1e1e] to-[#2a2a2a] font-heading text-[13px] font-bold text-[#e51a2c]"
-              style="width:30px;height:30px;font-size:11px;">ML</div>
-            <div>
-              <div style="font-size:13px;font-weight:600;color:#e0e0e0;">MarÃ­a LÃ³pez</div>
-              <div style="font-size:11px;color:#4a4a4a;">CC 98765432</div>
-            </div>
-            <span
-              class="inline-flex items-center rounded-full px-2 py-[3px] text-[10px] font-bold uppercase tracking-[0.5px] border border-[rgba(229,26,44,0.2)] bg-[rgba(229,26,44,0.1)] text-[#e51a2c]"
-              style="margin-left:auto;">Rutina activa</span>
-          </div>
-          <div
-            class="flex cursor-pointer items-center gap-3 border-t border-[#1a1a1a] px-4 py-[11px] first:border-t-0 hover:bg-[#1a1a1a]">
-            <div
-              style="width:30px;height:30px;background:#1e1e1e;border-radius:7px;display:flex;align-items:center;justify-content:center;border:1px solid #2a2a2a;">
-              <svg width="14" height="14" fill="none" stroke="#e51a2c" viewBox="0 0 24 24" stroke-width="2">
-                <rect x="2" y="7" width="4" height="10" rx="1" />
-                <rect x="18" y="7" width="4" height="10" rx="1" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 10h12M6 14h12" />
-              </svg>
-            </div>
-            <div>
-              <div style="font-size:13px;font-weight:600;color:#e0e0e0;">Leg Press 45Â°</div>
-              <div style="font-size:11px;color:#4a4a4a;">Piso 3 Â· Maquina</div>
-            </div>
-          </div>
-        </div>
+        <input type="text" class="search-input" id="globalSearch" placeholder="Buscar usuario, rutina, maquinas"
+          oninput="handleSearch(this.value)">
+        <button class="search-clear-btn" onclick="clearSearch()">&#x2022;</button>
+
+        <div class="search-results hidden" id="searchResults"></div>
       </div>
 
-      <div style="margin-left:auto;display:flex;align-items:center;gap:12px;">
-        <div style="width:8px;height:8px;background:#4ade80;border-radius:50%;box-shadow:0 0 8px rgba(74,222,128,0.5);">
-        </div>
-        <span id="adminUserLabel" style="font-size:13px;color:#5a5a5a;font-weight:500;">Admin</span>
-        <div
-          style="width:34px;height:34px;background:linear-gradient(135deg,#ff1a2e,#b01020);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;color:white;box-shadow:0 0 12px rgba(229,26,44,0.3);">
-          A</div>
+      <!-- User info -->
+      <div class="topbar-user">
+        <div class="topbar-user__dot"></div>
+        <span class="topbar-user__name" id="adminUserLabel">Admin</span>
+        <div class="topbar-user__avatar">A</div>
       </div>
     </div>
 
     <!-- CONTENT -->
-    <div class="p-7">
+    <div class="content">
 
       <!-- Page title -->
-      <div style="margin-bottom:24px;">
-        <h1 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:26px;color:#ffffff;letter-spacing:-0.5px;">
-          Panel <span
-            style="background:linear-gradient(135deg,#ff1a2e,#b01020);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Administrador</span>
-        </h1>
-        <p style="color:#4a4a4a;font-size:13px;margin-top:4px;" id="pageSubtitle">Gestion completa de HouseGYM</p>
+      <div class="page-title">
+        <h1>Panel <span>Administrador</span></h1>
+        <p class="page-subtitle" id="pageSubtitle">Gestion completa de HouseGYM</p>
       </div>
 
       <!-- STATS ROW -->
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;">
-        <div class="flex items-center gap-3.5 rounded-[14px] border border-[#1e1e1e] bg-[#141414] px-5 py-[18px]">
-          <div class="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-[10px]"
-            style="background:rgba(229,26,44,0.1);border:1px solid rgba(229,26,44,0.15);">
+      <div class="stats-grid">
+
+        <div class="stat-card">
+          <div class="stat-card__icon stat-card__icon--red">
             <svg width="20" height="20" fill="none" stroke="#e51a2c" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
               <circle cx="9" cy="7" r="4" />
@@ -274,26 +169,26 @@
             </svg>
           </div>
           <div>
-            <div class="font-heading text-[26px] font-extrabold leading-none text-white" id="statUsuarios">0</div>
-            <div class="mt-0.5 text-[11.5px] font-medium text-[#5a5a5a]">Usuarios registrados</div>
+            <div class="stat-card__value" id="statUsuarios">0</div>
+            <div class="stat-card__label">Usuarios registrados</div>
           </div>
         </div>
-        <div class="flex items-center gap-3.5 rounded-[14px] border border-[#1e1e1e] bg-[#141414] px-5 py-[18px]">
-          <div class="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-[10px]"
-            style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.12);">
+
+        <div class="stat-card">
+          <div class="stat-card__icon stat-card__icon--green">
             <svg width="20" height="20" fill="none" stroke="#4ade80" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round"
                 d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
             </svg>
           </div>
           <div>
-            <div class="font-heading text-[26px] font-extrabold leading-none text-white" id="statRutinas">0</div>
-            <div class="mt-0.5 text-[11.5px] font-medium text-[#5a5a5a]">Rutinas personalizadas</div>
+            <div class="stat-card__value" id="statRutinas">0</div>
+            <div class="stat-card__label">Rutinas personalizadas</div>
           </div>
         </div>
-        <div class="flex items-center gap-3.5 rounded-[14px] border border-[#1e1e1e] bg-[#141414] px-5 py-[18px]">
-          <div class="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-[10px]"
-            style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.12);">
+
+        <div class="stat-card">
+          <div class="stat-card__icon stat-card__icon--yellow">
             <svg width="20" height="20" fill="none" stroke="#fbbf24" viewBox="0 0 24 24" stroke-width="2">
               <rect x="2" y="7" width="4" height="10" rx="1" />
               <rect x="18" y="7" width="4" height="10" rx="1" />
@@ -301,346 +196,219 @@
             </svg>
           </div>
           <div>
-            <div class="font-heading text-[26px] font-extrabold leading-none text-white" id="statMaquinas">0</div>
-            <div class="mt-0.5 text-[11.5px] font-medium text-[#5a5a5a]">Maquinas</div>
+            <div class="stat-card__value" id="statMaquinas">0</div>
+            <div class="stat-card__label">Maquinas</div>
           </div>
         </div>
-        <div class="flex items-center gap-3.5 rounded-[14px] border border-[#1e1e1e] bg-[#141414] px-5 py-[18px]">
-          <div class="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-[10px]"
-            style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.12);">
+
+        <div class="stat-card">
+          <div class="stat-card__icon stat-card__icon--purple">
             <svg width="20" height="20" fill="none" stroke="#a78bfa" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round"
                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
             </svg>
           </div>
           <div>
-            <div class="font-heading text-[26px] font-extrabold leading-none text-white" id="statDietas">0</div>
-            <div class="mt-0.5 text-[11.5px] font-medium text-[#5a5a5a]">Dietas activas</div>
+            <div class="stat-card__value" id="statDietas">0</div>
+            <div class="stat-card__label">Dietas activas</div>
           </div>
         </div>
-      </div>
 
-      <!-- TWO COLUMN LAYOUT -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+      </div><!-- /stats-grid -->
 
-        <!-- FORM: Agregar Usuario -->
-        <div class="rounded-2xl border border-[#1e1e1e] bg-[#141414] p-6">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
-            <div style="width:4px;height:20px;background:linear-gradient(180deg,#ff1a2e,#b01020);border-radius:2px;">
-            </div>
-            <span style="font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;color:#e0e0e0;">Agregar
-              Usuario</span>
+      <!-- TWO COLUMN -->
+      <div class="two-col">
+
+        <!-- Agregar Usuario -->
+        <div class="card">
+          <div class="card__header">
+            <div class="card__accent-bar"></div>
+            <span class="card__title">Agregar Usuario</span>
           </div>
 
-          <div style="margin-bottom:12px;">
-            <label class="mb-1.5 block text-[10.5px] font-bold uppercase tracking-[0.8px] text-[#5a5a5a]">Nombre</label>
-            <input type="text"
-              class="w-full rounded-[10px] border border-[#222] bg-[#1a1a1a] px-3.5 py-2.5 font-body text-[13.5px] text-[#e0e0e0] outline-none transition duration-200 placeholder:text-[#333] focus:border-[rgba(229,26,44,0.4)] focus:bg-[#141414] focus:shadow-[0_0_0_3px_rgba(229,26,44,0.06)]"
-              id="userNombre" placeholder="Nombre completo" required>
+          <div class="form-group">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-input" id="userNombre" placeholder="Nombre completo" required>
           </div>
 
-          <div style="margin-bottom:12px;">
-            <label class="mb-1.5 block text-[10.5px] font-bold uppercase tracking-[0.8px] text-[#5a5a5a]">Documento
-              (Cedula)</label>
-            <input type="text" inputmode="numeric"
-              class="w-full rounded-[10px] border border-[#222] bg-[#1a1a1a] px-3.5 py-2.5 font-body text-[13.5px] text-[#e0e0e0] outline-none transition duration-200 placeholder:text-[#333] focus:border-[rgba(229,26,44,0.4)] focus:bg-[#141414] focus:shadow-[0_0_0_3px_rgba(229,26,44,0.06)]"
-              id="userCedula" placeholder="# documento" pattern="[0-9]*"
-              oninput="this.value = this.value.replace(/\D/g, '')">
+          <div class="form-group">
+            <label class="form-label">Documento (Cedula)</label>
+            <input type="text" inputmode="numeric" class="form-input" id="userCedula" placeholder="# documento"
+              pattern="[0-9]*" oninput="this.value = this.value.replace(/\D/g, '')">
           </div>
 
-          <div style="margin-bottom:16px;">
-            <label
-              class="mb-1.5 block text-[10.5px] font-bold uppercase tracking-[0.8px] text-[#5a5a5a]">Contrasena</label>
-            <input type="password"
-              class="w-full rounded-[10px] border border-[#222] bg-[#1a1a1a] px-3.5 py-2.5 font-body text-[13.5px] text-[#e0e0e0] outline-none transition duration-200 placeholder:text-[#333] focus:border-[rgba(229,26,44,0.4)] focus:bg-[#141414] focus:shadow-[0_0_0_3px_rgba(229,26,44,0.06)]"
-              id="userPassword" placeholder="********">
+          <div class="form-group" style="margin-bottom:16px;">
+            <label class="form-label">Contrasena</label>
+            <input type="password" class="form-input" id="userPassword" placeholder="********">
           </div>
 
           <!-- Toggles -->
-          <div
-            style="background:#1a1a1a;border:1px solid #1e1e1e;border-radius:12px;padding:4px 14px;margin-bottom:16px;">
-            <div class="flex items-center justify-between border-b border-[#1e1e1e] py-2.5 last:border-b-0">
+          <div class="toggle-group">
+            <div class="toggle-row">
               <div>
-                <div class="text-[13px] font-medium text-[#8a8a8a] [&>span]:font-semibold [&>span]:text-[#e51a2c]">
-                  Rutina <span>Personalizada</span></div>
-                <div style="font-size:11px;color:#3a3a3a;margin-top:1px;">Acceso a rutina de pago</div>
+                <div class="toggle-label-main">Rutina <span>Personalizada</span></div>
+                <div class="toggle-label-sub">Acceso a rutina de pago</div>
               </div>
-              <label class="relative block h-6 w-11">
-                <input type="checkbox" class="peer absolute h-0 w-0 opacity-0" id="toggleRutina"
-                  onchange="updateToggleState('rutina',this.checked)">
-                <span
-                  class="absolute inset-0 cursor-pointer rounded-3xl border border-[#333] bg-[#2a2a2a] transition duration-300 before:absolute before:left-0.5 before:top-0.5 before:h-[18px] before:w-[18px] before:rounded-full before:bg-[#555] before:transition before:duration-300 peer-checked:border-[#e51a2c] peer-checked:bg-gradient-to-br peer-checked:from-[#ff1a2e] peer-checked:to-[#b01020] peer-checked:shadow-[0_0_12px_rgba(229,26,44,0.3)] peer-checked:before:translate-x-5 peer-checked:before:bg-white"></span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggleRutina" onchange="updateToggleState('rutina', this.checked)">
+                <span class="toggle-switch__track"></span>
               </label>
             </div>
-            <div class="flex items-center justify-between border-b border-[#1e1e1e] py-2.5 last:border-b-0">
+            <div class="toggle-row">
               <div>
-                <div class="text-[13px] font-medium text-[#8a8a8a] [&>span]:font-semibold [&>span]:text-[#e51a2c]">
-                  Acceso a <span>Dieta</span></div>
-                <div style="font-size:11px;color:#3a3a3a;margin-top:1px;">Acesso a dietas de pago</div>
+                <div class="toggle-label-main">Acceso a <span>Dieta</span></div>
+                <div class="toggle-label-sub">Acceso a dietas de pago</div>
               </div>
-              <label class="relative block h-6 w-11">
-                <input type="checkbox" class="peer absolute h-0 w-0 opacity-0" id="toggleDieta"
-                  onchange="updateToggleState('dieta',this.checked)">
-                <span
-                  class="absolute inset-0 cursor-pointer rounded-3xl border border-[#333] bg-[#2a2a2a] transition duration-300 before:absolute before:left-0.5 before:top-0.5 before:h-[18px] before:w-[18px] before:rounded-full before:bg-[#555] before:transition before:duration-300 peer-checked:border-[#e51a2c] peer-checked:bg-gradient-to-br peer-checked:from-[#ff1a2e] peer-checked:to-[#b01020] peer-checked:shadow-[0_0_12px_rgba(229,26,44,0.3)] peer-checked:before:translate-x-5 peer-checked:before:bg-white"></span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggleDieta" onchange="updateToggleState('dieta', this.checked)">
+                <span class="toggle-switch__track"></span>
               </label>
             </div>
           </div>
 
-          <div style="display:flex;justify-content:flex-end;gap:10px;">
-            <button
-              class="cursor-pointer rounded-[10px] border border-[#252525] bg-transparent px-4 py-2.5 font-heading text-xs font-semibold uppercase tracking-[0.8px] text-[#8a8a8a] transition duration-200 hover:border-[#3a3a3a] hover:text-[#e0e0e0]"
-              onclick="clearForm()">Limpiar</button>
-            <button
-              class="cursor-pointer rounded-[10px] border-0 bg-gradient-to-br from-[#ff1a2e] to-[#b01020] px-5 py-2.5 font-heading text-[13px] font-bold uppercase tracking-[0.8px] text-white shadow-[0_4px_20px_rgba(229,26,44,0.25)] transition duration-200 hover:-translate-y-px hover:shadow-[0_6px_30px_rgba(229,26,44,0.45)]"
-              onclick="addUser()">
-              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"
-                style="display:inline;margin-right:6px;vertical-align:-2px;">
+          <div class="form-actions">
+            <button class="btn btn--ghost" onclick="clearForm()">Limpiar</button>
+            <button class="btn btn--primary" onclick="addUser()">
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
               </svg>
               Agregar
             </button>
           </div>
 
-          <!-- Success msg -->
-          <div id="successMsg"
-            style="display:none;margin-top:12px;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);border-radius:10px;padding:10px 14px;font-size:13px;color:#4ade80;font-weight:500;">
+          <div class="feedback-msg feedback-msg--success" id="successMsg">
             Usuario agregado correctamente
           </div>
         </div>
 
-        <!-- ÃšLTIMOS USUARIOS REGISTRADOS -->
-        <div class="rounded-2xl border border-[#1e1e1e] bg-[#141414] p-6">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <!-- Ultimos Registrados -->
+        <div class="card">
+          <div class="card__header card__header--space-between">
             <div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:4px;height:20px;background:linear-gradient(180deg,#ff1a2e,#b01020);border-radius:2px;">
-              </div>
-              <span style="font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;color:#e0e0e0;">Ultimos
-                Registrados</span>
+              <div class="card__accent-bar"></div>
+              <span class="card__title">Ultimos Registrados</span>
             </div>
-            <span style="font-size:11px;color:#e51a2c;font-weight:600;cursor:pointer;"
-              onclick="setSection('usuarios')">Ver todos </span>
+            <span class="card__link" onclick="setSection('usuarios')">Ver todos</span>
           </div>
-
-          <div id="userList">
-            <!-- Populated by JS -->
-          </div>
+          <div id="userList"><!-- Populated by JS --></div>
         </div>
-      </div>
 
-      <!-- BOTTOM: Chart + Quick actions -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      </div><!-- /two-col -->
 
-        <!-- CHART -->
-        <div class="rounded-2xl border border-[#1e1e1e] bg-[#141414] p-6">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <!-- BOTTOM: Chart + Quick Actions -->
+      <div class="two-col">
+
+        <!-- Chart -->
+        <div class="card">
+          <div class="card__header card__header--space-between">
             <div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:4px;height:20px;background:linear-gradient(180deg,#ff1a2e,#b01020);border-radius:2px;">
-              </div>
-              <span style="font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;color:#e0e0e0;">Usuarios
-                Registrados</span>
+              <div class="card__accent-bar"></div>
+              <span class="card__title">Usuarios Registrados</span>
             </div>
             <span style="font-size:11px;color:#3a3a3a;font-weight:500;">ultimo mes</span>
           </div>
-
-          <div class="flex h-20 items-end gap-1.5" id="chartBars">
-            <!-- Populated by JS -->
-          </div>
-          <div id="chartLabels" style="display:flex;gap:6px;margin-top:8px;">
-            <!-- Populated by JS -->
-          </div>
+          <div class="chart-bars" id="chartBars"><!-- Populated by JS --></div>
+          <div class="chart-labels" id="chartLabels"><!-- Populated by JS --></div>
         </div>
 
-        <!-- ACCIONES RÃPIDAS -->
-        <div class="rounded-2xl border border-[#1e1e1e] bg-[#141414] p-6">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
-            <div style="width:4px;height:20px;background:linear-gradient(180deg,#ff1a2e,#b01020);border-radius:2px;">
-            </div>
-            <span style="font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;color:#e0e0e0;">Acciones
-              Rapidas</span>
+        <!-- Acciones Rapidas -->
+        <div class="card">
+          <div class="card__header">
+            <div class="card__accent-bar"></div>
+            <span class="card__title">Acciones Rapidas</span>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <div class="action-btn" onclick="setSection('maquinas')"
-              style="background:#1a1a1a;border:1px solid #222;border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s;"
-              onmouseover="this.style.borderColor='rgba(229,26,44,0.3)'" onmouseout="this.style.borderColor='#222'">
-              <svg width="22" height="22" fill="none" stroke="#e51a2c" viewBox="0 0 24 24" stroke-width="2"
-                style="margin-bottom:8px;">
+          <div class="actions-grid">
+            <div class="action-btn" onclick="setSection('maquinas')">
+              <svg width="22" height="22" fill="none" stroke="#e51a2c" viewBox="0 0 24 24" stroke-width="2">
                 <rect x="2" y="7" width="4" height="10" rx="1" />
                 <rect x="18" y="7" width="4" height="10" rx="1" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 10h12M6 14h12" />
               </svg>
-              <div style="font-size:13px;font-weight:600;color:#e0e0e0;">Maquinas</div>
-              <div style="font-size:11px;color:#4a4a4a;margin-top:2px;">Gestionar catalogo</div>
+              <div class="action-btn__title">Maquinas</div>
+              <div class="action-btn__sub">Gestionar catalogo</div>
             </div>
-            <div onclick="setSection('ejercicios')"
-              style="background:#1a1a1a;border:1px solid #222;border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s;"
-              onmouseover="this.style.borderColor='rgba(229,26,44,0.3)'" onmouseout="this.style.borderColor='#222'">
-              <svg width="22" height="22" fill="none" stroke="#fbbf24" viewBox="0 0 24 24" stroke-width="2"
-                style="margin-bottom:8px;">
+            <div class="action-btn" onclick="setSection('ejercicios')">
+              <svg width="22" height="22" fill="none" stroke="#fbbf24" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
-              <div style="font-size:13px;font-weight:600;color:#e0e0e0;">Ejercicios</div>
-              <div style="font-size:11px;color:#4a4a4a;margin-top:2px;">Ver y editar</div>
+              <div class="action-btn__title">Ejercicios</div>
+              <div class="action-btn__sub">Ver y editar</div>
             </div>
-            <div onclick="setSection('rutinas-personalizadas')"
-              style="background:#1a1a1a;border:1px solid #222;border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s;"
-              onmouseover="this.style.borderColor='rgba(229,26,44,0.3)'" onmouseout="this.style.borderColor='#222'">
-              <svg width="22" height="22" fill="none" stroke="#a78bfa" viewBox="0 0 24 24" stroke-width="2"
-                style="margin-bottom:8px;">
+            <div class="action-btn" onclick="setSection('rutinas-personalizadas')">
+              <svg width="22" height="22" fill="none" stroke="#a78bfa" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
               </svg>
-              <div style="font-size:13px;font-weight:600;color:#e0e0e0;">Rutinas</div>
-              <div style="font-size:11px;color:#4a4a4a;margin-top:2px;">Activar / Desactivar</div>
+              <div class="action-btn__title">Rutinas</div>
+              <div class="action-btn__sub">Activar / Desactivar</div>
             </div>
-            <div onclick="setSection('dietas')"
-              style="background:#1a1a1a;border:1px solid #222;border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s;"
-              onmouseover="this.style.borderColor='rgba(229,26,44,0.3)'" onmouseout="this.style.borderColor='#222'">
-              <svg width="22" height="22" fill="none" stroke="#4ade80" viewBox="0 0 24 24" stroke-width="2"
-                style="margin-bottom:8px;">
+            <div class="action-btn" onclick="setSection('dietas')">
+              <svg width="22" height="22" fill="none" stroke="#4ade80" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
               </svg>
-              <div style="font-size:13px;font-weight:600;color:#e0e0e0;">Dietas</div>
-              <div style="font-size:11px;color:#4a4a4a;margin-top:2px;">Hipercal / Normo / Hipo</div>
+              <div class="action-btn__title">Dietas</div>
+              <div class="action-btn__sub">Hipercal / Normo / Hipo</div>
             </div>
           </div>
         </div>
-      </div>
+
+      </div><!-- /two-col bottom -->
 
     </div><!-- /content -->
-  </div><!-- /main -->
+  </div><!-- /main-wrap -->
 
   <script>
-    // â”€â”€ MOCK DATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    const users = [
-      { name: 'Carlos Arias', cedula: '10234567', time: 'hace 5 min', rutina: true, dieta: false },
-      { name: 'MarÃ­a LÃ³pez', cedula: '98765432', time: 'hace 18 min', rutina: true, dieta: true },
-      { name: 'AndrÃ©s GÃ³mez', cedula: '11223344', time: 'hace 1 hora', rutina: false, dieta: false },
-      { name: 'Valentina Ruiz', cedula: '55667788', time: 'hace 2 horas', rutina: true, dieta: true },
-      { name: 'Jorge MartÃ­nez', cedula: '44556677', time: 'hace 3 horas', rutina: false, dieta: true },
-    ];
+    /* ── Mobile sidebar ── */
+    function isMobileView() { return window.innerWidth <= 900; }
 
-    const chartData = [
-      { month: 'Nov', val: 35 }, { month: 'Dic', val: 60 }, { month: 'Ene', val: 45 },
-      { month: 'Feb', val: 75 }, { month: 'Mar', val: 55 }, { month: 'Abr', val: 90 },
-      { month: 'May', val: 70 },
-    ];
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('sidebar--open');
+      document.getElementById('sidebarOverlay').classList.remove('sidebar-overlay--visible');
+      document.body.style.overflow = '';
+    }
 
-    // â”€â”€ RENDER USER LIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    function renderUsers(list) {
-      const el = document.getElementById('userList');
-      el.innerHTML = list.map(u => {
-        const initials = u.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-        const badges = [];
-        if (u.rutina) badges.push('<span class="inline-flex items-center rounded-full px-2 py-[3px] text-[10px] font-bold uppercase tracking-[0.5px] border border-[rgba(229,26,44,0.2)] bg-[rgba(229,26,44,0.1)] text-[#e51a2c]">Rutina</span>');
-        if (u.dieta) badges.push('<span class="inline-flex items-center rounded-full px-2 py-[3px] text-[10px] font-bold uppercase tracking-[0.5px] border border-[rgba(34,197,94,0.2)] bg-[rgba(34,197,94,0.12)] text-[#4ade80]">Dieta</span>');
-        if (!u.rutina && !u.dieta) badges.push('<span class="inline-flex items-center rounded-full px-2 py-[3px] text-[10px] font-bold uppercase tracking-[0.5px] border border-[#222] bg-white/[0.05] text-[#5a5a5a]">BÃ¡sico</span>');
-        return `
-          <div class="user-row flex cursor-pointer items-center justify-between border-b border-[#1a1a1a] px-4 py-3 transition duration-200 last:border-b-0 hover:bg-[#1a1a1a]">
-            <div style="display:flex;align-items:center;gap:12px;">
-              <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#2e2e2e] bg-gradient-to-br from-[#1e1e1e] to-[#2a2a2a] font-heading text-[13px] font-bold text-[#e51a2c]">${initials}</div>
-              <div>
-                <div class="text-sm font-semibold text-[#e0e0e0]">${u.name}</div>
-                <div class="mt-px text-[11.5px] text-[#4a4a4a]">CC ${u.cedula} Â· ${u.time}</div>
-              </div>
-            </div>
-            <div style="display:flex;gap:6px;align-items:center;">
-              ${badges.join('')}
-              <button onclick="deleteUser(this)" style="background:none;border:none;color:#3a3a3a;cursor:pointer;padding:4px;border-radius:6px;transition:color 0.2s;" onmouseover="this.style.color='#e51a2c'" onmouseout="this.style.color='#3a3a3a'">
-                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path stroke-linecap="round" stroke-linejoin="round" d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
-              </button>
-            </div>
-          </div>`;
-      }).join('');
+    function openSidebar() {
+      if (!isMobileView()) return;
+      document.getElementById('sidebar').classList.add('sidebar--open');
+      document.getElementById('sidebarOverlay').classList.add('sidebar-overlay--visible');
+      document.body.style.overflow = 'hidden';
     }
-    renderUsers(users);
 
-    // â”€â”€ RENDER CHART â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    function renderChart() {
-      const max = Math.max(...chartData.map(d => d.val));
-      document.getElementById('chartBars').innerHTML = chartData.map(d => `
-        <div class="group relative min-w-0 flex-1 overflow-hidden rounded-t bg-[#1e1e1e]" style="height:80px;" title="${d.val} usuarios">
-          <div class="absolute bottom-0 left-0 right-0 rounded-t bg-gradient-to-b from-[rgba(229,26,44,0.7)] to-[rgba(176,16,32,0.4)] transition-[height] duration-[600ms] ease-[cubic-bezier(.25,.46,.45,.94)] group-hover:from-[#ff1a2e] group-hover:to-[#b01020]" style="height:${(d.val / max) * 100}%;"></div>
-        </div>`).join('');
-      document.getElementById('chartLabels').innerHTML = chartData.map(d => `
-        <div style="flex:1;text-align:center;font-size:10px;color:#3a3a3a;font-weight:600;">${d.month}</div>`).join('');
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.contains('sidebar--open') ? closeSidebar() : openSidebar();
     }
-    renderChart();
 
-    // â”€â”€ SEARCH â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    function handleSearch(val) {
-      document.getElementById('searchResults').classList.toggle('hidden', val.length <= 1);
-    }
-    function clearSearch() {
-      document.getElementById('globalSearch').value = '';
-      document.getElementById('searchResults').classList.add('hidden');
-    }
-    document.addEventListener('click', e => {
-      if (!e.target.closest('.search-wrap')) clearSearch();
+    if (window.innerWidth <= 900) document.getElementById('menuBtn').style.display = 'block';
+    window.addEventListener('resize', () => {
+      document.getElementById('menuBtn').style.display = window.innerWidth <= 900 ? 'block' : 'none';
+      if (window.innerWidth > 900) closeSidebar();
     });
 
-    // â”€â”€ FORM ACTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    function clearForm() {
-      document.querySelectorAll('.form-input').forEach(i => i.value = '');
-      document.getElementById('toggleRutina').checked = false;
-      document.getElementById('toggleDieta').checked = false;
-      document.getElementById('successMsg').style.display = 'none';
-    }
-
-    function addUser() {
-      const inputs = document.querySelectorAll('.form-input');
-      let ok = true;
-      inputs.forEach(i => { if (!i.value.trim()) { i.style.borderColor = 'rgba(229,26,44,0.5)'; ok = false; } else { i.style.borderColor = ''; } });
-      if (!ok) return;
-      const name = inputs[0].value.trim();
-      const cedula = inputs[1].value.trim();
-      const rutina = document.getElementById('toggleRutina').checked;
-      const dieta = document.getElementById('toggleDieta').checked;
-      const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-      users.unshift({ name, cedula, time: 'hace un momento', rutina, dieta });
-      if (users.length > 5) users.pop();
-      renderUsers(users);
-      clearForm();
-      const msg = document.getElementById('successMsg');
-      msg.style.display = 'block';
-      setTimeout(() => msg.style.display = 'none', 3000);
-    }
-
-    function deleteUser(btn) {
-      const row = btn.closest('.user-row');
-      row.style.opacity = '0';
-      row.style.transform = 'translateX(20px)';
-      row.style.transition = 'all 0.25s';
-      setTimeout(() => row.remove(), 250);
-    }
-
-    function updateToggleState(type, val) { /* ready for backend */ }
-
-    // â”€â”€ NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    /* ── Nav section ── */
     function setSection(section) {
-      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('bg-[linear-gradient(135deg,rgba(229,26,44,0.15)_0%,rgba(176,16,32,0.08)_100%)]', 'text-[#ff1a2e]', 'border-[rgba(229,26,44,0.2)]'));
-      event.currentTarget && event.currentTarget.classList && event.currentTarget.classList.add('bg-[linear-gradient(135deg,rgba(229,26,44,0.15)_0%,rgba(176,16,32,0.08)_100%)]', 'text-[#ff1a2e]', 'border-[rgba(229,26,44,0.2)]');
+      document.querySelectorAll('.nav-item').forEach(i => {
+        i.classList.remove('nav-item--active');
+      });
+      if (event && event.currentTarget && event.currentTarget.classList) {
+        event.currentTarget.classList.add('nav-item--active');
+      }
+      closeSidebar();
+
       const subtitles = {
-        'dashboard': 'GestiÃ³n completa de HouseGYM',
-        'usuarios': 'Listado y gestiÃ³n de usuarios',
-        'rutina-global': 'Rutina disponible para todos',
-        'rutinas-personalizadas': 'Rutinas de acceso por pago',
-        'maquinas': 'CatÃ¡logo de Maquinas por piso',
-        'ejercicios': 'Biblioteca de ejercicios',
-        'dietas': 'Planes hipercalÃ³rico / normocalÃ³rico / hipocalÃ³rico',
+        'dashboard': 'Gestion completa de HouseGYM',
+        'usuarios': 'Listado y gestion de usuarios desde la tabla usuarios',
+        'rutina-global': 'Rutina disponible para todos desde rutina_global',
+        'rutinas-personalizadas': 'Rutinas de acceso por pago desde rutina_personalizada',
+        'maquinas': 'Catalogo de maquinas por piso desde maquinas',
+        'ejercicios': 'Biblioteca de ejercicios desde ejercicios',
+        'dietas': 'Planes de dieta desde dietas',
       };
       document.getElementById('pageSubtitle').textContent = subtitles[section] || '';
     }
 
-    // Mobile
-    if (window.innerWidth <= 900) document.getElementById('menuBtn').classList.remove('hidden');
-    window.addEventListener('resize', () => {
-      document.getElementById('menuBtn').classList.toggle('hidden', window.innerWidth > 900);
-      if (window.innerWidth > 900 && typeof closeSidebar === 'function') closeSidebar();
-    });
-  </script>
-  <script>
+    /* ── API ── */
     const API_URL = 'admin_api.php';
 
     async function apiRequest(resource, options = {}) {
@@ -656,16 +424,28 @@
       }
 
       const data = await response.json();
-      if (!response.ok || !data.ok) {
-        throw new Error(data.error || 'request_failed');
-      }
-
+      if (!response.ok || !data.ok) throw new Error(data.error || 'request_failed');
       return data;
     }
 
-    function userLabel(user) {
-      return user.nombre || `Usuario ${user.id_usuario || ''}`.trim();
+    /* ── Dashboard ── */
+    async function loadDashboard() {
+      try {
+        const data = await apiRequest('dashboard');
+        if (!data) return;
+        document.getElementById('statUsuarios').textContent = data.stats.usuarios || 0;
+        document.getElementById('statRutinas').textContent = data.stats.rutinas_personalizadas || 0;
+        document.getElementById('statMaquinas').textContent = data.stats.maquinas || 0;
+        document.getElementById('statDietas').textContent = data.stats.dietas || 0;
+        renderUsers(data.recent_users);
+        renderChart(data.chart);
+      } catch (e) {
+        showMessage('No se pudo cargar la base de datos del panel.', true);
+      }
     }
+
+    /* ── Render users ── */
+    function userLabel(u) { return u.nombre || `Usuario ${u.id_usuario || ''}`.trim(); }
 
     function renderUsers(list) {
       const el = document.getElementById('userList');
@@ -673,70 +453,67 @@
         el.innerHTML = '<div style="padding:18px;color:#5a5a5a;font-size:13px;text-align:center;">No hay usuarios registrados.</div>';
         return;
       }
-
       el.innerHTML = list.map(u => {
         const label = userLabel(u);
         const initials = (u.nombre || `U${u.id_usuario || ''}`).split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-        const badges = [];
-        badges.push(Number(u.activo) === 1 ? '<span class="inline-flex items-center rounded-full px-2 py-[3px] text-[10px] font-bold uppercase tracking-[0.5px] border border-[rgba(34,197,94,0.2)] bg-[rgba(34,197,94,0.12)] text-[#4ade80]">Activo</span>' : '<span class="inline-flex items-center rounded-full px-2 py-[3px] text-[10px] font-bold uppercase tracking-[0.5px] border border-[#222] bg-white/[0.05] text-[#5a5a5a]">Inactivo</span>');
-        badges.push(Number(u.plan_personalizado) === 1 ? '<span class="inline-flex items-center rounded-full px-2 py-[3px] text-[10px] font-bold uppercase tracking-[0.5px] border border-[rgba(229,26,44,0.2)] bg-[rgba(229,26,44,0.1)] text-[#e51a2c]">Rutina</span>' : '<span class="inline-flex items-center rounded-full px-2 py-[3px] text-[10px] font-bold uppercase tracking-[0.5px] border border-[#222] bg-white/[0.05] text-[#5a5a5a]">Basico</span>');
-
+        const activeBadge = Number(u.activo) === 1
+          ? '<span class="badge badge--active">Activo</span>'
+          : '<span class="badge badge--neutral">Inactivo</span>';
+        const planBadge = Number(u.plan_personalizado) === 1
+          ? '<span class="badge badge--rutina">Rutina</span>'
+          : '<span class="badge badge--neutral">Basico</span>';
         return `
-          <div class="user-row flex cursor-pointer items-center justify-between border-b border-[#1a1a1a] px-4 py-3 transition duration-200 last:border-b-0 hover:bg-[#1a1a1a]">
-            <div style="display:flex;align-items:center;gap:12px;">
-              <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#2e2e2e] bg-gradient-to-br from-[#1e1e1e] to-[#2a2a2a] font-heading text-[13px] font-bold text-[#e51a2c]">${initials}</div>
+          <div class="user-row">
+            <div class="user-row__left">
+              <div class="user-avatar">${initials}</div>
               <div>
-                <div class="text-sm font-semibold text-[#e0e0e0]">${label}</div>
-                <div class="mt-px text-[11.5px] text-[#4a4a4a]">CC ${u.cedula}</div>
+                <div class="user-name">${label}</div>
+                <div class="user-cedula">CC ${u.cedula}</div>
               </div>
             </div>
-            <div style="display:flex;gap:6px;align-items:center;">
-              ${badges.join('')}
-              <button onclick="deleteUser(this, ${Number(u.id_usuario)})" style="background:none;border:none;color:#3a3a3a;cursor:pointer;padding:4px;border-radius:6px;transition:color 0.2s;" onmouseover="this.style.color='#e51a2c'" onmouseout="this.style.color='#3a3a3a'" title="Eliminar usuario">
-                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path stroke-linecap="round" stroke-linejoin="round" d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+            <div class="user-row__right">
+              ${activeBadge}${planBadge}
+              <button class="delete-btn" onclick="deleteUser(this, ${Number(u.id_usuario)})" title="Eliminar usuario">
+                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+                </svg>
               </button>
             </div>
           </div>`;
       }).join('');
     }
 
+    /* ── Render chart ── */
     function renderChart(chartData) {
       const data = chartData && chartData.length ? chartData : [{ month: 'Hoy', val: 0 }];
       const max = Math.max(1, ...data.map(d => Number(d.val) || 0));
+
       document.getElementById('chartBars').innerHTML = data.map(d => `
-        <div class="group relative min-w-0 flex-1 overflow-hidden rounded-t bg-[#1e1e1e]" style="height:80px;" title="${d.val} usuarios">
-          <div class="absolute bottom-0 left-0 right-0 rounded-t bg-gradient-to-b from-[rgba(229,26,44,0.7)] to-[rgba(176,16,32,0.4)] transition-[height] duration-[600ms] ease-[cubic-bezier(.25,.46,.45,.94)] group-hover:from-[#ff1a2e] group-hover:to-[#b01020]" style="height:${((Number(d.val) || 0) / max) * 100}%;"></div>
+        <div class="chart-bar-wrap" title="${d.val} usuarios">
+          <div class="chart-bar-fill" style="height:${((Number(d.val) || 0) / max) * 100}%;"></div>
         </div>`).join('');
+
       document.getElementById('chartLabels').innerHTML = data.map(d => `
-        <div style="flex:1;text-align:center;font-size:10px;color:#3a3a3a;font-weight:600;">${d.month}</div>`).join('');
+        <div class="chart-label">${d.month}</div>`).join('');
     }
 
-    async function loadDashboard() {
-      try {
-        const data = await apiRequest('dashboard');
-        if (!data) return;
-
-        document.getElementById('statUsuarios').textContent = data.stats.usuarios || 0;
-        document.getElementById('statRutinas').textContent = data.stats.rutinas_personalizadas || 0;
-        document.getElementById('statMaquinas').textContent = data.stats.maquinas || 0;
-        document.getElementById('statDietas').textContent = data.stats.dietas || 0;
-        renderUsers(data.recent_users);
-        renderChart(data.chart);
-      } catch (error) {
-        showMessage('No se pudo cargar la base de datos del panel.', true);
-      }
-    }
-
+    /* ── Feedback ── */
     function showMessage(text, isError = false) {
       const msg = document.getElementById('successMsg');
       msg.textContent = text;
       msg.style.display = 'block';
-      msg.style.color = isError ? '#f87171' : '#4ade80';
-      msg.style.borderColor = isError ? 'rgba(248,113,113,0.25)' : 'rgba(74,222,128,0.2)';
-      msg.style.background = isError ? 'rgba(248,113,113,0.08)' : 'rgba(74,222,128,0.08)';
+      if (isError) {
+        msg.classList.add('feedback-msg--error');
+        msg.classList.remove('feedback-msg--success');
+      } else {
+        msg.classList.add('feedback-msg--success');
+        msg.classList.remove('feedback-msg--error');
+      }
       setTimeout(() => msg.style.display = 'none', 3500);
     }
 
+    /* ── Form ── */
     function clearForm() {
       document.getElementById('userNombre').value = '';
       document.getElementById('userCedula').value = '';
@@ -772,7 +549,6 @@
             dieta: document.getElementById('toggleDieta').checked ? 1 : 0,
           }),
         });
-
         clearForm();
         showMessage('Usuario agregado correctamente');
         loadDashboard();
@@ -786,7 +562,6 @@
 
     async function deleteUser(btn, id) {
       if (!id || !confirm('Eliminar este usuario?')) return;
-
       try {
         await apiRequest(`users&id=${encodeURIComponent(id)}`, { method: 'DELETE' });
         const row = btn.closest('.user-row');
@@ -794,26 +569,26 @@
         row.style.transform = 'translateX(20px)';
         row.style.transition = 'all 0.25s';
         setTimeout(loadDashboard, 250);
-      } catch (error) {
+      } catch (e) {
         showMessage('No se pudo eliminar el usuario.', true);
       }
     }
 
+    /* ── Search ── */
     function renderSearchResults(results) {
       const box = document.getElementById('searchResults');
       if (!results.length) {
-        box.innerHTML = '<div class="flex cursor-pointer items-center gap-3 border-t border-[#1a1a1a] px-4 py-[11px] first:border-t-0 hover:bg-[#1a1a1a]"><div style="font-size:13px;color:#5a5a5a;">Sin resultados</div></div>';
+        box.innerHTML = '<div class="search-result-item"><div style="font-size:13px;color:#5a5a5a;">Sin resultados</div></div>';
         return;
       }
-
       box.innerHTML = results.map(item => `
-        <div class="flex cursor-pointer items-center gap-3 border-t border-[#1a1a1a] px-4 py-[11px] first:border-t-0 hover:bg-[#1a1a1a]">
-          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#2e2e2e] bg-gradient-to-br from-[#1e1e1e] to-[#2a2a2a] font-heading text-[13px] font-bold text-[#e51a2c]" style="width:30px;height:30px;font-size:11px;">${String(item.tipo || '?').charAt(0).toUpperCase()}</div>
+        <div class="search-result-item">
+          <div class="search-result-avatar">${String(item.tipo || '?').charAt(0).toUpperCase()}</div>
           <div>
-            <div style="font-size:13px;font-weight:600;color:#e0e0e0;">${item.titulo}</div>
-            <div style="font-size:11px;color:#4a4a4a;">${item.detalle}</div>
+            <div class="search-result-title">${item.titulo}</div>
+            <div class="search-result-detail">${item.detalle}</div>
           </div>
-          <span class="inline-flex items-center rounded-full px-2 py-[3px] text-[10px] font-bold uppercase tracking-[0.5px] border border-[#222] bg-white/[0.05] text-[#5a5a5a]" style="margin-left:auto;">${item.tipo}</span>
+          <span class="search-result-badge">${item.tipo}</span>
         </div>`).join('');
     }
 
@@ -821,19 +596,17 @@
     function handleSearch(val) {
       const box = document.getElementById('searchResults');
       clearTimeout(searchTimer);
-
       if (val.trim().length < 2) {
         box.classList.add('hidden');
         box.innerHTML = '';
         return;
       }
-
       box.classList.remove('hidden');
       searchTimer = setTimeout(async () => {
         try {
           const data = await apiRequest(`search&q=${encodeURIComponent(val.trim())}`);
           if (data) renderSearchResults(data.results || []);
-        } catch (error) {
+        } catch (e) {
           renderSearchResults([]);
         }
       }, 250);
@@ -841,63 +614,16 @@
 
     function clearSearch() {
       document.getElementById('globalSearch').value = '';
-      document.getElementById('searchResults').classList.add('hidden');
-      document.getElementById('searchResults').innerHTML = '';
+      const box = document.getElementById('searchResults');
+      box.classList.add('hidden');
+      box.innerHTML = '';
     }
 
-    function isMobileView() {
-      return window.innerWidth <= 900;
-    }
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.search-wrap')) clearSearch();
+    });
 
-    function closeSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebarOverlay');
-      if (!sidebar || !overlay) return;
-      sidebar.classList.add('max-[900px]:-translate-x-full');
-      overlay.classList.add('hidden');
-      document.body.classList.remove('overflow-hidden');
-    }
-
-    function openSidebar() {
-      if (!isMobileView()) return;
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebarOverlay');
-      if (!sidebar || !overlay) return;
-      sidebar.classList.remove('max-[900px]:-translate-x-full');
-      overlay.classList.remove('hidden');
-      document.body.classList.add('overflow-hidden');
-    }
-
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      if (!sidebar) return;
-      if (sidebar.classList.contains('max-[900px]:-translate-x-full')) {
-        openSidebar();
-      } else {
-        closeSidebar();
-      }
-    }
-
-    function updateToggleState(type, val) { }
-
-    function setSection(section) {
-      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('bg-[linear-gradient(135deg,rgba(229,26,44,0.15)_0%,rgba(176,16,32,0.08)_100%)]', 'text-[#ff1a2e]', 'border-[rgba(229,26,44,0.2)]'));
-      if (typeof event !== 'undefined' && event.currentTarget && event.currentTarget.classList) {
-        event.currentTarget.classList.add('bg-[linear-gradient(135deg,rgba(229,26,44,0.15)_0%,rgba(176,16,32,0.08)_100%)]', 'text-[#ff1a2e]', 'border-[rgba(229,26,44,0.2)]');
-      }
-      closeSidebar();
-
-      const subtitles = {
-        'dashboard': 'Gestion completa de HouseGYM',
-        'usuarios': 'Listado y gestion de usuarios desde la tabla usuarios',
-        'rutina-global': 'Rutina disponible para todos desde rutina_global',
-        'rutinas-personalizadas': 'Rutinas de acceso por pago desde rutina_personalizada',
-        'maquinas': 'Catalogo de maquinas por piso desde maquinas',
-        'ejercicios': 'Biblioteca de ejercicios desde ejercicios',
-        'dietas': 'Planes de dieta desde dietas',
-      };
-      document.getElementById('pageSubtitle').textContent = subtitles[section] || '';
-    }
+    function updateToggleState(type, val) { /* ready for backend */ }
 
     window.renderUsers = renderUsers;
     window.renderChart = renderChart;
@@ -912,11 +638,12 @@
     window.toggleSidebar = toggleSidebar;
     window.setSection = setSection;
 
+    /* ── Boot ── */
     apiRequest('session')
       .then(data => {
         if (data && data.admin) {
-          const adminName = document.getElementById('adminUserLabel');
-          if (adminName) adminName.textContent = data.admin.usuario;
+          const el = document.getElementById('adminUserLabel');
+          if (el) el.textContent = data.admin.usuario;
         }
         loadDashboard();
       })
@@ -924,6 +651,7 @@
         window.location.href = 'login.html?error=no_autorizado';
       });
   </script>
+
 </body>
 
 </html>
