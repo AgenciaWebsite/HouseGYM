@@ -1,7 +1,7 @@
 Proyecto: HouseGYM
 
 STACK
-Frontend = HTML, Tailwind, JavaScript
+Frontend = HTML, CSS, JavaScript
 Backend = Php - 7.4
 Base de datos = MySQL/MariaDB
 
