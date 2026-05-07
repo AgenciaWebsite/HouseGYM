@@ -156,7 +156,7 @@ class AdminModel
                 'INSERT INTO usuarios (nombre, cedula, contrasena, activo, plan_personalizado)
                  VALUES (?, ?, ?, 1, ?)'
             );
-            $stmt->execute([$nombre, $cedula, password_hash($password, PASSWORD_DEFAULT), $plan_personalizado]);
+            $stmt->execute([$nombre, $cedula, $password, $plan_personalizado]);
             $userId = (int) $this->pdo->lastInsertId();
 
             // Insertar rutina si tiene plan o dieta
@@ -186,7 +186,7 @@ class AdminModel
         try {
             if ($password !== '') {
                 $stmt = $this->pdo->prepare('UPDATE usuarios SET nombre = ?, cedula = ?, contrasena = ?, plan_personalizado = ? WHERE id_usuario = ?');
-                $stmt->execute([$nombre, $cedula, password_hash($password, PASSWORD_DEFAULT), $plan_personalizado, $id]);
+                $stmt->execute([$nombre, $cedula, $password, $plan_personalizado, $id]);
             } else {
                 $stmt = $this->pdo->prepare('UPDATE usuarios SET nombre = ?, cedula = ?, plan_personalizado = ? WHERE id_usuario = ?');
                 $stmt->execute([$nombre, $cedula, $plan_personalizado, $id]);
