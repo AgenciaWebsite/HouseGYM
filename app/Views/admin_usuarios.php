@@ -73,7 +73,7 @@
         Rutinas Personalizadas
       </div>
 
-      <div class="nav-item" onclick="window.location.href='index.php?route=admin'">
+      <div class="nav-item" onclick="window.location.href='index.php?route=admin_maquinas'">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <rect x="2" y="7" width="4" height="10" rx="1" />
           <rect x="18" y="7" width="4" height="10" rx="1" />
@@ -220,8 +220,14 @@
                   oninput="this.value = this.value.replace(/\D/g, '')">
               </div>
               <div class="gu-field-row">
-                <span class="gu-field-label">Contraseña</span>
-                <input type="password" class="gu-field-input" id="editPassword" placeholder="Nueva contrasena">
+                <span class="gu-field-label">Contraseña actual</span>
+                <input type="text" class="gu-field-input" id="currentPassword" readonly
+                  style="background-color: var(--black-bg); color: var(--white); cursor: not-allowed;"
+                  placeholder="Sin contraseña">
+              </div>
+              <div class="gu-field-row">
+                <span class="gu-field-label">Nueva Contraseña</span>
+                <input type="password" class="gu-field-input" id="editPassword" placeholder="Escribe para cambiarla">
               </div>
             </div>
 
@@ -445,6 +451,7 @@
 
       document.getElementById('editNombre').value = u.nombre || '';
       document.getElementById('editCedula').value = u.cedula || '';
+      document.getElementById('currentPassword').value = u.contrasena || '';
       document.getElementById('editPassword').value = '';
       document.getElementById('editRutina').checked = hasRutina;
       document.getElementById('editDieta').checked = hasDieta;
@@ -596,6 +603,7 @@
         });
         // Update local state
         Object.assign(currentUser, { nombre, cedula, plan_personalizado: rutina, dieta });
+        if (password) currentUser.contrasena = password;
         allUsers = allUsers.map(u => u.id_usuario == currentUser.id_usuario ? { ...u, ...currentUser } : u);
         showDetail(currentUser);
         renderUserList(allUsers);

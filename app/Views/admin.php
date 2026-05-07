@@ -74,7 +74,7 @@
         Rutinas Personalizadas
       </div>
 
-      <div class="nav-item" onclick="setSection('maquinas')">
+      <div class="nav-item" onclick="window.location.href='index.php?route=admin_maquinas'">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <rect x="2" y="7" width="4" height="10" rx="1" />
           <rect x="18" y="7" width="4" height="10" rx="1" />

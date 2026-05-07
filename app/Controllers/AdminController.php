@@ -101,6 +101,22 @@ class AdminController
                 $this->saveRutinaPersonalizada();
             }
 
+            if ($method === 'GET' && $resource === 'machines') {
+                $this->getMachines();
+            }
+
+            if ($method === 'POST' && $resource === 'machines') {
+                $this->addMachine();
+            }
+
+            if ($method === 'PUT' && $resource === 'machines') {
+                $this->updateMachine();
+            }
+
+            if ($method === 'DELETE' && $resource === 'machines') {
+                $this->deleteMachine();
+            }
+
             $this->jsonResponse(['ok' => false, 'error' => 'recurso_no_soportado'], 404);
 
         } catch (\PDOException $e) {
@@ -273,6 +289,82 @@ class AdminController
         }
 
         $this->model->saveRutinaPersonalizada($userId, $data['dias']);
+        $this->jsonResponse(['ok' => true]);
+    }
+
+    /**
+     * Obtiene todas las máquinas.
+     */
+    private function getMachines(): void
+    {
+        $machines = $this->model->getAllMachines();
+        $this->jsonResponse(['ok' => true, 'machines' => $machines]);
+    }
+
+    /**
+     * Agrega una nueva máquina.
+     */
+    private function addMachine(): void
+    {
+        $data = json_decode((string) file_get_contents('php://input'), true);
+        if (!is_array($data)) {
+            $this->jsonResponse(['ok' => false, 'error' => 'datos_invalidos'], 400);
+        }
+
+        $nombre = trim((string) ($data['nombre'] ?? ''));
+        $categoria = trim((string) ($data['categoria'] ?? ''));
+        $descripcion = trim((string) ($data['descripcion'] ?? ''));
+        $ubicacion = trim((string) ($data['ubicacion'] ?? ''));
+        $foto = isset($data['foto']) ? (string) $data['foto'] : null;
+
+        if ($nombre === '') {
+            $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
+        }
+
+        $id = $this->model->addMachine($nombre, $categoria, $descripcion, $ubicacion, $foto);
+        $this->jsonResponse(['ok' => true, 'id' => $id]);
+    }
+
+    /**
+     * Actualiza una máquina existente.
+     */
+    private function updateMachine(): void
+    {
+        $id = (int) ($_GET['id'] ?? 0);
+        if ($id <= 0) {
+            $this->jsonResponse(['ok' => false, 'error' => 'id_invalido'], 422);
+        }
+
+        $data = json_decode((string) file_get_contents('php://input'), true);
+        if (!is_array($data)) {
+            $this->jsonResponse(['ok' => false, 'error' => 'datos_invalidos'], 400);
+        }
+
+        $nombre = trim((string) ($data['nombre'] ?? ''));
+        $categoria = trim((string) ($data['categoria'] ?? ''));
+        $descripcion = trim((string) ($data['descripcion'] ?? ''));
+        $ubicacion = trim((string) ($data['ubicacion'] ?? ''));
+        $foto = isset($data['foto']) ? (string) $data['foto'] : null;
+
+        if ($nombre === '') {
+            $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
+        }
+
+        $this->model->updateMachine($id, $nombre, $categoria, $descripcion, $ubicacion, $foto);
+        $this->jsonResponse(['ok' => true]);
+    }
+
+    /**
+     * Elimina una máquina.
+     */
+    private function deleteMachine(): void
+    {
+        $id = (int) ($_GET['id'] ?? 0);
+        if ($id <= 0) {
+            $this->jsonResponse(['ok' => false, 'error' => 'id_invalido'], 422);
+        }
+
+        $this->model->deleteMachine($id);
         $this->jsonResponse(['ok' => true]);
     }
 }

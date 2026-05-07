@@ -82,7 +82,7 @@ class AdminModel
     public function getAllUsers(): array
     {
         return $this->pdo->query(
-            'SELECT u.id_usuario, u.nombre, u.cedula, u.activo, u.plan_personalizado,
+            'SELECT u.id_usuario, u.nombre, u.cedula, u.contrasena, u.activo, u.plan_personalizado,
                     (SELECT COUNT(*) FROM rutina_personalizada rp WHERE rp.id_usuario = u.id_usuario AND rp.id_dieta IS NOT NULL AND rp.activa = 1) as dieta
              FROM usuarios u
              ORDER BY u.id_usuario DESC'
@@ -355,5 +355,57 @@ class AdminModel
             $this->pdo->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * Obtiene todas las máquinas.
+     */
+    public function getAllMachines(): array
+    {
+        return $this->pdo->query(
+            'SELECT id_maquina, nombre, descripcion, foto_url as foto, ubicacion, categoria
+             FROM maquinas
+             ORDER BY id_maquina DESC'
+        )->fetchAll();
+    }
+
+    /**
+     * Agrega una nueva máquina.
+     */
+    public function addMachine(string $nombre, string $categoria, string $descripcion, string $ubicacion, ?string $fotoBase64): int
+    {
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO maquinas (nombre, categoria, descripcion, ubicacion, foto_url)
+             VALUES (?, ?, ?, ?, ?)'
+        );
+        $stmt->execute([$nombre, $categoria, $descripcion, $ubicacion, $fotoBase64]);
+        return (int) $this->pdo->lastInsertId();
+    }
+
+    /**
+     * Actualiza una máquina existente.
+     */
+    public function updateMachine(int $id, string $nombre, string $categoria, string $descripcion, string $ubicacion, ?string $fotoBase64): void
+    {
+        if ($fotoBase64 !== null) {
+            $stmt = $this->pdo->prepare(
+                'UPDATE maquinas SET nombre = ?, categoria = ?, descripcion = ?, ubicacion = ?, foto_url = ? WHERE id_maquina = ?'
+            );
+            $stmt->execute([$nombre, $categoria, $descripcion, $ubicacion, $fotoBase64, $id]);
+        } else {
+            $stmt = $this->pdo->prepare(
+                'UPDATE maquinas SET nombre = ?, categoria = ?, descripcion = ?, ubicacion = ? WHERE id_maquina = ?'
+            );
+            $stmt->execute([$nombre, $categoria, $descripcion, $ubicacion, $id]);
+        }
+    }
+
+    /**
+     * Elimina una máquina.
+     */
+    public function deleteMachine(int $id): bool
+    {
+        $stmt = $this->pdo->prepare('DELETE FROM maquinas WHERE id_maquina = ?');
+        return $stmt->execute([$id]);
     }
 }
