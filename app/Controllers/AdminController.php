@@ -89,6 +89,18 @@ class AdminController
                 $this->deleteUser();
             }
 
+            if ($method === 'GET' && $resource === 'ejercicios') {
+                $this->getEjercicios();
+            }
+
+            if ($method === 'GET' && $resource === 'rutina_personalizada') {
+                $this->getRutinaPersonalizada();
+            }
+
+            if ($method === 'POST' && $resource === 'rutina_personalizada') {
+                $this->saveRutinaPersonalizada();
+            }
+
             $this->jsonResponse(['ok' => false, 'error' => 'recurso_no_soportado'], 404);
 
         } catch (\PDOException $e) {
@@ -209,7 +221,7 @@ class AdminController
     }
 
     /**
-     * Procesa la solicitud para eliminar un usuario.
+     * Elimina un usuario por su ID.
      */
     private function deleteUser(): void
     {
@@ -219,6 +231,48 @@ class AdminController
         }
 
         $this->model->deleteUser($id);
+        $this->jsonResponse(['ok' => true]);
+    }
+
+    /**
+     * Obtiene el catálogo de ejercicios.
+     */
+    private function getEjercicios(): void
+    {
+        $ejercicios = $this->model->getAllEjercicios();
+        $this->jsonResponse(['ok' => true, 'ejercicios' => $ejercicios]);
+    }
+
+    /**
+     * Obtiene la rutina personalizada de un usuario.
+     */
+    private function getRutinaPersonalizada(): void
+    {
+        $userId = (int) ($_GET['user_id'] ?? 0);
+        if ($userId <= 0) {
+            $this->jsonResponse(['ok' => false, 'error' => 'usuario_invalido'], 422);
+        }
+
+        $dias = $this->model->getRutinaPersonalizada($userId);
+        $this->jsonResponse(['ok' => true, 'dias' => $dias]);
+    }
+
+    /**
+     * Guarda la rutina personalizada de un usuario.
+     */
+    private function saveRutinaPersonalizada(): void
+    {
+        $userId = (int) ($_GET['user_id'] ?? 0);
+        if ($userId <= 0) {
+            $this->jsonResponse(['ok' => false, 'error' => 'usuario_invalido'], 422);
+        }
+
+        $data = json_decode((string) file_get_contents('php://input'), true);
+        if (!is_array($data) || !isset($data['dias'])) {
+            $this->jsonResponse(['ok' => false, 'error' => 'datos_invalidos'], 400);
+        }
+
+        $this->model->saveRutinaPersonalizada($userId, $data['dias']);
         $this->jsonResponse(['ok' => true]);
     }
 }

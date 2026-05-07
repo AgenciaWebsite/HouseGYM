@@ -35,7 +35,7 @@ class AdminModel
             'usuarios' => $this->scalarCount('SELECT COUNT(*) FROM usuarios'),
             'rutinas_personalizadas' => $this->scalarCount('SELECT COUNT(*) FROM rutina_personalizada'),
             'maquinas' => $this->scalarCount('SELECT COUNT(*) FROM maquinas'),
-            'dietas' => $this->scalarCount('SELECT COUNT(*) FROM dietas'),
+            'dietas' => $this->scalarCount('SELECT COUNT(id_dieta) FROM rutina_personalizada'),
             'ejercicios' => $this->scalarCount('SELECT COUNT(*) FROM ejercicios'),
             'rutinas_globales' => $this->scalarCount('SELECT COUNT(*) FROM rutina_global'),
         ];
@@ -234,5 +234,126 @@ class AdminModel
     private function scalarCount(string $sql): int
     {
         return (int) $this->pdo->query($sql)->fetchColumn();
+    }
+
+    /**
+     * Obtiene todos los ejercicios del catálogo.
+     */
+    public function getAllEjercicios(): array
+    {
+        return $this->pdo->query(
+            'SELECT id_ejercicio, nombre, descripcion, grupo_muscular, imagen_url
+             FROM ejercicios
+             ORDER BY nombre ASC'
+        )->fetchAll();
+    }
+
+    /**
+     * Obtiene la rutina personalizada de un usuario agrupada por días.
+     */
+    public function getRutinaPersonalizada(int $userId): array
+    {
+        // Obtener el ID de la rutina personalizada activa para el usuario
+        $stmt = $this->pdo->prepare('SELECT id_rutina_pers FROM rutina_personalizada WHERE id_usuario = ? LIMIT 1');
+        $stmt->execute([$userId]);
+        $rutinaId = $stmt->fetchColumn();
+
+        if (!$rutinaId) {
+            return []; // El usuario no tiene rutina asignada
+        }
+
+        // Obtener los detalles agrupados por dia
+        $stmt = $this->pdo->prepare(
+            'SELECT d.dia, d.id_ejercicio, d.series, d.repeticiones as reps,
+                    e.nombre, e.imagen_url, e.grupo_muscular
+             FROM rutina_personalizada_detalle d
+             JOIN ejercicios e ON d.id_ejercicio = e.id_ejercicio
+             WHERE d.id_rutina_pers = ?
+             ORDER BY d.dia ASC, d.id ASC'
+        );
+        $stmt->execute([$rutinaId]);
+        $rows = $stmt->fetchAll();
+
+        // Agrupar en formato para frontend: [ { ejercicios: [...] }, { ejercicios: [...] } ]
+        $diasMap = [];
+        foreach ($rows as $row) {
+            $diaIndex = (int)$row['dia'] - 1; // 0-indexed for frontend array
+            if (!isset($diasMap[$diaIndex])) {
+                $diasMap[$diaIndex] = ['ejercicios' => []];
+            }
+            $diasMap[$diaIndex]['ejercicios'][] = [
+                'id_ejercicio' => $row['id_ejercicio'],
+                'nombre' => $row['nombre'],
+                'imagen_url' => $row['imagen_url'],
+                'grupo_muscular' => $row['grupo_muscular'],
+                'reps' => $row['reps'],
+                'series' => $row['series']
+            ];
+        }
+
+        // Convertir mapa a array indexado, rellenando dias vacíos si es necesario
+        $maxDia = empty($diasMap) ? -1 : max(array_keys($diasMap));
+        $result = [];
+        for ($i = 0; $i <= $maxDia; $i++) {
+            $result[] = isset($diasMap[$i]) ? $diasMap[$i] : ['ejercicios' => []];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Guarda la rutina personalizada de un usuario.
+     */
+    public function saveRutinaPersonalizada(int $userId, array $dias): void
+    {
+        $this->pdo->beginTransaction();
+        try {
+            // Verificar si el usuario ya tiene un registro en rutina_personalizada
+            $stmt = $this->pdo->prepare('SELECT id_rutina_pers FROM rutina_personalizada WHERE id_usuario = ? LIMIT 1');
+            $stmt->execute([$userId]);
+            $rutinaId = $stmt->fetchColumn();
+
+            if (!$rutinaId) {
+                // Crear el registro de rutina
+                $stmt = $this->pdo->prepare(
+                    'INSERT INTO rutina_personalizada (id_usuario, nombre, activa) VALUES (?, ?, 1)'
+                );
+                $stmt->execute([$userId, 'Rutina personalizada']);
+                $rutinaId = $this->pdo->lastInsertId();
+                
+                // Actualizar bandera en usuario
+                $stmt = $this->pdo->prepare('UPDATE usuarios SET plan_personalizado = 1 WHERE id_usuario = ?');
+                $stmt->execute([$userId]);
+            }
+
+            // Eliminar detalles anteriores
+            $stmt = $this->pdo->prepare('DELETE FROM rutina_personalizada_detalle WHERE id_rutina_pers = ?');
+            $stmt->execute([$rutinaId]);
+
+            // Insertar nuevos detalles
+            if (!empty($dias)) {
+                $stmtInsert = $this->pdo->prepare(
+                    'INSERT INTO rutina_personalizada_detalle (id_rutina_pers, dia, id_ejercicio, series, repeticiones)
+                     VALUES (?, ?, ?, ?, ?)'
+                );
+
+                foreach ($dias as $index => $dia) {
+                    $diaNum = $index + 1; // 1-indexed for database
+                    if (!empty($dia['ejercicios'])) {
+                        foreach ($dia['ejercicios'] as $ej) {
+                            $id_ejercicio = (int) $ej['id_ejercicio'];
+                            $series = (int) ($ej['series'] ?? 3);
+                            $reps = (int) ($ej['reps'] ?? 12);
+                            $stmtInsert->execute([$rutinaId, $diaNum, $id_ejercicio, $series, $reps]);
+                        }
+                    }
+                }
+            }
+
+            $this->pdo->commit();
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
     }
 }

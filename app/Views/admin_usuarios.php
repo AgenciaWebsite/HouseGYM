@@ -65,7 +65,7 @@
         Rutina Global
       </div>
 
-      <div class="nav-item" onclick="window.location.href='index.php?route=admin'">
+      <div class="nav-item" onclick="window.location.href='index.php?route=admin_rutina_personalizada'">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -163,14 +163,8 @@
               <circle cx="11" cy="11" r="8" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35" />
             </svg>
-            <input
-              type="text"
-              id="userSearch"
-              class="gu-search-input"
-              placeholder="Buscar usuario..."
-              oninput="filterUsers(this.value)"
-              autocomplete="off"
-            >
+            <input type="text" id="userSearch" class="gu-search-input" placeholder="Buscar usuario..."
+              oninput="filterUsers(this.value)" autocomplete="off">
             <button class="gu-search-clear" id="userSearchClear" onclick="clearUserSearch()" style="display:none">
               &times;
             </button>
@@ -195,7 +189,8 @@
             <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
               <circle cx="9" cy="7" r="4" />
-              <path stroke-linecap="round" stroke-linejoin="round" d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
             </svg>
             <p>Selecciona un usuario<br>para ver su detalle</p>
           </div>
@@ -225,7 +220,7 @@
                   oninput="this.value = this.value.replace(/\D/g, '')">
               </div>
               <div class="gu-field-row">
-                <span class="gu-field-label">Contrasena</span>
+                <span class="gu-field-label">Contraseña</span>
                 <input type="password" class="gu-field-input" id="editPassword" placeholder="Nueva contrasena">
               </div>
             </div>
@@ -408,10 +403,10 @@
       const filtered = q.trim().length < 1
         ? allUsers
         : allUsers.filter(u => {
-            const name = (u.nombre || '').toLowerCase();
-            const doc = String(u.cedula || '');
-            return name.includes(q.toLowerCase()) || doc.includes(q);
-          });
+          const name = (u.nombre || '').toLowerCase();
+          const doc = String(u.cedula || '');
+          return name.includes(q.toLowerCase()) || doc.includes(q);
+        });
       renderUserList(filtered);
     }
     function clearUserSearch() {
@@ -674,4 +669,5 @@
   </script>
 
 </body>
+
 </html>

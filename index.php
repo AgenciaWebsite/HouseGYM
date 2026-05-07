@@ -76,6 +76,14 @@ switch ($route) {
         require_once __DIR__ . '/app/Views/admin_usuarios.php';
         break;
 
+    case 'admin_rutina_personalizada':
+        if (($_SESSION['rol'] ?? '') !== 'admin' || empty($_SESSION['admin_id'])) {
+            header('Location: index.php?route=login&error=no_autorizado');
+            exit;
+        }
+        require_once __DIR__ . '/app/Views/admin_rutina_personalizada.php';
+        break;
+
     default:
         // Ruta no encontrada, redirigir al login
         header('Location: index.php?route=login');

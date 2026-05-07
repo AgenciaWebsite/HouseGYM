@@ -66,7 +66,7 @@
         Rutina Global
       </div>
 
-      <div class="nav-item" onclick="setSection('rutinas-personalizadas')">
+      <div class="nav-item" onclick="window.location.href='index.php?route=admin_rutina_personalizada'">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
