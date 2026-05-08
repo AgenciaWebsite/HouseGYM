@@ -92,6 +92,14 @@ switch ($route) {
         require_once __DIR__ . '/app/Views/admin_rutina_personalizada.php';
         break;
 
+    case 'admin_rutina_global':
+        if (($_SESSION['rol'] ?? '') !== 'admin' || empty($_SESSION['admin_id'])) {
+            header('Location: index.php?route=login&error=no_autorizado');
+            exit;
+        }
+        require_once __DIR__ . '/app/Views/admin_rutina_global.php';
+        break;
+
     case 'admin_maquinas':
         if (($_SESSION['rol'] ?? '') !== 'admin' || empty($_SESSION['admin_id'])) {
             header('Location: index.php?route=login&error=no_autorizado');

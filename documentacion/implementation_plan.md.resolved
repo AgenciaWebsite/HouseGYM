@@ -1,0 +1,133 @@
+# Rutina Global — Implementación Completa por Género, Semanas y Días
+
+## Descripción
+
+La tabla `rutina_global` en la base de datos actualmente **no tiene campo de género ni de semana ni de día**. Solo tiene `nombre`, `descripcion` y `activa`. La view `admin_rutina_global.php` existente está usando código de la vista de rutinas personalizadas (selector de usuario) y no refleja la lógica correcta.
+
+Se necesita:
+1. Agregar `genero` (Hombre/Mujer) y `semana` (1–4) a `rutina_global`.
+2. Agregar `dia` (1–5) y `orden` a `rutina_global_detalle`.
+3. Reescribir `admin_rutina_global.php` como una página dedicada con selector de género → semana (1–4) → día (1–5) → lista de ejercicios con series/reps.
+4. Agregar los métodos al `AdminModel.php` y `AdminController.php`.
+5. Registrar la ruta `admin_rutina_global` en `index.php`.
+6. Corregir los nav-links en todas las vistas admin para que apunten correctamente.
+7. Actualizar `housegym.sql` con los cambios de esquema.
+
+---
+
+## User Review Required
+
+> [!IMPORTANT]
+> La tabla `rutina_global` y `rutina_global_detalle` necesitan cambios de esquema. Se creará un script `alter_db.php` para aplicar los cambios de forma segura, sin necesidad de re-importar el SQL completo.
+
+> [!WARNING]
+> El archivo `admin_rutina_global.php` será completamente reescrito — el contenido actual es una copia de la vista de rutinas personalizadas. El CSS `admin_rutina_global.css` también recibirá ajustes específicos para las tabs de género y semana.
+
+---
+
+## Propuesta de Cambios de Esquema
+
+### `rutina_global` — Agregar columnas
+```sql
+ALTER TABLE rutina_global 
+  ADD COLUMN genero ENUM('Hombre','Mujer') NOT NULL DEFAULT 'Hombre' AFTER nombre,
+  ADD COLUMN semana TINYINT(1) NOT NULL DEFAULT 1 
+      CHECK (semana BETWEEN 1 AND 4) AFTER genero;
+```
+
+### `rutina_global_detalle` — Agregar columna `dia`
+```sql
+ALTER TABLE rutina_global_detalle 
+  ADD COLUMN dia TINYINT(1) NOT NULL DEFAULT 1 
+      CHECK (dia BETWEEN 1 AND 5) AFTER id_rutina_global,
+  ADD COLUMN orden TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER dia;
+-- Eliminar unique constraint anterior si existe
+ALTER TABLE rutina_global_detalle DROP INDEX IF EXISTS uq_rg_ejercicio;
+ALTER TABLE rutina_global_detalle ADD UNIQUE KEY uq_rg_dia_ejercicio (id_rutina_global, dia, id_ejercicio);
+```
+
+La clave de rutina global se identifica por `(genero, semana)` — habrá hasta 8 rutinas (2 géneros × 4 semanas). Si no existe, se crea automáticamente.
+
+---
+
+## Proposed Changes
+
+### Database
+
+#### [MODIFY] alter_db.php ← nuevo archivo en raíz
+Script PHP seguro que aplica los `ALTER TABLE` solo si las columnas no existen ya. Accesible desde el navegador por el admin.
+
+#### [MODIFY] housegym.sql
+Actualizar el schema documental para incluir los nuevos campos.
+
+---
+
+### Backend — Model
+
+#### [MODIFY] AdminModel.php
+Agregar métodos:
+- `getRutinaGlobal(string $genero, int $semana): array` — retorna días 1–5 con ejercicios
+- `saveRutinaGlobal(string $genero, int $semana, array $dias): void` — upsert de la rutina + detalles
+- `getRutinasGlobalesStats(): array` — conteo por género/semana
+
+---
+
+### Backend — Controller
+
+#### [MODIFY] AdminController.php
+Agregar handlers:
+- `GET rutina_global` → `getRutinaGlobal()` (params: `genero`, `semana`)
+- `POST rutina_global` → `saveRutinaGlobal()` (params: `genero`, `semana` en body)
+
+---
+
+### Router
+
+#### [MODIFY] index.php
+Agregar case `admin_rutina_global` que cargue la vista correspondiente (con protección de sesión admin).
+
+---
+
+### Frontend — Vista
+
+#### [MODIFY] app/Views/admin_rutina_global.php
+Reescritura completa con:
+- **Selector de género**: tabs "♂ Hombre" / "♀ Mujer" prominentes
+- **Selector de semana**: pills 1–4 (máximo de semanas en 1 mes)
+- **Panel izquierdo**: lista de días 1–5, cada uno expandible con sus ejercicios (con reps/series editables, botón eliminar ejercicio, botón eliminar día hasta máx 5)
+- **Panel derecho**: catálogo de ejercicios con búsqueda + filtro por grupo muscular
+- **Modal**: al agregar un ejercicio, pedir reps y series (como en rutina personalizada)
+- **Auto-save**: cada cambio llama al API y guarda
+
+Los enlaces del sidebar corregidos:
+- "Rutina Global" → `index.php?route=admin_rutina_global`
+- "Rutinas Personalizadas" → `index.php?route=admin_rutina_personalizada`
+
+#### [MODIFY] assets/admin_rutina_global.css
+Agregar estilos para:
+- `.rg-gender-tabs` — tabs de género con iconos ♂/♀ y color activo
+- `.rg-week-pills` — pills de semana 1–4
+- `.rg-selector-bar` — barra superior combinada género + semana
+- Indicadores visuales de género (azul para Hombre, rosa para Mujer)
+
+---
+
+### Nav Links — Corrección en todas las vistas
+
+#### [MODIFY] admin_rutina_global.php — nav-item de "Rutina Global" debe ser `nav-item--active`
+#### [MODIFY] Resto de vistas admin — "Rutina Global" debe apuntar a `admin_rutina_global`
+
+---
+
+## Verification Plan
+
+### Automated
+- Ejecutar `alter_db.php` desde el navegador → verificar que no haya errores
+- Probar API: `GET index.php?route=admin_api&resource=rutina_global&genero=Hombre&semana=1`
+- Probar API: `POST index.php?route=admin_api&resource=rutina_global`
+
+### Manual
+- Navegar a `index.php?route=admin_rutina_global`
+- Seleccionar "Hombre" → Semana 1 → agregar días y ejercicios → guardar
+- Seleccionar "Mujer" → Semana 2 → verificar que sean rutinas independientes
+- Eliminar ejercicio, eliminar día → confirmar que el cambio persiste en BD

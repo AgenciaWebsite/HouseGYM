@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rutina Personalizada - HouseGYM</title>
+  <title>Rutina Global - HouseGYM</title>
   <link rel="stylesheet" href="assets/admin.css">
-  <link rel="stylesheet" href="assets/admin_rutina_personalizada.css">
+  <link rel="stylesheet" href="assets/admin_rutina_global.css">
 </head>
 
 <body>
@@ -57,7 +57,7 @@
 
       <div class="nav-section-label">Contenido</div>
 
-      <div class="nav-item" onclick="window.location.href='index.php?route=admin'">
+      <div class="nav-item nav-item--active" onclick="window.location.href='index.php?route=admin_rutina_global'">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -65,7 +65,7 @@
         Rutina Global
       </div>
 
-      <div class="nav-item nav-item--active">
+      <div class="nav-item" onclick="window.location.href='index.php?route=admin_rutina_personalizada'">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -82,20 +82,6 @@
         Maquinas
       </div>
 
-      <div class="nav-item" onclick="window.location.href='index.php?route=admin'">
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-        Ejercicios
-      </div>
-
-      <div class="nav-item" onclick="window.location.href='index.php?route=admin'">
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-        </svg>
-        Dietas
-      </div>
     </nav>
 
     <div class="sidebar-footer">
@@ -148,134 +134,125 @@
     <div class="content">
 
       <div class="page-title">
-        <h1>Rutina global<span>Personalizada</span></h1>
-        <p class="page-subtitle">Editor de ejercicios por usuario — asigna días y ejercicios individuales</p>
+        <h1>Rutina global<span>General</span></h1>
+        <p class="page-subtitle">Editor de ejercicios por género y semana — define las rutinas predeterminadas</p>
       </div>
 
-      <!-- MAIN LAYOUT: izquierda = usuario + días | derecha = catálogo ejercicios -->
-      <div class="rp-layout">
+      <!-- MAIN LAYOUT -->
+      <div class="rg-layout">
 
-        <!-- ── PANEL IZQUIERDO: usuario seleccionado + días de rutina ── -->
-        <div class="rp-panel rp-panel--left">
+        <!-- ── PANEL IZQUIERDO: Configuración de Rutina Global (5 días fijos) ── -->
+        <div class="rg-panel rg-panel--left">
 
-          <!-- Header del panel: selector de usuario -->
-          <div class="rp-panel-header">
-            <div class="rp-header-user" id="rpHeaderUser">
-              <span class="rp-header-user__name" id="rpUserName">Seleccionar rutina global</span>
-              <button class="rp-header-user__btn" id="rpUserBtn" onclick="toggleUserPicker()">
-                <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
+          <!-- Header del panel: selectores de Género y Semana -->
+          <div class="rg-panel-header">
+            <div class="rg-selectors">
+              <div class="rg-select-wrap">
+                <label for="selectGenero">Género</label>
+                <select id="selectGenero" class="rg-select" onchange="loadRutina()">
+                  <option value="Hombre">Hombre</option>
+                  <option value="Mujer">Mujer</option>
+                </select>
+              </div>
 
-              <!-- Dropdown de usuarios -->
-              <div class="rp-user-picker" id="rpUserPicker" style="display:none">
-                <div class="rp-user-picker__search">
-                  <input type="text" id="rpPickerSearch" placeholder="Buscar usuario..."
-                    oninput="filterPickerUsers(this.value)" autocomplete="off">
-                </div>
-                <div class="rp-user-picker__list" id="rpPickerList">
-                  <div class="rp-picker-empty">Cargando...</div>
-                </div>
+              <div class="rg-select-wrap">
+                <label for="selectSemana">Semana</label>
+                <select id="selectSemana" class="rg-select" onchange="loadRutina()">
+                  <option value="1">Semana 1</option>
+                  <option value="2">Semana 2</option>
+                  <option value="3">Semana 3</option>
+                  <option value="4">Semana 4</option>
+                </select>
               </div>
             </div>
 
-            <div class="rp-header-sep"></div>
-            <span class="rp-header-label">rutina</span>
-          </div>
-
-          <!-- Lista de días con ejercicios -->
-          <div class="rp-days-wrap" id="rpDaysList">
-            <div class="rp-empty-state">
-              <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.2">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            <button class="rg-btn-save" onclick="saveRutina()" id="btnSaveRutina" style="display:none">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
               </svg>
-              <p>Selecciona un usuario<br>para editar su rutina</p>
-            </div>
+              Guardar Cambios
+            </button>
           </div>
 
-          <!-- Footer: añadir día -->
-          <div class="rp-panel-footer" id="rpPanelFooter" style="display:none">
-            <button class="rp-add-day-btn" onclick="addDay()">
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+          <!-- Lista de los 5 días -->
+          <div class="rg-days-wrap" id="rgDaysList">
+            <div class="rg-empty-state">
+              <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
               </svg>
-              Añadir dia
-            </button>
+              <p>Selecciona un <strong>Género</strong> y <strong>Semana</strong><br>para configurar sus ejercicios</p>
+            </div>
           </div>
 
         </div><!-- /panel izquierdo -->
 
         <!-- ── PANEL DERECHO: catálogo de ejercicios ── -->
-        <div class="rp-panel rp-panel--right">
+        <div class="rg-panel rg-panel--right">
 
-          <!-- Header del panel derecho -->
-          <div class="rp-panel-header rp-panel-header--right">
-            <span class="rp-header-label rp-header-label--main">ejercicios</span>
+          <div class="rg-panel-header">
+            <span style="font-weight: 700; color: #fff; text-transform: uppercase; font-size: 14px;">Catálogo</span>
           </div>
 
           <!-- Barra de búsqueda + filtro -->
-          <div class="rp-catalog-search">
-            <div class="rp-search-bar">
+          <div class="rg-catalog-search">
+            <div class="rg-search-bar">
               <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                 <circle cx="11" cy="11" r="8" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35" />
               </svg>
-              <input type="text" id="catalogSearch" class="rp-search-input" placeholder="Buscar ejercicio..."
+              <input type="text" id="catalogSearch" class="rg-search-input" placeholder="Buscar ejercicio..."
                 oninput="filterCatalog(this.value)" autocomplete="off">
             </div>
-            <div class="rp-filter-wrap">
-              <button class="rp-filter-btn" id="rpFilterBtn" onclick="toggleFilterMenu()">
+            <div class="rg-filter-wrap">
+              <button class="rg-filter-btn" id="rgFilterBtn" onclick="toggleFilterMenu()">
                 <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z" />
                 </svg>
               </button>
-              <button class="rp-filter-clear" id="rpFilterClear" onclick="clearFilter()" style="display:none"
-                title="Quitar filtro">&times;</button>
-
+              
               <!-- Dropdown de grupos musculares -->
-              <div class="rp-filter-menu" id="rpFilterMenu" style="display:none">
-                <div class="rp-filter-menu__title">Grupo muscular</div>
-                <div class="rp-filter-menu__list" id="rpFilterList"></div>
+              <div class="rp-filter-menu" id="rgFilterMenu" style="display:none; position:absolute; right:0; top:45px; background:#222; border:1px solid #333; border-radius:8px; z-index:100; min-width: 150px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                <div style="padding:10px 12px; font-size:11px; color:#888; border-bottom:1px solid #333; font-weight:bold;">GRUPO MUSCULAR</div>
+                <div id="rgFilterList" style="max-height:200px; overflow-y:auto;"></div>
+                <button id="rgFilterClear" onclick="clearFilter()" style="display:none; width:100%; background:none; border:none; padding:10px; color:#f87171; font-size:12px; cursor:pointer; font-weight:600;">Quitar filtro</button>
               </div>
             </div>
           </div>
 
           <!-- Grid de ejercicios -->
-          <div class="rp-catalog-grid" id="rpCatalogGrid">
-            <div class="rp-catalog-loading">Cargando ejercicios...</div>
+          <div class="rg-catalog-grid" id="rgCatalogGrid">
+            <div style="color:#aaa; font-size:13px; text-align:center; width:100%;">Cargando ejercicios...</div>
           </div>
 
         </div><!-- /panel derecho -->
 
-      </div><!-- /rp-layout -->
+      </div><!-- /rg-layout -->
 
     </div><!-- /content -->
   </div><!-- /main-wrap -->
 
   <!-- MODAL: configurar reps/series al agregar ejercicio a un día -->
-  <div class="rp-modal-overlay" id="rpModalOverlay" onclick="closeModal()">
-    <div class="rp-modal" onclick="event.stopPropagation()">
-      <div class="rp-modal__header">
-        <span class="rp-modal__title" id="modalTitle">Agregar ejercicio</span>
-        <button class="rp-modal__close" onclick="closeModal()">&times;</button>
+  <div class="rg-modal-overlay" id="rgModalOverlay" onclick="closeModal()">
+    <div class="rg-modal" onclick="event.stopPropagation()">
+      <div class="rg-modal__header">
+        <span class="rg-modal__title" id="modalTitle">Agregar ejercicio</span>
+        <button class="rg-modal__close" onclick="closeModal()">&times;</button>
       </div>
-      <div class="rp-modal__body">
-        <div class="rp-modal__exercise-preview" id="modalPreview"></div>
-        <div class="rp-modal__fields">
-          <div class="rp-modal__field">
-            <label class="rp-modal__label">Repeticiones</label>
-            <input type="number" class="rp-modal__input" id="modalReps" min="1" value="12" placeholder="12">
+      <div class="rg-modal__body">
+        <div class="rg-modal__exercise-preview" id="modalPreview"></div>
+        <div class="rg-modal__fields">
+          <div class="rg-modal__field">
+            <label class="rg-modal__label">Repeticiones</label>
+            <input type="number" class="rg-modal__input" id="modalReps" min="1" value="12" placeholder="12">
           </div>
-          <div class="rp-modal__field">
-            <label class="rp-modal__label">Series</label>
-            <input type="number" class="rp-modal__input" id="modalSeries" min="1" value="3" placeholder="3">
+          <div class="rg-modal__field">
+            <label class="rg-modal__label">Series</label>
+            <input type="number" class="rg-modal__input" id="modalSeries" min="1" value="3" placeholder="3">
           </div>
         </div>
       </div>
-      <div class="rp-modal__footer">
+      <div class="rg-modal__footer">
         <button class="btn btn--ghost" onclick="closeModal()">Cancelar</button>
         <button class="btn btn--primary" onclick="confirmAddExercise()">
           <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
@@ -289,7 +266,7 @@
 
   <script>
     /* ══════════════════════════════════════════
-       HouseGYM — Admin Rutina Personalizada JS
+       HouseGYM — Admin Rutina Global JS
     ══════════════════════════════════════════ */
 
     /* ── Mobile sidebar ── */
@@ -329,14 +306,12 @@
     }
 
     /* ══ STATE ══ */
-    let allUsers = [];   // todos los usuarios
-    let currentUser = null; // usuario seleccionado
-    let rutinaDays = [];   // días de la rutina del usuario actual
+    let rutinaDays = [];      // 5 días fijos [ { dia: 1, ejercicios: [] }, ... ]
     let allEjercicios = [];   // catálogo completo de ejercicios
-    let filteredEjerc = [];   // ejercicios filtrados en el catálogo
-    let activeFilter = null; // grupo muscular activo
+    let filteredEjerc = [];   // ejercicios filtrados
+    let activeFilter = null;  // grupo muscular activo
     let pendingExercise = null; // ejercicio pendiente de confirmar en modal
-    let pendingDayIdx = null; // día al que se va a agregar
+    let loadedParams = { genero: 'Hombre', semana: 1 }; // Track current loaded state
 
     /* ══ BOOT ══ */
     apiRequest('session')
@@ -345,134 +320,88 @@
           const el = document.getElementById('adminUserLabel');
           if (el) el.textContent = data.admin.usuario;
         }
-        loadUsers();
         loadEjercicios();
+        loadRutina(); // Carga la opción por defecto (Hombre, Semana 1)
       })
       .catch(() => {
         window.location.href = 'index.php?route=login&error=no_autorizado';
       });
 
-    /* ══ USUARIOS ══ */
-    async function loadUsers() {
-      try {
-        const data = await apiRequest('users');
-        allUsers = (data.users || []).filter(u => Number(u.plan_personalizado) === 1);
-        renderPickerList(allUsers);
-      } catch (e) {
-        document.getElementById('rpPickerList').innerHTML = '<div class="rp-picker-empty">Error al cargar usuarios.</div>';
+    /* ══ RUTINA DÍAS (Fijos 5 días) ══ */
+    function initEmptyDays() {
+      rutinaDays = [];
+      for (let i = 1; i <= 5; i++) {
+        rutinaDays.push({ dia: i, ejercicios: [] });
       }
     }
 
-    function renderPickerList(list) {
-      const el = document.getElementById('rpPickerList');
-      if (!list.length) {
-        el.innerHTML = '<div class="rp-picker-empty">Sin usuarios con rutina personalizada.</div>';
-        return;
-      }
-      el.innerHTML = list.map(u => {
-        const name = u.nombre || `Usuario ${u.id_usuario}`;
-        const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-        return `<div class="rp-picker-item" onclick="selectUser(${u.id_usuario})">
-          <div class="rp-picker-avatar">${initials}</div>
-          <div>
-            <div class="rp-picker-name">${name}</div>
-            <div class="rp-picker-doc">CC ${u.cedula || '--'}</div>
-          </div>
-        </div>`;
-      }).join('');
-    }
+    async function loadRutina() {
+      const genero = document.getElementById('selectGenero').value;
+      const semana = document.getElementById('selectSemana').value;
+      
+      loadedParams = { genero, semana };
+      document.getElementById('rgDaysList').innerHTML = '<div style="color:#aaa; text-align:center; padding: 40px;">Cargando rutina...</div>';
+      document.getElementById('btnSaveRutina').style.display = 'none';
 
-    function filterPickerUsers(q) {
-      const filtered = q.trim().length < 1
-        ? allUsers
-        : allUsers.filter(u => (u.nombre || '').toLowerCase().includes(q.toLowerCase()) || String(u.cedula || '').includes(q));
-      renderPickerList(filtered);
-    }
+      initEmptyDays();
 
-    function toggleUserPicker() {
-      const picker = document.getElementById('rpUserPicker');
-      const isOpen = picker.style.display !== 'none';
-      picker.style.display = isOpen ? 'none' : 'block';
-      if (!isOpen) document.getElementById('rpPickerSearch').focus();
-    }
-
-    function selectUser(id) {
-      currentUser = allUsers.find(u => u.id_usuario == id) || null;
-      if (!currentUser) return;
-
-      const name = currentUser.nombre || `Usuario ${currentUser.id_usuario}`;
-      document.getElementById('rpUserName').textContent = name;
-      document.getElementById('rpUserPicker').style.display = 'none';
-      document.getElementById('rpPanelFooter').style.display = 'flex';
-
-      loadRutina(currentUser.id_usuario);
-    }
-
-    /* ══ RUTINA DÍAS ══ */
-    async function loadRutina(userId) {
-      document.getElementById('rpDaysList').innerHTML = '<div class="rp-loading">Cargando rutina...</div>';
       try {
-        const data = await apiRequest(`rutina_personalizada&user_id=${encodeURIComponent(userId)}`);
-        rutinaDays = data.dias || [];
+        const data = await apiRequest(`rutina_global&genero=${encodeURIComponent(genero)}&semana=${encodeURIComponent(semana)}`);
+        
+        // Mapear los datos que vienen del servidor (pueden faltar días si están vacíos)
+        if (data.dias && data.dias.length > 0) {
+            data.dias.forEach(dbDia => {
+                const dayIndex = dbDia.dia - 1;
+                if (dayIndex >= 0 && dayIndex < 5) {
+                    rutinaDays[dayIndex].ejercicios = dbDia.ejercicios || [];
+                }
+            });
+        }
+        
         renderDays();
+        document.getElementById('btnSaveRutina').style.display = 'flex';
       } catch (e) {
-        rutinaDays = [];
         renderDays();
+        document.getElementById('btnSaveRutina').style.display = 'flex';
       }
     }
 
     function renderDays() {
-      const container = document.getElementById('rpDaysList');
-      if (!rutinaDays.length) {
-        container.innerHTML = `
-          <div class="rp-empty-state">
-            <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-            </svg>
-            <p>Sin días configurados.<br>Pulsa <strong>Añadir dia</strong> para comenzar.</p>
-          </div>`;
-        return;
-      }
-
-      container.innerHTML = rutinaDays.map((dia, di) => `
-        <div class="rp-day-card" id="dayCard${di}">
-          <div class="rp-day-header">
-            <span class="rp-day-label">DÍA ${di + 1}</span>
-            <button class="rp-day-remove" onclick="removeDay(${di})" title="Eliminar día">
-              <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2M3 6h18"/>
-              </svg>
-            </button>
+      const container = document.getElementById('rgDaysList');
+      container.innerHTML = rutinaDays.map((diaObj, di) => `
+        <div class="rg-day-card" id="dayCard${di}">
+          <div class="rg-day-header">
+            <span class="rg-day-label">DÍA ${diaObj.dia}</span>
           </div>
-          <div class="rp-exercise-list">
-            ${(dia.ejercicios || []).map((ej, ei) => renderExerciseRow(ej, di, ei)).join('')}
-            ${!(dia.ejercicios || []).length ? '<div class="rp-no-exercises">Sin ejercicios — arrastra desde el catalogo o selecciona uno</div>' : ''}
+          <div class="rg-exercise-list">
+            ${(diaObj.ejercicios || []).map((ej, ei) => renderExerciseRow(ej, di, ei)).join('')}
+            ${!(diaObj.ejercicios || []).length ? '<div class="rg-no-exercises">Sin ejercicios — selecciona uno del catálogo</div>' : ''}
           </div>
         </div>`).join('');
     }
 
     function renderExerciseRow(ej, di, ei) {
       return `
-        <div class="rp-exercise-row">
-          <div class="rp-exercise-img">
+        <div class="rg-exercise-row">
+          <div class="rg-exercise-img">
             ${ej.imagen_url
           ? `<img src="${ej.imagen_url}" alt="${ej.nombre}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
           : ''}
-            <div class="rp-exercise-img__placeholder" ${ej.imagen_url ? 'style="display:none"' : ''}>
+            <div class="rg-exercise-img__placeholder" ${ej.imagen_url ? 'style="display:none"' : ''}>
               <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
               </svg>
               <span>imagen</span>
             </div>
           </div>
-          <div class="rp-exercise-info">
-            <div class="rp-exercise-name">${ej.nombre || 'Ejercicio'}</div>
-            <div class="rp-exercise-meta">
+          <div class="rg-exercise-info">
+            <div class="rg-exercise-name">${ej.nombre || 'Ejercicio'}</div>
+            <div class="rg-exercise-meta">
               REPS = <span>'${ej.reps || 12}'</span> &nbsp; SERIES = <span>'${ej.series || 3}'</span>
             </div>
-            <div class="rp-exercise-muscle">${ej.grupo_muscular || 'grupo muscular'}</div>
+            <div class="rg-exercise-muscle">${ej.grupo_muscular || 'grupo muscular'}</div>
           </div>
-          <button class="rp-exercise-remove" onclick="removeExercise(${di}, ${ei})" title="Quitar ejercicio">
+          <button class="rg-exercise-remove" onclick="removeExercise(${di}, ${ei})" title="Quitar ejercicio">
             <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
               <circle cx="12" cy="12" r="10"/>
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 9l-6 6M9 9l6 6"/>
@@ -481,29 +410,9 @@
         </div>`;
     }
 
-    function addDay() {
-      if (!currentUser) return;
-      rutinaDays.push({ ejercicios: [] });
-      renderDays();
-      saveRutina();
-      // Scroll al final
-      setTimeout(() => {
-        const wrap = document.getElementById('rpDaysList');
-        wrap.scrollTop = wrap.scrollHeight;
-      }, 50);
-    }
-
-    function removeDay(di) {
-      if (!confirm(`¿Eliminar el Día ${di + 1} con todos sus ejercicios?`)) return;
-      rutinaDays.splice(di, 1);
-      renderDays();
-      saveRutina();
-    }
-
     function removeExercise(di, ei) {
       rutinaDays[di].ejercicios.splice(ei, 1);
       renderDays();
-      saveRutina();
     }
 
     /* ══ CATÁLOGO EJERCICIOS ══ */
@@ -515,31 +424,31 @@
         renderCatalog(filteredEjerc);
         buildFilterMenu();
       } catch (e) {
-        document.getElementById('rpCatalogGrid').innerHTML = '<div class="rp-catalog-loading">Error al cargar ejercicios.</div>';
+        document.getElementById('rgCatalogGrid').innerHTML = '<div style="color:#f87171; font-size:13px;">Error al cargar ejercicios.</div>';
       }
     }
 
     function renderCatalog(list) {
-      const grid = document.getElementById('rpCatalogGrid');
+      const grid = document.getElementById('rgCatalogGrid');
       if (!list.length) {
-        grid.innerHTML = '<div class="rp-catalog-loading">Sin resultados.</div>';
+        grid.innerHTML = '<div style="color:#aaa; font-size:13px; text-align:center; width:100%;">Sin resultados.</div>';
         return;
       }
       grid.innerHTML = list.map(ej => `
-        <div class="rp-catalog-card" onclick="openModal(${ej.id_ejercicio})" title="${ej.nombre}">
-          <div class="rp-catalog-card__img">
+        <div class="rg-catalog-card" onclick="openModal(${ej.id_ejercicio})" title="${ej.nombre}">
+          <div class="rg-catalog-card__img">
             ${ej.imagen_url
           ? `<img src="${ej.imagen_url}" alt="${ej.nombre}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
           : ''}
-            <div class="rp-catalog-card__placeholder" ${ej.imagen_url ? 'style="display:none"' : ''}>
+            <div class="rg-catalog-card__placeholder" ${ej.imagen_url ? 'style="display:none"' : ''}>
               <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
               </svg>
             </div>
           </div>
-          <div class="rp-catalog-card__info">
-            <div class="rp-catalog-card__name">${ej.nombre || 'Ejercicio'}</div>
-            <div class="rp-catalog-card__muscle">${ej.grupo_muscular || ''}</div>
+          <div class="rg-catalog-card__info">
+            <div class="rg-catalog-card__name">${ej.nombre || 'Ejercicio'}</div>
+            <div class="rg-catalog-card__muscle">${ej.grupo_muscular || ''}</div>
           </div>
         </div>`).join('');
     }
@@ -556,85 +465,77 @@
 
     function buildFilterMenu() {
       const groups = [...new Set(allEjercicios.map(e => e.grupo_muscular).filter(Boolean))].sort();
-      document.getElementById('rpFilterList').innerHTML = groups.map(g => `
-        <div class="rp-filter-option" onclick="applyFilter('${g}')">${g}</div>`).join('');
+      document.getElementById('rgFilterList').innerHTML = groups.map(g => `
+        <div style="padding:10px 12px; font-size:12px; color:#ddd; cursor:pointer; border-bottom:1px solid #333;" onmouseover="this.style.background='#333'" onmouseout="this.style.background='transparent'" onclick="applyFilter('${g}')">${g}</div>`).join('');
     }
 
     function toggleFilterMenu() {
-      const menu = document.getElementById('rpFilterMenu');
+      const menu = document.getElementById('rgFilterMenu');
       menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
     }
 
     function applyFilter(group) {
       activeFilter = group;
-      document.getElementById('rpFilterMenu').style.display = 'none';
-      document.getElementById('rpFilterClear').style.display = 'flex';
-      document.getElementById('rpFilterBtn').classList.add('rp-filter-btn--active');
+      document.getElementById('rgFilterMenu').style.display = 'none';
+      document.getElementById('rgFilterClear').style.display = 'block';
+      document.getElementById('rgFilterBtn').classList.add('rg-filter-btn--active');
       filterCatalog(document.getElementById('catalogSearch').value);
     }
 
     function clearFilter() {
       activeFilter = null;
-      document.getElementById('rpFilterClear').style.display = 'none';
-      document.getElementById('rpFilterBtn').classList.remove('rp-filter-btn--active');
+      document.getElementById('rgFilterClear').style.display = 'none';
+      document.getElementById('rgFilterBtn').classList.remove('rg-filter-btn--active');
       filterCatalog(document.getElementById('catalogSearch').value);
     }
 
     /* ══ MODAL reps/series ══ */
     function openModal(ejercicioId) {
-      if (!currentUser) {
-        alert('Primero selecciona un usuario.');
+      if (!rutinaDays || rutinaDays.length === 0) {
+        alert('Cargando la rutina... por favor espera.');
         return;
       }
-      if (!rutinaDays.length) {
-        alert('Primero añade al menos un día a la rutina.');
-        return;
-      }
+
       pendingExercise = allEjercicios.find(e => e.id_ejercicio == ejercicioId) || null;
       if (!pendingExercise) return;
 
       document.getElementById('modalTitle').textContent = pendingExercise.nombre || 'Ejercicio';
       document.getElementById('modalPreview').innerHTML = `
-        <div class="rp-modal__img">
+        <div class="rg-modal__img">
           ${pendingExercise.imagen_url
           ? `<img src="${pendingExercise.imagen_url}" alt="${pendingExercise.nombre}">`
-          : `<div class="rp-modal__img-placeholder">
-                <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                </svg>
-               </div>`}
+          : `<div style="color:#666;"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>`}
         </div>
         <div>
-          <div class="rp-modal__ej-name">${pendingExercise.nombre || ''}</div>
-          <div class="rp-modal__ej-muscle">${pendingExercise.grupo_muscular || ''}</div>
-          ${rutinaDays.length > 1 ? `
-            <div class="rp-modal__day-select-wrap">
-              <label class="rp-modal__label">Agregar al día</label>
-              <select class="rp-modal__select" id="modalDaySelect">
-                ${rutinaDays.map((_, i) => `<option value="${i}">Día ${i + 1}</option>`).join('')}
-              </select>
-            </div>` : ''}
+          <div class="rg-modal__ej-name">${pendingExercise.nombre || ''}</div>
+          <div class="rg-modal__ej-muscle">${pendingExercise.grupo_muscular || ''}</div>
+          <div style="margin-top: 12px;">
+            <label class="rg-modal__label">Agregar al día</label>
+            <select class="rg-modal__select" id="modalDaySelect" style="margin-top: 4px;">
+              ${rutinaDays.map(d => `<option value="${d.dia - 1}">Día ${d.dia}</option>`).join('')}
+            </select>
+          </div>
         </div>`;
 
       document.getElementById('modalReps').value = 12;
       document.getElementById('modalSeries').value = 3;
-      document.getElementById('rpModalOverlay').classList.add('rp-modal-overlay--visible');
+      document.getElementById('rgModalOverlay').classList.add('rg-modal-overlay--visible');
     }
 
     function closeModal() {
-      document.getElementById('rpModalOverlay').classList.remove('rp-modal-overlay--visible');
+      document.getElementById('rgModalOverlay').classList.remove('rg-modal-overlay--visible');
       pendingExercise = null;
     }
 
     function confirmAddExercise() {
-      if (!pendingExercise || !currentUser) return;
+      if (!pendingExercise) return;
+      
       const reps = parseInt(document.getElementById('modalReps').value) || 12;
       const series = parseInt(document.getElementById('modalSeries').value) || 3;
-      const dayIdx = rutinaDays.length > 1
-        ? parseInt(document.getElementById('modalDaySelect').value)
-        : 0;
+      const dayIdx = parseInt(document.getElementById('modalDaySelect').value) || 0;
 
       if (!rutinaDays[dayIdx].ejercicios) rutinaDays[dayIdx].ejercicios = [];
+      
       rutinaDays[dayIdx].ejercicios.push({
         id_ejercicio: pendingExercise.id_ejercicio,
         nombre: pendingExercise.nombre,
@@ -646,19 +547,39 @@
 
       closeModal();
       renderDays();
-      saveRutina();
     }
 
     /* ══ SAVE ══ */
     async function saveRutina() {
-      if (!currentUser) return;
+      const btn = document.getElementById('btnSaveRutina');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = 'Guardando...';
+      btn.disabled = true;
+
       try {
-        await apiRequest(`rutina_personalizada&user_id=${encodeURIComponent(currentUser.id_usuario)}`, {
+        await apiRequest('rutina_global', {
           method: 'POST',
-          body: JSON.stringify({ dias: rutinaDays }),
+          body: JSON.stringify({ 
+              genero: loadedParams.genero, 
+              semana: parseInt(loadedParams.semana),
+              dias: rutinaDays 
+          }),
         });
+        
+        btn.style.background = '#4ade80';
+        btn.style.color = '#000';
+        btn.innerHTML = '¡Guardado!';
+        
+        setTimeout(() => {
+            btn.style.background = '';
+            btn.style.color = '';
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }, 2000);
       } catch (e) {
-        console.warn('No se pudo guardar la rutina:', e.message);
+        alert('Error al guardar la rutina: ' + e.message);
+        btn.innerHTML = originalText;
+        btn.disabled = false;
       }
     }
 
@@ -701,11 +622,8 @@
     }
     document.addEventListener('click', e => {
       if (!e.target.closest('.search-wrap')) clearSearch();
-      if (!e.target.closest('.rp-header-user')) {
-        document.getElementById('rpUserPicker').style.display = 'none';
-      }
-      if (!e.target.closest('.rp-filter-wrap')) {
-        document.getElementById('rpFilterMenu').style.display = 'none';
+      if (!e.target.closest('.rg-filter-wrap')) {
+        document.getElementById('rgFilterMenu').style.display = 'none';
       }
     });
   </script>

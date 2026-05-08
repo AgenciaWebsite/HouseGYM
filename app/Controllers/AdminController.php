@@ -117,6 +117,14 @@ class AdminController
                 $this->deleteMachine();
             }
 
+            if ($method === 'GET' && $resource === 'rutina_global') {
+                $this->getRutinaGlobal();
+            }
+
+            if ($method === 'POST' && $resource === 'rutina_global') {
+                $this->saveRutinaGlobal();
+            }
+
             $this->jsonResponse(['ok' => false, 'error' => 'recurso_no_soportado'], 404);
 
         } catch (\PDOException $e) {
@@ -365,6 +373,55 @@ class AdminController
         }
 
         $this->model->deleteMachine($id);
+        $this->jsonResponse(['ok' => true]);
+    }
+
+    /**
+     * Obtiene la rutina global de un género/semana.
+     * Params GET: genero (Hombre|Mujer), semana (1-4)
+     */
+    private function getRutinaGlobal(): void
+    {
+        $genero = (string) ($_GET['genero'] ?? 'Hombre');
+        $semana = (int) ($_GET['semana'] ?? 1);
+
+        if (!in_array($genero, ['Hombre', 'Mujer'], true)) {
+            $this->jsonResponse(['ok' => false, 'error' => 'genero_invalido'], 422);
+        }
+        if ($semana < 1 || $semana > 4) {
+            $this->jsonResponse(['ok' => false, 'error' => 'semana_invalida'], 422);
+        }
+
+        $dias = $this->model->getRutinaGlobal($genero, $semana);
+        $this->jsonResponse(['ok' => true, 'dias' => $dias]);
+    }
+
+    /**
+     * Guarda la rutina global de un género/semana.
+     * Body JSON: { genero, semana, dias: [{dia, ejercicios:[{id_ejercicio,series,reps}]}] }
+     */
+    private function saveRutinaGlobal(): void
+    {
+        $data = json_decode((string) file_get_contents('php://input'), true);
+        if (!is_array($data)) {
+            $this->jsonResponse(['ok' => false, 'error' => 'datos_invalidos'], 400);
+        }
+
+        $genero = (string) ($data['genero'] ?? '');
+        $semana = (int) ($data['semana'] ?? 0);
+        $dias   = $data['dias'] ?? [];
+
+        if (!in_array($genero, ['Hombre', 'Mujer'], true)) {
+            $this->jsonResponse(['ok' => false, 'error' => 'genero_invalido'], 422);
+        }
+        if ($semana < 1 || $semana > 4) {
+            $this->jsonResponse(['ok' => false, 'error' => 'semana_invalida'], 422);
+        }
+        if (!is_array($dias)) {
+            $this->jsonResponse(['ok' => false, 'error' => 'datos_invalidos'], 400);
+        }
+
+        $this->model->saveRutinaGlobal($genero, $semana, $dias);
         $this->jsonResponse(['ok' => true]);
     }
 }

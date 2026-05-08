@@ -242,10 +242,168 @@ class AdminModel
     public function getAllEjercicios(): array
     {
         return $this->pdo->query(
-            'SELECT id_ejercicio, nombre, descripcion, grupo_muscular, imagen_url
-             FROM ejercicios
-             ORDER BY nombre ASC'
+            'SELECT e.id_ejercicio, e.nombre, e.descripcion, e.foto_url AS imagen_url,
+                    g.nombre AS grupo_muscular
+             FROM ejercicios e
+             JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
+             ORDER BY e.nombre ASC'
         )->fetchAll();
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RUTINA GLOBAL — Métodos por Género / Semana / Día
+    ═══════════════════════════════════════════════════════════════ */
+
+    /**
+     * Obtiene o crea el ID de la rutina global para un género y semana dados.
+     *
+     * @param string $genero 'Hombre' o 'Mujer'
+     * @param int    $semana 1–4
+     * @return int   ID de rutina_global
+     */
+    private function getOrCreateRutinaGlobalId(string $genero, int $semana): int
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT id_rutina_global FROM rutina_global
+             WHERE genero = ? AND semana = ? LIMIT 1'
+        );
+        $stmt->execute([$genero, $semana]);
+        $id = $stmt->fetchColumn();
+
+        if ($id) {
+            return (int) $id;
+        }
+
+        // Crear nueva rutina global para este género/semana
+        $nombre = "Rutina Global {$genero} — Semana {$semana}";
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO rutina_global (nombre, genero, semana, activa) VALUES (?, ?, ?, 1)'
+        );
+        $stmt->execute([$nombre, $genero, $semana]);
+        return (int) $this->pdo->lastInsertId();
+    }
+
+    /**
+     * Obtiene la rutina global de un género y semana, agrupada por días.
+     *
+     * @param string $genero 'Hombre' o 'Mujer'
+     * @param int    $semana 1–4
+     * @return array [ ['dia'=>1, 'ejercicios'=>[...]], ... ]
+     */
+    public function getRutinaGlobal(string $genero, int $semana): array
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT id_rutina_global FROM rutina_global
+             WHERE genero = ? AND semana = ? LIMIT 1'
+        );
+        $stmt->execute([$genero, $semana]);
+        $rutinaId = $stmt->fetchColumn();
+
+        if (!$rutinaId) {
+            return []; // sin datos aún
+        }
+
+        $stmt = $this->pdo->prepare(
+            'SELECT rgd.dia, rgd.id_ejercicio, rgd.series, rgd.repeticiones AS reps, rgd.orden,
+                    e.nombre, e.foto_url AS imagen_url, g.nombre AS grupo_muscular
+             FROM rutina_global_detalle rgd
+             JOIN ejercicios e ON e.id_ejercicio = rgd.id_ejercicio
+             JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
+             WHERE rgd.id_rutina_global = ?
+             ORDER BY rgd.dia ASC, rgd.orden ASC, rgd.id ASC'
+        );
+        $stmt->execute([$rutinaId]);
+        $rows = $stmt->fetchAll();
+
+        // Agrupar en formato: { dia: N, ejercicios: [...] }
+        $diasMap = [];
+        foreach ($rows as $row) {
+            $dia = (int) $row['dia'];
+            if (!isset($diasMap[$dia])) {
+                $diasMap[$dia] = ['dia' => $dia, 'ejercicios' => []];
+            }
+            $diasMap[$dia]['ejercicios'][] = [
+                'id_ejercicio'  => $row['id_ejercicio'],
+                'nombre'        => $row['nombre'],
+                'imagen_url'    => $row['imagen_url'],
+                'grupo_muscular'=> $row['grupo_muscular'],
+                'reps'          => $row['reps'],
+                'series'        => $row['series'],
+            ];
+        }
+
+        // Ordenar por número de día y devolver como array indexado
+        ksort($diasMap);
+        return array_values($diasMap);
+    }
+
+    /**
+     * Guarda/reemplaza la rutina global completa para un género y semana.
+     *
+     * @param string $genero 'Hombre' o 'Mujer'
+     * @param int    $semana 1–4
+     * @param array  $dias   [ ['dia'=>N, 'ejercicios'=>[...]], ... ]
+     */
+    public function saveRutinaGlobal(string $genero, int $semana, array $dias): void
+    {
+        $this->pdo->beginTransaction();
+        try {
+            $rutinaId = $this->getOrCreateRutinaGlobalId($genero, $semana);
+
+            // Borrar todos los detalles anteriores de esta rutina
+            $stmt = $this->pdo->prepare(
+                'DELETE FROM rutina_global_detalle WHERE id_rutina_global = ?'
+            );
+            $stmt->execute([$rutinaId]);
+
+            // Insertar los nuevos detalles
+            if (!empty($dias)) {
+                $stmtIns = $this->pdo->prepare(
+                    'INSERT INTO rutina_global_detalle
+                     (id_rutina_global, dia, orden, id_ejercicio, series, repeticiones)
+                     VALUES (?, ?, ?, ?, ?, ?)'
+                );
+                foreach ($dias as $diaObj) {
+                    $diaNum = (int) ($diaObj['dia'] ?? 0);
+                    if ($diaNum < 1 || $diaNum > 5) continue;
+                    $orden = 0;
+                    foreach ($diaObj['ejercicios'] ?? [] as $ej) {
+                        $idEj   = (int) $ej['id_ejercicio'];
+                        $series = max(1, (int) ($ej['series'] ?? 3));
+                        $reps   = max(1, (int) ($ej['reps'] ?? 12));
+                        $stmtIns->execute([$rutinaId, $diaNum, $orden, $idEj, $series, $reps]);
+                        $orden++;
+                    }
+                }
+            }
+
+            $this->pdo->commit();
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * Retorna estadísticas rápidas de cuántas rutinas globales están configuradas.
+     *
+     * @return array ['hombre'=>int[], 'mujer'=>int[]]
+     */
+    public function getRutinasGlobalesStats(): array
+    {
+        $rows = $this->pdo->query(
+            "SELECT rg.genero, rg.semana, COUNT(rgd.id) AS total_ejercicios
+             FROM rutina_global rg
+             LEFT JOIN rutina_global_detalle rgd ON rgd.id_rutina_global = rg.id_rutina_global
+             GROUP BY rg.genero, rg.semana
+             ORDER BY rg.genero, rg.semana"
+        )->fetchAll();
+
+        $stats = ['Hombre' => [], 'Mujer' => []];
+        foreach ($rows as $r) {
+            $stats[$r['genero']][(int)$r['semana']] = (int)$r['total_ejercicios'];
+        }
+        return $stats;
     }
 
     /**
