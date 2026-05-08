@@ -50,6 +50,9 @@ class UsuarioController
                 case 'machines':
                     $this->getMachines($method);
                     break;
+                case 'ejercicios':
+                    $this->getEjercicios($method);
+                    break;
                 default:
                     http_response_code(404);
                     echo json_encode(['ok' => false, 'error' => 'Recurso no encontrado']);
@@ -109,6 +112,16 @@ class UsuarioController
 
         $machines = $this->model->getAllMaquinas();
         echo json_encode(['ok' => true, 'machines' => $machines]);
+    }
+
+    private function getEjercicios(string $method): void
+    {
+        if ($method !== 'GET') {
+            $this->sendMethodNotAllowed();
+        }
+
+        $ejercicios = $this->model->getAllEjercicios();
+        echo json_encode(['ok' => true, 'ejercicios' => $ejercicios]);
     }
 
     private function sendMethodNotAllowed(): void

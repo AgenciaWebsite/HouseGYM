@@ -98,4 +98,17 @@ class UsuarioModel
              ORDER BY nombre ASC'
         )->fetchAll();
     }
+    /**
+     * Obtiene todos los ejercicios del catálogo (solo lectura).
+     */
+    public function getAllEjercicios(): array
+    {
+        return $this->pdo->query(
+            'SELECT e.id_ejercicio, e.nombre, e.descripcion, e.foto_url AS imagen_url,
+                    e.id_grupo, e.id_maquina, g.nombre AS grupo_muscular
+             FROM ejercicios e
+             JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
+             ORDER BY e.nombre ASC'
+        )->fetchAll();
+    }
 }

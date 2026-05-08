@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mi Panel - HouseGYM</title>
   <link rel="stylesheet" href="assets/admin.css">
-  <link rel="stylesheet" href="assets/usuarios_rutina.css">
+  <link rel="stylesheet" href="assets/usuarios.css">
 </head>
 
 <body>
@@ -38,7 +38,7 @@
     <nav class="sidebar-nav">
       <div class="nav-section-label">Personal</div>
 
-      <a class="nav-item" href="index.php?route=usuarios">
+      <a class="nav-item nav-item--active" href="index.php?route=usuarios">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
           <circle cx="9" cy="7" r="4" />
@@ -47,7 +47,7 @@
         Mi Perfil
       </a>
 
-      <a class="nav-item nav-item--active" href="index.php?route=usuarios_rutina">
+      <a class="nav-item" href="#seccion-rutina">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -63,16 +63,15 @@
         Mi Dieta
       </a>
 
-      <a class="nav-item" href="index.php?route=usuarios_maquinas">
+      <a class="nav-item" href="#seccion-maquinas">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-          <rect x="2" y="7" width="4" height="10" rx="1" />
-          <rect x="18" y="7" width="4" height="10" rx="1" />
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 10h12M6 14h12" />
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
         </svg>
-        Máquinas
+        Maquinas
       </a>
 
-      <a class="nav-item" href="#seccion-ejercicios">
+      <a class="nav-item" href="index.php?route=usuarios_ejercicios">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />

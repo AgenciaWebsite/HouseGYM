@@ -559,3 +559,26 @@
     justify-content: center;
   }
 }
+
+/* ── Valor de solo lectura en modal ── */
+.gm-detail-value {
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  color: var(--white-soft);
+  background: var(--gray-dark);
+  border: 1px solid var(--gray-border2);
+  border-radius: 10px;
+  padding: 9px 14px;
+  min-height: 38px;
+  line-height: 1.5;
+}
+
+/* ── Zona de foto en modo lectura (sin cursor pointer) ── */
+.gm-photo-zone--readonly {
+  cursor: default !important;
+}
+
+.gm-photo-zone--readonly:hover {
+  border-color: var(--gray-border2) !important;
+  background: var(--gray-dark) !important;
+}

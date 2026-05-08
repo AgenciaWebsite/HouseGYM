@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ejercicios - HouseGYM</title>
   <link rel="stylesheet" href="assets/admin.css">
-  <link rel="stylesheet" href="assets/admin_ejercicios.css">
+  <link rel="stylesheet" href="assets/usuarios_ejercicios.css">
 </head>
 
 <body>
@@ -28,84 +28,64 @@
         </div>
         <div>
           <div class="sidebar-logo__name">HouseGYM</div>
-          <div class="sidebar-logo__sub">Admin Panel</div>
+          <div class="sidebar-logo__sub">Mi Panel</div>
         </div>
       </div>
     </div>
 
     <nav class="sidebar-nav">
-      <div class="nav-section-label">General</div>
+      <div class="nav-section-label">Personal</div>
 
-      <div class="nav-item" onclick="window.location.href='index.php?route=admin'">
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-          <rect x="3" y="3" width="7" height="7" rx="1" />
-          <rect x="14" y="3" width="7" height="7" rx="1" />
-          <rect x="3" y="14" width="7" height="7" rx="1" />
-          <rect x="14" y="14" width="7" height="7" rx="1" />
-        </svg>
-        Dashboard
-      </div>
-
-      <div class="nav-item" onclick="window.location.href='index.php?route=admin_usuarios'">
+      <a class="nav-item" href="index.php?route=usuarios">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
           <circle cx="9" cy="7" r="4" />
           <path stroke-linecap="round" stroke-linejoin="round" d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
         </svg>
-        Usuarios
-      </div>
+        Mi Perfil
+      </a>
 
-      <div class="nav-section-label">Contenido</div>
-
-      <div class="nav-item" onclick="window.location.href='index.php?route=admin_rutina_global'">
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-        </svg>
-        Rutina Global
-      </div>
-
-      <div class="nav-item" onclick="window.location.href='index.php?route=admin_rutina_personalizada'">
+      <a class="nav-item" href="index.php?route=usuarios_rutina">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
         </svg>
-        Rutinas Personalizadas
-      </div>
+        Mi Rutina
+      </a>
 
-      <div class="nav-item" onclick="window.location.href='index.php?route=admin_maquinas'">
+      <a class="nav-item" href="#seccion-dieta">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+        </svg>
+        Mi Dieta
+      </a>
+
+      <a class="nav-item" href="index.php?route=usuarios_maquinas">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <rect x="2" y="7" width="4" height="10" rx="1" />
           <rect x="18" y="7" width="4" height="10" rx="1" />
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 10h12M6 14h12" />
         </svg>
         Máquinas
-      </div>
+      </a>
 
-      <div class="nav-item nav-item--active" onclick="window.location.href='index.php?route=admin_ejercicios'">
+      <a class="nav-item nav-item--active" href="index.php?route=usuarios_ejercicios">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
         Ejercicios
-      </div>
-
-      <div class="nav-item" onclick="window.location.href='index.php?route=admin'">
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-        </svg>
-        Dietas
-      </div>
+      </a>
     </nav>
 
     <div class="sidebar-footer">
-      <div class="nav-item nav-item--logout" onclick="window.location='index.php?route=logout'">
+      <a class="nav-item nav-item--logout" href="index.php?route=logout">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
         </svg>
         Cerrar Sesión
-      </div>
+      </a>
     </div>
   </aside>
 
@@ -123,24 +103,13 @@
         </svg>
       </button>
 
-      <!-- Global search -->
-      <div class="search-wrap">
-        <svg class="search-wrap__icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-          stroke-width="2.5">
-          <circle cx="11" cy="11" r="8" />
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35" />
-        </svg>
-        <input type="text" class="search-input" id="globalSearch" placeholder="Buscar usuario, rutina, maquinas"
-          oninput="handleSearch(this.value)">
-        <button class="search-clear-btn" onclick="clearSearch()">&#x2022;</button>
-        <div class="search-results hidden" id="searchResults"></div>
-      </div>
+      <div style="flex:1"></div>
 
       <!-- User info -->
       <div class="topbar-user">
         <div class="topbar-user__dot"></div>
-        <span class="topbar-user__name" id="adminUserLabel">Admin</span>
-        <div class="topbar-user__avatar">A</div>
+        <span class="topbar-user__name" id="topbarUserName">Cargando...</span>
+        <div class="topbar-user__avatar" id="topbarAvatar">U</div>
       </div>
     </div>
 
@@ -148,14 +117,13 @@
     <div class="content">
 
       <div class="page-title">
-        <h1>Gestión de <span>Ejercicios</span></h1>
-        <p class="page-subtitle">Agrega, edita y organiza los ejercicios del gimnasio</p>
+        <h1>Catálogo de <span>Ejercicios</span></h1>
+        <p class="page-subtitle">Consulta los ejercicios disponibles en el gimnasio</p>
       </div>
 
-      <!-- TOOLBAR -->
+      <!-- TOOLBAR: solo búsqueda y filtro, sin botón agregar -->
       <div class="gm-toolbar">
 
-        <!-- Search de ejercicios -->
         <div class="gm-search-wrap">
           <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
             <circle cx="11" cy="11" r="8" />
@@ -166,15 +134,6 @@
           <button class="gm-search-clear" id="ejercicioSearchClear" onclick="clearEjercicioSearch()">&times;</button>
         </div>
 
-        <!-- Botón Agregar -->
-        <button class="gm-add-btn" onclick="openModal()">
-          <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" />
-          </svg>
-          Agregar
-        </button>
-
-        <!-- Filtro por grupo muscular -->
         <div class="gm-filter-wrap">
           <select class="gm-filter-select" id="muscleFilter"
             onchange="filterEjercicios(document.getElementById('ejercicioSearch').value)">
@@ -217,31 +176,24 @@
     </div><!-- /content -->
   </div><!-- /main-wrap -->
 
-
-  <!-- ══════════════════════════════════════
-       MODAL: Agregar / Editar Ejercicio
-  ══════════════════════════════════════ -->
+  <!-- MODAL: Vista detalle ejercicio (solo lectura) -->
   <div class="gm-modal-overlay" id="ejercicioModal" onclick="handleOverlayClick(event)">
     <div class="gm-modal" id="ejercicioModalInner">
 
-      <!-- Head -->
       <div class="gm-modal__head">
         <div>
-          <div class="gm-modal__title" id="modalTitle">Agregar Ejercicio</div>
-          <div class="gm-modal__subtitle" id="modalSubtitle">Nuevo ejercicio al inventario</div>
+          <div class="gm-modal__title" id="modalTitle">Detalle de Ejercicio</div>
+          <div class="gm-modal__subtitle" id="modalSubtitle"></div>
         </div>
         <button class="gm-modal__close" onclick="closeModal()" title="Cerrar">&times;</button>
       </div>
 
-      <!-- Body -->
       <div class="gm-modal__body">
 
         <!-- Foto -->
         <div>
-          <div class="gm-photo-zone" id="photoZone" onclick="triggerFileInput()">
-            <input type="file" id="photoInput" accept="image/*" onchange="previewPhoto(event)">
-
-            <!-- Placeholder (visible sin imagen) -->
+          <div class="gm-photo-zone gm-photo-zone--readonly" id="photoZone">
+            <img id="photoPreview" src="" alt="foto ejercicio" style="display:none;">
             <div id="photoPlaceholder"
               style="display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;">
               <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
@@ -249,107 +201,69 @@
                 <circle cx="8.5" cy="8.5" r="1.5" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 15l-5-5L5 21" />
               </svg>
-              <span class="gm-photo-zone__label">Subir foto<br>del ejercicio</span>
-              <span class="gm-photo-zone__hint">JPG, PNG · Máx 5 MB</span>
-            </div>
-
-            <!-- Preview imagen -->
-            <img id="photoPreview" src="" alt="preview" style="display:none;">
-            <div class="gm-photo-zone__overlay" id="photoOverlay">
-              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M15.232 5.232l3.536 3.536M9 13l6.5-6.5a2.121 2.121 0 013 3L12 16H9v-3z" />
-              </svg>
-              Cambiar foto
+              <span class="gm-photo-zone__label">Sin foto</span>
             </div>
           </div>
         </div>
 
-        <!-- Form fields -->
+        <!-- Info (solo lectura) -->
         <div class="gm-form-side">
 
           <div class="gm-form-group">
-            <label class="gm-form-label" for="ejercicioName">Nombre del ejercicio</label>
-            <input type="text" id="ejercicioName" class="gm-form-input" placeholder="Ej: Press de banca">
+            <label class="gm-form-label">Nombre</label>
+            <div class="gm-detail-value" id="detailNombre">—</div>
           </div>
 
           <div class="gm-form-group">
-            <label class="gm-form-label" for="ejercicioGrupo">Grupo Muscular <span
-                style="color:#e51a2c;">*</span></label>
-            <select id="ejercicioGrupo" class="gm-form-select">
-              <option value="">Seleccionar grupo</option>
-              <option value="1">Pierna</option>
-              <option value="2">Pecho</option>
-              <option value="3">Espalda</option>
-              <option value="4">Brazo</option>
-              <option value="5">Cardio</option>
-              <option value="6">Abdomen</option>
-            </select>
+            <label class="gm-form-label">Grupo Muscular</label>
+            <div class="gm-detail-value" id="detailGrupo">—</div>
           </div>
 
           <div class="gm-form-group">
-            <label class="gm-form-label" for="ejercicioDesc">Descripción</label>
-            <textarea id="ejercicioDesc" class="gm-form-textarea"
-              placeholder="Descripción breve del ejercicio..."></textarea>
+            <label class="gm-form-label">Descripción</label>
+            <div class="gm-detail-value" id="detailDesc">—</div>
           </div>
 
-          <div class="gm-form-group">
-            <label class="gm-form-label" for="ejercicioMaquina">Máquina asignada (Opcional)</label>
-            <select id="ejercicioMaquina" class="gm-form-select">
-              <option value="">Ninguna / Peso Libre</option>
-            </select>
+          <div class="gm-form-group" id="machineGroup" style="display: none;">
+            <label class="gm-form-label">Máquina Asignada</label>
+            <div class="gm-detail-value" id="detailMaquina">—</div>
           </div>
 
-        </div><!-- /form-side -->
-      </div><!-- /modal-body -->
-
-      <!-- Footer -->
-      <div class="gm-modal__foot">
-        <div class="gm-feedback" id="modalFeedback"></div>
-        <button class="gm-btn gm-btn--danger" id="deleteBtn" onclick="deleteEjercicio()" style="display:none;">
-          <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-            <polyline points="3 6 5 6 21 6" />
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2" />
-          </svg>
-          Eliminar
-        </button>
-        <button class="gm-btn gm-btn--ghost" onclick="closeModal()">Cancelar</button>
-        <button class="gm-btn gm-btn--primary" onclick="saveEjercicio()">
-          <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
-          Guardar
-        </button>
+        </div>
       </div>
 
-    </div><!-- /modal -->
-  </div><!-- /overlay -->
+      <div class="gm-modal__foot">
+        <button class="gm-btn gm-btn--ghost" onclick="closeModal()">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
 
 
   <script>
     /* ══════════════════════════════════════════════════
-       HouseGYM — Admin Ejercicios
+       HouseGYM — Usuarios: Catálogo de Ejercicios
     ══════════════════════════════════════════════════ */
 
-    const API_BASE = 'index.php?route=admin_api&resource=';
+    const API_BASE = 'index.php?route=usuario_api&resource=';
 
     async function apiRequest(action, options = {}) {
       const defaults = { headers: { 'Content-Type': 'application/json' } };
       const res = await fetch(API_BASE + action, { ...defaults, ...options });
+      if (res.status === 401) {
+        window.location.href = 'index.php?route=login&error=no_autorizado';
+        return null;
+      }
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.json();
     }
 
     /* ── State ── */
     let allEjercicios = [];
-    let currentEjercicio = null; // null = nuevo ejercicio
-    let photoBase64 = null;
     let allMachines = [];
 
-    /* ══════════════════════════════
-       SIDEBAR (reutilizado de admin)
-    ══════════════════════════════ */
+    /* ── Sidebar móvil ── */
+    function isMobileView() { return window.innerWidth <= 900; }
     function openSidebar() { document.getElementById('sidebar').classList.add('sidebar--open'); document.getElementById('sidebarOverlay').classList.add('active'); }
     function closeSidebar() { document.getElementById('sidebar').classList.remove('sidebar--open'); document.getElementById('sidebarOverlay').classList.remove('active'); }
     function toggleSidebar() { document.getElementById('sidebar').classList.contains('sidebar--open') ? closeSidebar() : openSidebar(); }
@@ -359,8 +273,17 @@
     ══════════════════════════════ */
     async function loadEjercicios() {
       try {
-        const data = await apiRequest('ejercicios');
-        allEjercicios = data.ejercicios || [];
+        const [dataEjercicios, dataMachines] = await Promise.all([
+          apiRequest('ejercicios'),
+          apiRequest('machines')
+        ]);
+        
+        if (dataMachines && dataMachines.machines) {
+          allMachines = dataMachines.machines;
+        }
+
+        if (!dataEjercicios) return;
+        allEjercicios = dataEjercicios.ejercicios || [];
         renderGrid(allEjercicios);
       } catch (e) {
         document.getElementById('ejercicioGrid').innerHTML = `
@@ -371,22 +294,6 @@
             </svg>
             No se pudieron cargar los ejercicios.
           </div>`;
-      }
-    }
-
-    async function loadMachinesSelect() {
-      try {
-        const data = await apiRequest('machines');
-        allMachines = data.machines || [];
-        const select = document.getElementById('ejercicioMaquina');
-        allMachines.forEach(m => {
-          const opt = document.createElement('option');
-          opt.value = m.id_maquina;
-          opt.textContent = m.nombre;
-          select.appendChild(opt);
-        });
-      } catch (e) {
-        console.error("Error al cargar máquinas", e);
       }
     }
 
@@ -424,7 +331,7 @@
              </div>`;
 
         return `
-          <div class="gm-card" onclick="openModal(${m.id_ejercicio})">
+          <div class="gm-card" onclick="openDetail(${m.id_ejercicio})">
             <div class="gm-card__photo">${photoHtml}</div>
             <div class="gm-card__name">${escHtml(m.nombre)}</div>
             ${m.grupo_muscular ? `<div class="gm-card__muscle">${escHtml(m.grupo_muscular)}</div>` : ''}
@@ -457,32 +364,31 @@
     }
 
     /* ══════════════════════════════
-       MODAL
+       MODAL DETALLE (solo lectura)
     ══════════════════════════════ */
-    function openModal(id = null) {
-      currentEjercicio = id ? (allEjercicios.find(m => m.id_ejercicio == id) || null) : null;
-      photoBase64 = null;
+    function openDetail(id) {
+      const m = allEjercicios.find(x => x.id_ejercicio == id);
+      if (!m) return;
 
-      // Titles
-      document.getElementById('modalTitle').textContent = currentEjercicio ? 'Editar Ejercicio' : 'Agregar Ejercicio';
-      document.getElementById('modalSubtitle').textContent = currentEjercicio ? `Editando: ${currentEjercicio.nombre}` : 'Nuevo ejercicio al inventario';
+      document.getElementById('modalTitle').textContent = m.nombre;
+      document.getElementById('modalSubtitle').textContent = m.grupo_muscular || '';
+      document.getElementById('detailNombre').textContent = m.nombre || '—';
+      document.getElementById('detailGrupo').textContent = m.grupo_muscular || '—';
+      document.getElementById('detailDesc').textContent = m.descripcion || '—';
+      
+      const machineGroup = document.getElementById('machineGroup');
+      if (m.id_maquina) {
+        const maquina = allMachines.find(mac => mac.id_maquina == m.id_maquina);
+        document.getElementById('detailMaquina').textContent = maquina ? maquina.nombre : '—';
+        machineGroup.style.display = 'block';
+      } else {
+        machineGroup.style.display = 'none';
+      }
 
-      // Delete button
-      document.getElementById('deleteBtn').style.display = currentEjercicio ? 'flex' : 'none';
-
-      // Reset form
-      document.getElementById('ejercicioName').value = currentEjercicio ? currentEjercicio.nombre : '';
-      document.getElementById('ejercicioGrupo').value = currentEjercicio ? (currentEjercicio.id_grupo || '') : '';
-      document.getElementById('ejercicioDesc').value = currentEjercicio ? (currentEjercicio.descripcion || '') : '';
-      document.getElementById('ejercicioMaquina').value = currentEjercicio ? (currentEjercicio.id_maquina || '') : '';
-      document.getElementById('photoInput').value = '';
-      document.getElementById('modalFeedback').style.display = 'none';
-
-      // Photo
       const preview = document.getElementById('photoPreview');
       const placeholder = document.getElementById('photoPlaceholder');
-      if (currentEjercicio && currentEjercicio.imagen_url) {
-        preview.src = currentEjercicio.imagen_url;
+      if (m.imagen_url) {
+        preview.src = m.imagen_url;
         preview.style.display = 'block';
         placeholder.style.display = 'none';
       } else {
@@ -498,174 +404,43 @@
     function closeModal() {
       document.getElementById('ejercicioModal').classList.remove('visible');
       document.body.style.overflow = '';
-      currentEjercicio = null;
-      photoBase64 = null;
     }
 
     function handleOverlayClick(e) {
       if (e.target === document.getElementById('ejercicioModal')) closeModal();
     }
 
-    /* ── Photo preview ── */
-    function triggerFileInput() {
-      // Let the native input handle clicks; this is just a fallback.
-    }
-
-    function previewPhoto(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = ev => {
-        photoBase64 = ev.target.result;
-        const preview = document.getElementById('photoPreview');
-        preview.src = photoBase64;
-        preview.style.display = 'block';
-        document.getElementById('photoPlaceholder').style.display = 'none';
-      };
-      reader.readAsDataURL(file);
-    }
-
-    /* ── Save ── */
-    async function saveEjercicio() {
-      const nombre = document.getElementById('ejercicioName').value.trim();
-      const id_grupo = document.getElementById('ejercicioGrupo').value;
-      const descripcion = document.getElementById('ejercicioDesc').value.trim();
-      const id_maquina = document.getElementById('ejercicioMaquina').value;
-
-      if (!nombre || !id_grupo) {
-        document.getElementById('ejercicioName').style.borderColor = !nombre ? 'rgba(229,26,44,0.5)' : '';
-        document.getElementById('ejercicioGrupo').style.borderColor = !id_grupo ? 'rgba(229,26,44,0.5)' : '';
-        showModalMsg('El nombre y grupo muscular son obligatorios.', true);
-        return;
-      }
-      document.getElementById('ejercicioName').style.borderColor = '';
-      document.getElementById('ejercicioGrupo').style.borderColor = '';
-
-      const payload = { nombre, id_grupo, descripcion, id_maquina };
-      if (photoBase64) payload.foto = photoBase64;
-
-      try {
-        if (currentEjercicio) {
-          await apiRequest(`ejercicios&id=${encodeURIComponent(currentEjercicio.id_ejercicio)}`, {
-            method: 'PUT',
-            body: JSON.stringify(payload),
-          });
-
-          showModalMsg('Ejercicio actualizado correctamente.');
-        } else {
-          await apiRequest('ejercicios', {
-            method: 'POST',
-            body: JSON.stringify(payload),
-          });
-          showModalMsg('Ejercicio agregado correctamente.');
-        }
-
-        // Recargar la lista de ejercicios para asegurar datos frescos
-        loadEjercicios();
-
-        setTimeout(closeModal, 1400);
-      } catch (e) {
-        showModalMsg('No se pudo guardar. Intenta de nuevo.', true);
-      }
-    }
-
-    /* ── Delete ── */
-    async function deleteEjercicio() {
-      if (!currentEjercicio) return;
-      if (!confirm(`¿Eliminar el ejercicio "${currentEjercicio.nombre}"? Esta acción no se puede deshacer.`)) return;
-      try {
-        await apiRequest(`ejercicios&id=${encodeURIComponent(currentEjercicio.id_ejercicio)}`, { method: 'DELETE' });
-        allEjercicios = allEjercicios.filter(m => m.id_ejercicio != currentEjercicio.id_ejercicio);
-        renderGrid(allEjercicios);
-        closeModal();
-      } catch (e) {
-        showModalMsg('No se pudo eliminar el ejercicio.', true);
-      }
-    }
-
-    /* ── Modal feedback ── */
-    function showModalMsg(text, isError = false) {
-      const el = document.getElementById('modalFeedback');
-      el.textContent = text;
-      el.className = `gm-feedback ${isError ? 'gm-feedback--error' : 'gm-feedback--success'}`;
-      el.style.display = 'block';
-      if (!isError) setTimeout(() => { el.style.display = 'none'; }, 3000);
-    }
-
-    /* ══════════════════════════════
-       GLOBAL SEARCH (topbar)
-    ══════════════════════════════ */
-    function renderSearchResults(results) {
-      const box = document.getElementById('searchResults');
-      if (!results.length) {
-        box.innerHTML = '<div class="search-result-item"><div style="font-size:13px;color:#5a5a5a;">Sin resultados</div></div>';
-        return;
-      }
-      box.innerHTML = results.map(item => `
-        <div class="search-result-item">
-          <div class="search-result-avatar">${String(item.tipo || '?').charAt(0).toUpperCase()}</div>
-          <div>
-            <div class="search-result-title">${item.titulo}</div>
-            <div class="search-result-detail">${item.detalle}</div>
-          </div>
-          <span class="search-result-badge">${item.tipo}</span>
-        </div>`).join('');
-    }
-
-    let searchTimer = null;
-    function handleSearch(val) {
-      const box = document.getElementById('searchResults');
-      clearTimeout(searchTimer);
-      if (val.trim().length < 2) { box.classList.add('hidden'); box.innerHTML = ''; return; }
-      box.classList.remove('hidden');
-      searchTimer = setTimeout(async () => {
-        try {
-          const data = await apiRequest(`search&q=${encodeURIComponent(val.trim())}`);
-          if (data) renderSearchResults(data.results || []);
-        } catch (e) { renderSearchResults([]); }
-      }, 250);
-    }
-    function clearSearch() {
-      document.getElementById('globalSearch').value = '';
-      const box = document.getElementById('searchResults');
-      box.classList.add('hidden');
-      box.innerHTML = '';
-    }
-    document.addEventListener('click', e => {
-      if (!e.target.closest('.search-wrap')) clearSearch();
-    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
     /* ── Escape HTML ── */
     function escHtml(str) {
       return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    /* ── ESC closes modal ── */
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeModal();
-    });
-
     /* ══════════════════════════════
        BOOT
     ══════════════════════════════ */
-    apiRequest('session')
-      .then(data => {
-        if (data && data.admin) {
-          const el = document.getElementById('adminUserLabel');
-          if (el) el.textContent = data.admin.usuario;
+    async function boot() {
+      try {
+        const data = await apiRequest('profile');
+        if (data && data.profile) {
+          const name = data.profile.nombre || 'Usuario';
+          const firstName = name.split(' ')[0];
+          document.getElementById('topbarUserName').textContent = firstName;
+          const parts = name.trim().split(' ');
+          let ini = parts[0][0];
+          if (parts.length > 1) ini += parts[1][0];
+          document.getElementById('topbarAvatar').textContent = ini.toUpperCase();
         }
-        loadEjercicios();
-        loadMachinesSelect();
-      })
-      .catch(() => {
-        window.location.href = 'index.php?route=login&error=no_autorizado';
-      });
+      } catch (e) { /* silent */ }
+      loadEjercicios();
+    }
+
+    boot();
 
     window.openSidebar = openSidebar;
     window.closeSidebar = closeSidebar;
     window.toggleSidebar = toggleSidebar;
-    window.handleSearch = handleSearch;
-    window.clearSearch = clearSearch;
   </script>
 
 </body>
