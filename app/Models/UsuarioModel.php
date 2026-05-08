@@ -86,4 +86,16 @@ class UsuarioModel
 
         return $result;
     }
+
+    /**
+     * Obtiene todas las máquinas disponibles en el gimnasio (solo lectura).
+     */
+    public function getAllMaquinas(): array
+    {
+        return $this->pdo->query(
+            'SELECT id_maquina, nombre, descripcion, foto_url AS foto, categoria, ubicacion
+             FROM maquinas
+             ORDER BY nombre ASC'
+        )->fetchAll();
+    }
 }

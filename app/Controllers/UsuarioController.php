@@ -47,6 +47,9 @@ class UsuarioController
                 case 'routine':
                     $this->getRoutine($method, $userId);
                     break;
+                case 'machines':
+                    $this->getMachines($method);
+                    break;
                 default:
                     http_response_code(404);
                     echo json_encode(['ok' => false, 'error' => 'Recurso no encontrado']);
@@ -96,6 +99,16 @@ class UsuarioController
             'ok' => true,
             'routine' => $routine
         ]);
+    }
+
+    private function getMachines(string $method): void
+    {
+        if ($method !== 'GET') {
+            $this->sendMethodNotAllowed();
+        }
+
+        $machines = $this->model->getAllMaquinas();
+        echo json_encode(['ok' => true, 'machines' => $machines]);
     }
 
     private function sendMethodNotAllowed(): void
