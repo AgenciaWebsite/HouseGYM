@@ -93,6 +93,18 @@ class AdminController
                 $this->getEjercicios();
             }
 
+            if ($method === 'POST' && $resource === 'ejercicios') {
+                $this->addEjercicio();
+            }
+
+            if ($method === 'PUT' && $resource === 'ejercicios') {
+                $this->updateEjercicio();
+            }
+
+            if ($method === 'DELETE' && $resource === 'ejercicios') {
+                $this->deleteEjercicio();
+            }
+
             if ($method === 'GET' && $resource === 'rutina_personalizada') {
                 $this->getRutinaPersonalizada();
             }
@@ -265,6 +277,73 @@ class AdminController
     {
         $ejercicios = $this->model->getAllEjercicios();
         $this->jsonResponse(['ok' => true, 'ejercicios' => $ejercicios]);
+    }
+
+    /**
+     * Agrega un nuevo ejercicio.
+     */
+    private function addEjercicio(): void
+    {
+        $data = json_decode((string) file_get_contents('php://input'), true);
+        if (!is_array($data)) {
+            $this->jsonResponse(['ok' => false, 'error' => 'datos_invalidos'], 400);
+        }
+
+        $nombre = trim((string) ($data['nombre'] ?? ''));
+        $id_grupo = (int) ($data['id_grupo'] ?? 0);
+        $id_maquina = !empty($data['id_maquina']) ? (int) $data['id_maquina'] : null;
+        $descripcion = trim((string) ($data['descripcion'] ?? ''));
+        $foto = isset($data['foto']) ? (string) $data['foto'] : null;
+
+        if ($nombre === '' || $id_grupo <= 0) {
+            $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
+        }
+
+        $id = $this->model->addEjercicio($nombre, $id_grupo, $id_maquina, $descripcion, $foto);
+        $this->jsonResponse(['ok' => true, 'id' => $id]);
+    }
+
+    /**
+     * Actualiza un ejercicio.
+     */
+    private function updateEjercicio(): void
+    {
+        $id = (int) ($_GET['id'] ?? 0);
+        if ($id <= 0) {
+            $this->jsonResponse(['ok' => false, 'error' => 'id_invalido'], 422);
+        }
+
+        $data = json_decode((string) file_get_contents('php://input'), true);
+        if (!is_array($data)) {
+            $this->jsonResponse(['ok' => false, 'error' => 'datos_invalidos'], 400);
+        }
+
+        $nombre = trim((string) ($data['nombre'] ?? ''));
+        $id_grupo = (int) ($data['id_grupo'] ?? 0);
+        $id_maquina = !empty($data['id_maquina']) ? (int) $data['id_maquina'] : null;
+        $descripcion = trim((string) ($data['descripcion'] ?? ''));
+        $foto = isset($data['foto']) ? (string) $data['foto'] : null;
+
+        if ($nombre === '' || $id_grupo <= 0) {
+            $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
+        }
+
+        $this->model->updateEjercicio($id, $nombre, $id_grupo, $id_maquina, $descripcion, $foto);
+        $this->jsonResponse(['ok' => true]);
+    }
+
+    /**
+     * Elimina un ejercicio.
+     */
+    private function deleteEjercicio(): void
+    {
+        $id = (int) ($_GET['id'] ?? 0);
+        if ($id <= 0) {
+            $this->jsonResponse(['ok' => false, 'error' => 'id_invalido'], 422);
+        }
+
+        $this->model->deleteEjercicio($id);
+        $this->jsonResponse(['ok' => true]);
     }
 
     /**

@@ -82,7 +82,7 @@
         Maquinas
       </div>
 
-      <div class="nav-item" onclick="window.location.href='index.php?route=admin'">
+      <div class="nav-item" onclick="window.location.href='index.php?route=admin_ejercicios'">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>

@@ -68,11 +68,20 @@ switch ($route) {
 
     case 'usuarios':
         // Mostrar la vista de usuarios (para el usuario cliente)
-        if (empty($_SESSION['rol'])) {
+        if (($_SESSION['rol'] ?? '') !== 'usuario') {
             header('Location: index.php?route=login&error=no_autorizado');
             exit;
         }
         require_once __DIR__ . '/app/Views/usuarios.php';
+        break;
+
+    case 'usuarios_rutina':
+        // Mostrar la vista de rutina (para el usuario cliente)
+        if (($_SESSION['rol'] ?? '') !== 'usuario') {
+            header('Location: index.php?route=login&error=no_autorizado');
+            exit;
+        }
+        require_once __DIR__ . '/app/Views/usuarios_rutina.php';
         break;
 
     case 'admin_usuarios':
@@ -106,6 +115,14 @@ switch ($route) {
             exit;
         }
         require_once __DIR__ . '/app/Views/admin_maquinas.php';
+        break;
+
+    case 'admin_ejercicios':
+        if (($_SESSION['rol'] ?? '') !== 'admin' || empty($_SESSION['admin_id'])) {
+            header('Location: index.php?route=login&error=no_autorizado');
+            exit;
+        }
+        require_once __DIR__ . '/app/Views/admin_ejercicios.php';
         break;
 
     default:

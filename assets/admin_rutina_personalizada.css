@@ -468,6 +468,32 @@
   color: var(--red);
 }
 
+.rp-save-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--red);
+  color: var(--white);
+  border: 1px solid transparent;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rp-save-btn:hover {
+  background: var(--red-bright);
+  box-shadow: 0 4px 12px rgba(229, 26, 44, 0.3);
+  transform: translateY(-1px);
+}
+
+.rp-save-btn:active {
+  transform: translateY(0);
+}
+
 /* ══ PANEL DERECHO: catálogo ══ */
 .rp-panel--right {
   max-height: calc(100vh - 180px);

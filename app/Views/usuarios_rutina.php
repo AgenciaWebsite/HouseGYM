@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mi Panel - HouseGYM</title>
   <link rel="stylesheet" href="assets/admin.css">
-  <link rel="stylesheet" href="assets/usuarios.css">
+  <link rel="stylesheet" href="assets/usuarios_rutina.css">
 </head>
 
 <body>
@@ -38,7 +38,7 @@
     <nav class="sidebar-nav">
       <div class="nav-section-label">Personal</div>
 
-      <a class="nav-item nav-item--active" href="index.php?route=usuarios">
+      <a class="nav-item" href="index.php?route=usuarios">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
           <circle cx="9" cy="7" r="4" />
@@ -47,7 +47,7 @@
         Mi Perfil
       </a>
 
-      <a class="nav-item" href="index.php?route=usuarios_rutina">
+      <a class="nav-item nav-item--active" href="index.php?route=usuarios_rutina">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -55,7 +55,7 @@
         Mi Rutina
       </a>
 
-      <a class="nav-item" href="#seccion-rutina">
+      <a class="nav-item" href="#seccion-dieta">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -63,7 +63,7 @@
         Mi Dieta
       </a>
 
-      <a class="nav-item" href="#seccion-rutina">
+      <a class="nav-item" href="#seccion-maquinas">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -71,7 +71,7 @@
         Maquinas
       </a>
 
-      <a class="nav-item" href="#seccion-rutina">
+      <a class="nav-item" href="#seccion-ejercicios">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -122,8 +122,7 @@
       <!-- Page Header -->
       <div class="page-title">
         <h1>Bienvenido, <span id="headerUserName">Usuario</span></h1>
-        <p class="page-subtitle">Este es tu panel personal. Aquí puedes ver tu plan actual y tu rutina de entrenamiento.
-        </p>
+        <p class="page-subtitle">Este es tu panel personal. Aquí puedes ver tu plan actual y tu rutina de entrenamiento.</p>
       </div>
 
       <!-- Perfil y Plan -->
@@ -172,21 +171,64 @@
 
       <hr class="section-divider">
 
-      <!-- Rutina Section -->
+      <!-- ══════════════════════════════════════
+           RUTINA SECTION
+      ══════════════════════════════════════ -->
       <div id="seccion-rutina" class="routine-section">
+
         <div class="routine-header">
-          <h2>Rutina <span>Global</span></h2>
-          <p>ejercicios agrupados por semana de entrenamiento.</p>
+          <h2>Mi <span>Rutina</span></h2>
+          <p>Selecciona un día para ver los ejercicios asignados.</p>
         </div>
 
-        <div id="routineStateMsg" class="routine-empty-state">
-
+        <!-- Empty / loading state -->
+        <div id="routineStateMsg" class="routine-empty-state" style="display: none;">
+          <div class="empty-icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3>Sin rutina asignada</h3>
+          <p>Aún no tienes una rutina personalizada. Acércate a recepción para que tu entrenador te asigne una.</p>
         </div>
 
-        <div id="routineDaysContainer" class="routine-days" style="display: none;">
-          <!-- Se llenará vía JS -->
-        </div>
-      </div>
+        <!-- Two-panel layout -->
+        <div id="routineLayout" class="routine-layout" style="display: none;">
+
+          <!-- LEFT: Days list -->
+          <div class="days-panel">
+            <div class="days-panel__header">
+              <h3>Días de Entrenamiento</h3>
+            </div>
+            <div class="days-list" id="daysList">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- RIGHT: Exercises panel -->
+          <div class="exercises-panel" id="exercisesPanel" data-hidden="true">
+            <div class="exercises-panel__header">
+              <h3 id="exercisesPanelTitle">Ejercicios</h3>
+              <span class="exercises-panel__day-tag" id="exercisesDayTag" style="display:none">Día —</span>
+            </div>
+            <div class="exercises-panel__body" id="exercisesPanelBody">
+              <!-- Placeholder until a day is selected -->
+              <div class="exercises-placeholder">
+                <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                </svg>
+                <p>Selecciona un día para ver los ejercicios</p>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /routineLayout -->
+
+      </div><!-- /seccion-rutina -->
 
     </div><!-- /content -->
   </div><!-- /main-wrap -->
@@ -243,9 +285,8 @@
     }
 
     /* ══════════════════════════════════════
-       LOGIC
+       HELPERS
     ══════════════════════════════════════ */
-
     function setInitials(name) {
       const parts = name.trim().split(' ');
       let ini = parts[0][0];
@@ -260,6 +301,133 @@
       return diets[id] || 'Especial';
     }
 
+    /* ══════════════════════════════════════
+       ROUTINE — RENDER DAY ROW
+    ══════════════════════════════════════ */
+    function buildDayRow(dia, index, isRest) {
+      const numEjs = dia.ejercicios ? dia.ejercicios.length : 0;
+      const maxPills = 6;
+      let pillsHtml = '';
+
+      for (let i = 0; i < maxPills; i++) {
+        const filled = i < numEjs ? 'day-pill--filled' : '';
+        pillsHtml += `<div class="day-pill ${filled}"></div>`;
+      }
+
+      const checkSvg = `
+        <svg width="10" height="10" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="3.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+        </svg>`;
+
+      const restClass = isRest ? 'day-row--rest' : '';
+
+      return `
+        <div class="day-row ${restClass}" data-day-index="${index}" onclick="selectDay(${index})">
+          <div class="day-row__label">
+            <div class="day-check">${checkSvg}</div>
+            <span>Día ${index + 1}</span>
+          </div>
+          <div class="day-row__pills">${pillsHtml}</div>
+        </div>`;
+    }
+
+    /* ══════════════════════════════════════
+       ROUTINE — SELECT DAY (show exercises)
+    ══════════════════════════════════════ */
+    let _routineData = [];
+
+    function selectDay(index) {
+      // Update active row
+      document.querySelectorAll('.day-row').forEach((row, i) => {
+        row.classList.toggle('day-row--active', i === index);
+      });
+
+      const dia = _routineData[index];
+      const panel = document.getElementById('exercisesPanel');
+      const body  = document.getElementById('exercisesPanelBody');
+      const tag   = document.getElementById('exercisesDayTag');
+
+      // Show panel on mobile if hidden
+      panel.setAttribute('data-hidden', 'false');
+      panel.style.display = 'flex';
+
+      // Update header tag
+      tag.style.display = 'inline-block';
+      tag.textContent = `Día ${index + 1}`;
+
+      const numEjs = dia.ejercicios ? dia.ejercicios.length : 0;
+
+      if (numEjs === 0) {
+        body.innerHTML = `
+          <div class="exercises-rest">
+            <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" style="opacity:0.3">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+            </svg>
+            <p>Día de descanso</p>
+          </div>`;
+        return;
+      }
+
+      const cardsHtml = dia.ejercicios.map(ej => {
+        const hasImg = ej.imagen_url && ej.imagen_url.trim() !== '';
+        const photoContent = hasImg
+          ? `style="background-image: url('${ej.imagen_url}')"`
+          : `class="ex-card__photo--empty"`;
+
+        const noImgIcon = hasImg ? '' : `
+          <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M13.5 12h.008v.008H13.5V12zm0 0h.008v.008H13.5V12zm4.5-1.929h.008v.008H18V10.07z"/>
+          </svg>`;
+
+        return `
+          <div class="ex-card">
+            <div class="ex-card__photo" ${photoContent}>
+              ${noImgIcon}
+              <div class="ex-card__stats">
+                <span>${ej.series}</span>×${ej.reps}
+              </div>
+            </div>
+            <div class="ex-card__name">${ej.nombre}</div>
+            <div class="ex-card__muscle">${ej.grupo_muscular || ''}</div>
+          </div>`;
+      }).join('');
+
+      body.innerHTML = `<div class="exercises-grid">${cardsHtml}</div>`;
+
+      // On mobile, scroll to exercises panel
+      if (window.innerWidth <= 860) {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    /* ══════════════════════════════════════
+       ROUTINE — RENDER ALL DAYS
+    ══════════════════════════════════════ */
+    function renderRoutine(routine) {
+      _routineData = routine;
+      const list = document.getElementById('daysList');
+      let html = '';
+
+      routine.forEach((dia, index) => {
+        const isRest = !dia.ejercicios || dia.ejercicios.length === 0;
+        html += buildDayRow(dia, index, isRest);
+      });
+
+      list.innerHTML = html;
+      document.getElementById('routineLayout').style.display = 'grid';
+
+      // Auto-select first non-rest day on desktop
+      if (window.innerWidth > 860) {
+        const firstActive = routine.findIndex(d => d.ejercicios && d.ejercicios.length > 0);
+        if (firstActive >= 0) selectDay(firstActive);
+      }
+    }
+
+    /* ══════════════════════════════════════
+       LOAD DASHBOARD
+    ══════════════════════════════════════ */
     async function loadDashboard() {
       const dataProfile = await fetchApi('profile');
       if (dataProfile && dataProfile.profile) {
@@ -268,20 +436,14 @@
         const firstName = p.nombre.split(' ')[0];
         document.getElementById('topbarUserName').textContent = firstName;
         document.getElementById('headerUserName').textContent = firstName;
-
         document.getElementById('profileName').textContent = p.nombre;
         document.getElementById('profileDoc').textContent = 'CC ' + p.cedula;
         setInitials(p.nombre);
 
-        // Update badges
+        // Badges
         const bActivo = document.getElementById('badgeActivo');
-        if (p.activo) {
-          bActivo.className = 'badge badge--active';
-          bActivo.textContent = 'Activo';
-        } else {
-          bActivo.className = 'badge badge--neutral';
-          bActivo.textContent = 'Inactivo';
-        }
+        bActivo.className = p.activo ? 'badge badge--active' : 'badge badge--neutral';
+        bActivo.textContent = p.activo ? 'Activo' : 'Inactivo';
 
         const bRutina = document.getElementById('badgeRutina');
         if (p.plan_personalizado) {
@@ -295,11 +457,12 @@
           bDieta.textContent = getDietName(p.id_dieta);
         }
 
+        // Load routine
         if (p.plan_personalizado) {
-          loadRoutine();
+          await loadRoutine();
         } else {
           document.getElementById('routineStateMsg').style.display = 'flex';
-          document.getElementById('routineDaysContainer').style.display = 'none';
+          document.getElementById('routineLayout').style.display = 'none';
         }
       }
     }
@@ -308,45 +471,10 @@
       const dataRoutine = await fetchApi('routine');
       if (dataRoutine && dataRoutine.routine && dataRoutine.routine.length > 0) {
         document.getElementById('routineStateMsg').style.display = 'none';
-        const container = document.getElementById('routineDaysContainer');
-        container.style.display = 'grid';
-
-        let html = '';
-        dataRoutine.routine.forEach((dia, index) => {
-          const numEjs = dia.ejercicios.length;
-          let ejHtml = '';
-
-          if (numEjs === 0) {
-            ejHtml = '<p class="day-empty">Día de descanso.</p>';
-          } else {
-            ejHtml = dia.ejercicios.map(ej => `
-              <div class="exercise-item">
-                <div class="exercise-img" style="background-image: url('${ej.imagen_url || ''}')"></div>
-                <div class="exercise-info">
-                  <h4>${ej.nombre}</h4>
-                  <span>${ej.grupo_muscular}</span>
-                </div>
-                <div class="exercise-stats">
-                  <div><strong>${ej.series}</strong> Series</div>
-                  <div><strong>${ej.reps}</strong> Reps</div>
-                </div>
-              </div>
-            `).join('');
-          }
-
-          html += `
-            <div class="day-card">
-              <div class="day-card__header">
-                <h3>Día ${index + 1}</h3>
-                <span class="day-badge">${numEjs} Ejercicios</span>
-              </div>
-              <div class="day-card__body">
-                ${ejHtml}
-              </div>
-            </div>
-          `;
-        });
-        container.innerHTML = html;
+        renderRoutine(dataRoutine.routine);
+      } else {
+        document.getElementById('routineStateMsg').style.display = 'flex';
+        document.getElementById('routineLayout').style.display = 'none';
       }
     }
 

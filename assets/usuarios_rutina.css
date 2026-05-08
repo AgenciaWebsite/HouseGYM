@@ -1,0 +1,584 @@
+/* =============================================
+   HouseGYM — Mi Panel (User Dashboard) Styles
+   Extends admin.css
+   ============================================= */
+
+/* ── Top Section (Profile & Banner) ── */
+.user-dashboard-top {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+@media (max-width: 900px) {
+  .user-dashboard-top {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Profile Card */
+.user-card {
+  background-color: var(--black-card);
+  border: 1px solid var(--gray-border);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-card__header {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(180deg, rgba(229,26,44,0.05) 0%, transparent 100%);
+  border-bottom: 1px solid var(--gray-border);
+}
+
+.user-card__avatar {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(229,26,44,0.3);
+  background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--red);
+  box-shadow: 0 0 20px rgba(229,26,44,0.15);
+}
+
+.user-card__info h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+  margin: 0 0 4px 0;
+}
+
+.user-card__info p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--gray-dimmer);
+}
+
+.user-card__body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.status-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-light);
+}
+
+/* Info Banner */
+.info-banner {
+  background: linear-gradient(135deg, rgba(30,30,30,0.6), rgba(20,20,20,0.8));
+  border: 1px solid var(--gray-border);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.info-banner__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(229,26,44,0.1);
+  color: var(--red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.info-banner__text h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white-soft);
+  margin: 0 0 8px 0;
+}
+
+.info-banner__text p {
+  font-size: 14px;
+  color: var(--gray-dimmer);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Section Divider ── */
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--gray-border);
+  margin: 40px 0;
+}
+
+/* ── Routine Section ── */
+.routine-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.routine-header h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--white);
+  margin: 0 0 6px 0;
+}
+
+.routine-header h2 span {
+  color: var(--red);
+}
+
+.routine-header p {
+  font-size: 14px;
+  color: var(--gray-dimmer);
+  margin: 0;
+}
+
+/* Empty State */
+.routine-empty-state {
+  background-color: var(--black-card);
+  border: 1px dashed var(--gray-border2);
+  border-radius: 16px;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--gray-dark);
+  color: var(--gray-faint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.routine-empty-state h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  color: var(--white-soft);
+  margin: 0 0 8px 0;
+}
+
+.routine-empty-state p {
+  font-size: 14px;
+  color: var(--gray-dimmer);
+  margin: 0;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+/* ══════════════════════════════════════════
+   NEW TWO-PANEL ROUTINE LAYOUT
+══════════════════════════════════════════ */
+
+.routine-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .routine-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Left Panel: Day List ── */
+.days-panel {
+  background-color: var(--black-card);
+  border: 1px solid var(--gray-border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.days-panel__header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--gray-border);
+  background: var(--gray-dark);
+}
+
+.days-panel__header h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white-soft);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.days-list {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Day Row ── */
+.day-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--gray-border);
+  background: rgba(255,255,255,0.02);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.day-row:hover {
+  border-color: rgba(229,26,44,0.4);
+  background: rgba(229,26,44,0.04);
+}
+
+.day-row--active {
+  border-color: var(--red) !important;
+  background: rgba(229,26,44,0.07) !important;
+  box-shadow: 0 0 0 1px rgba(229,26,44,0.2), 0 4px 16px rgba(229,26,44,0.1);
+}
+
+/* Day label + checkmark */
+.day-row__label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 54px;
+}
+
+.day-row__label span {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gray-light);
+  white-space: nowrap;
+}
+
+.day-row--active .day-row__label span {
+  color: var(--red);
+}
+
+.day-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--gray-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.day-row--active .day-check {
+  border-color: var(--red);
+  background: var(--red);
+}
+
+.day-check svg {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.day-row--active .day-check svg {
+  opacity: 1;
+}
+
+/* Exercise pills strip */
+.day-row__pills {
+  display: flex;
+  gap: 5px;
+  flex: 1;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.day-pill {
+  height: 32px;
+  flex: 1;
+  min-width: 0;
+  max-width: 40px;
+  border-radius: 20px;
+  background: var(--gray-dark);
+  border: 1px solid var(--gray-border);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.day-row--active .day-pill {
+  background: rgba(229,26,44,0.12);
+  border-color: rgba(229,26,44,0.3);
+}
+
+.day-pill--filled {
+  background: rgba(229,26,44,0.18) !important;
+  border-color: rgba(229,26,44,0.5) !important;
+}
+
+.day-row--active .day-pill--filled {
+  background: rgba(229,26,44,0.3) !important;
+  border-color: var(--red) !important;
+}
+
+/* Rest day row */
+.day-row--rest .day-row__pills {
+  opacity: 0.3;
+}
+
+.day-row--rest .day-row__label span {
+  color: var(--gray-dimmer);
+}
+
+/* ── Right Panel: Exercises Grid ── */
+.exercises-panel {
+  background-color: var(--black-card);
+  border: 1px solid var(--gray-border);
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.exercises-panel__header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--gray-border);
+  background: var(--gray-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.exercises-panel__header h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white-soft);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.exercises-panel__day-tag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(229,26,44,0.15);
+  color: var(--red);
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: opacity 0.2s;
+}
+
+.exercises-panel__body {
+  padding: 16px;
+  flex: 1;
+}
+
+/* No-selection placeholder */
+.exercises-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 240px;
+  gap: 12px;
+  color: var(--gray-faint);
+}
+
+.exercises-placeholder svg {
+  opacity: 0.3;
+}
+
+.exercises-placeholder p {
+  font-size: 13px;
+  color: var(--gray-dimmer);
+  margin: 0;
+}
+
+/* Rest day placeholder */
+.exercises-rest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 240px;
+  gap: 12px;
+}
+
+.exercises-rest p {
+  font-size: 14px;
+  color: var(--gray-dimmer);
+  font-style: italic;
+  margin: 0;
+}
+
+/* Exercises grid: 3 columns */
+.exercises-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 1100px) {
+  .exercises-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 860px) {
+  .exercises-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .exercises-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 380px) {
+  .exercises-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Exercise card */
+.ex-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--gray-border);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.ex-card:hover {
+  border-color: rgba(229,26,44,0.35);
+  transform: translateY(-2px);
+}
+
+.ex-card__photo {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background-color: #1a1a1a;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ex-card__photo--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-faint);
+}
+
+.ex-card__photo--empty svg {
+  opacity: 0.3;
+}
+
+/* Stats overlay badge */
+.ex-card__stats {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(0,0,0,0.75);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 3px 7px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--white-soft);
+  backdrop-filter: blur(4px);
+  line-height: 1.4;
+  text-align: center;
+}
+
+.ex-card__stats span {
+  color: var(--red);
+}
+
+.ex-card__name {
+  padding: 8px 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--white-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-top: 1px solid var(--gray-border);
+}
+
+.ex-card__muscle {
+  padding: 0 10px 8px;
+  font-size: 10.5px;
+  color: var(--gray-dimmer);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Mobile: stack panels ── */
+@media (max-width: 860px) {
+  .routine-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .exercises-panel {
+    min-height: unset;
+  }
+
+  /* On mobile, show exercises below after a day is selected */
+  .exercises-panel[data-hidden="true"] {
+    display: none;
+  }
+
+  .exercises-panel[data-hidden="false"] {
+    display: flex;
+  }
+}
+
+/* Transition for panel content */
+.exercises-panel__body > * {
+  animation: fadeInPanel 0.2s ease;
+}
+
+@keyframes fadeInPanel {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

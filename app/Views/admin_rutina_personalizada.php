@@ -82,7 +82,7 @@
         Maquinas
       </div>
 
-      <div class="nav-item" onclick="window.location.href='index.php?route=admin'">
+      <div class="nav-item" onclick="window.location.href='index.php?route=admin_ejercicios'">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
@@ -195,13 +195,19 @@
             </div>
           </div>
 
-          <!-- Footer: añadir día -->
-          <div class="rp-panel-footer" id="rpPanelFooter" style="display:none">
+          <!-- Footer: añadir día y guardar -->
+          <div class="rp-panel-footer" id="rpPanelFooter" style="display:none; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
             <button class="rp-add-day-btn" onclick="addDay()">
               <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
               </svg>
-              Añadir dia
+              Añadir día
+            </button>
+            <button class="rp-save-btn" onclick="manualSaveRutina()">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              Guardar Cambios
             </button>
           </div>
 
@@ -659,6 +665,36 @@
         });
       } catch (e) {
         console.warn('No se pudo guardar la rutina:', e.message);
+        throw e;
+      }
+    }
+
+    async function manualSaveRutina() {
+      const btn = document.querySelector('.rp-save-btn');
+      const originalText = btn.innerHTML;
+      try {
+        btn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Guardando...';
+        btn.style.opacity = '0.7';
+        btn.style.pointerEvents = 'none';
+
+        await saveRutina();
+
+        btn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> ¡Guardado!';
+        btn.style.background = '#10b981'; // green
+        btn.style.borderColor = '#10b981';
+
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.style.background = '';
+          btn.style.borderColor = '';
+          btn.style.opacity = '1';
+          btn.style.pointerEvents = 'auto';
+        }, 2000);
+      } catch (e) {
+        btn.innerHTML = originalText;
+        btn.style.opacity = '1';
+        btn.style.pointerEvents = 'auto';
+        alert('Hubo un error al guardar los cambios.');
       }
     }
 

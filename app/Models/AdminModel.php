@@ -243,11 +243,51 @@ class AdminModel
     {
         return $this->pdo->query(
             'SELECT e.id_ejercicio, e.nombre, e.descripcion, e.foto_url AS imagen_url,
-                    g.nombre AS grupo_muscular
+                    e.id_grupo, e.id_maquina, g.nombre AS grupo_muscular
              FROM ejercicios e
              JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
              ORDER BY e.nombre ASC'
         )->fetchAll();
+    }
+
+    /**
+     * Agrega un nuevo ejercicio.
+     */
+    public function addEjercicio(string $nombre, int $id_grupo, ?int $id_maquina, string $descripcion, ?string $fotoBase64): int
+    {
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO ejercicios (nombre, id_grupo, id_maquina, descripcion, foto_url)
+             VALUES (?, ?, ?, ?, ?)'
+        );
+        $stmt->execute([$nombre, $id_grupo, $id_maquina, $descripcion, $fotoBase64]);
+        return (int) $this->pdo->lastInsertId();
+    }
+
+    /**
+     * Actualiza un ejercicio existente.
+     */
+    public function updateEjercicio(int $id, string $nombre, int $id_grupo, ?int $id_maquina, string $descripcion, ?string $fotoBase64): void
+    {
+        if ($fotoBase64 !== null) {
+            $stmt = $this->pdo->prepare(
+                'UPDATE ejercicios SET nombre = ?, id_grupo = ?, id_maquina = ?, descripcion = ?, foto_url = ? WHERE id_ejercicio = ?'
+            );
+            $stmt->execute([$nombre, $id_grupo, $id_maquina, $descripcion, $fotoBase64, $id]);
+        } else {
+            $stmt = $this->pdo->prepare(
+                'UPDATE ejercicios SET nombre = ?, id_grupo = ?, id_maquina = ?, descripcion = ? WHERE id_ejercicio = ?'
+            );
+            $stmt->execute([$nombre, $id_grupo, $id_maquina, $descripcion, $id]);
+        }
+    }
+
+    /**
+     * Elimina un ejercicio.
+     */
+    public function deleteEjercicio(int $id): bool
+    {
+        $stmt = $this->pdo->prepare('DELETE FROM ejercicios WHERE id_ejercicio = ?');
+        return $stmt->execute([$id]);
     }
 
     /* ═══════════════════════════════════════════════════════════════
