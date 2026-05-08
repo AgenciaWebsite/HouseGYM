@@ -1,0 +1,862 @@
+/* =============================================
+   HouseGYM — Usuarios (Rutina Global)
+   Diseño mobile-first
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ── Variables ── */
+:root {
+  --black:        #0a0a0a;
+  --black-light:  #111111;
+  --black-card:   #141414;
+  --gray-dark:    #1a1a1a;
+  --gray-mid:     #2a2a2a;
+  --gray-border:  #1e1e1e;
+  --gray-border2: #222222;
+  --gray-light:   #8a8a8a;
+  --gray-dim:     #5a5a5a;
+  --gray-dimmer:  #4a4a4a;
+  --gray-faint:   #3a3a3a;
+  --white:        #ffffff;
+  --white-soft:   #e0e0e0;
+  --red:          #e51a2c;
+  --red-bright:   #ff1a2e;
+  --red-dark:     #b01020;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+
+body {
+  background-color: var(--black);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════════
+   LAYOUT PRINCIPAL (mobile-first)
+══════════════════════════════════ */
+.ru-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+  background: var(--black);
+}
+
+/* ── Glow de fondo ── */
+.ru-glow {
+  pointer-events: none;
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: 0;
+}
+.ru-glow--top {
+  width: 320px; height: 320px;
+  top: -80px; right: -60px;
+  background: radial-gradient(circle, rgba(229,26,44,0.09) 0%, transparent 70%);
+}
+.ru-glow--bot {
+  width: 280px; height: 280px;
+  bottom: -60px; left: -40px;
+  background: radial-gradient(circle, rgba(229,26,44,0.06) 0%, transparent 70%);
+}
+
+/* ══════════════════════════════════
+   HEADER
+══════════════════════════════════ */
+.ru-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(10,10,10,0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--gray-border);
+  padding: 16px 20px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ru-header__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.ru-header__label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: var(--red);
+}
+.ru-header__name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.2;
+}
+
+/* Divider line under title */
+.ru-header__line {
+  height: 2px;
+  background: linear-gradient(90deg, var(--red) 0%, transparent 70%);
+  border-radius: 1px;
+  margin-top: 4px;
+  width: 100%;
+}
+
+/* Hamburger button */
+.ru-menu-btn {
+  background: var(--gray-dark);
+  border: 1px solid var(--gray-border2);
+  border-radius: 10px;
+  width: 38px; height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--white-soft);
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+.ru-menu-btn:hover { background: var(--gray-mid); border-color: var(--gray-dim); }
+
+/* ══════════════════════════════════
+   MAIN SCROLL AREA
+══════════════════════════════════ */
+.ru-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 16px 100px;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ══════════════════════════════════
+   WEEK / SESSION SELECTOR
+══════════════════════════════════ */
+.ru-week-scroll {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 2px;
+}
+.ru-week-scroll::-webkit-scrollbar { display: none; }
+
+.ru-week-tabs {
+  display: flex;
+  gap: 8px;
+  width: max-content;
+}
+
+.ru-week-tab {
+  padding: 9px 20px;
+  border-radius: 50px;
+  border: 1.5px solid var(--gray-border2);
+  background: var(--black-card);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-light);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.2s, background 0.2s, color 0.2s, box-shadow 0.2s;
+  letter-spacing: 0.2px;
+}
+.ru-week-tab:hover {
+  border-color: rgba(229,26,44,0.35);
+  color: var(--white-soft);
+}
+.ru-week-tab--active {
+  background: linear-gradient(135deg, rgba(229,26,44,0.18), rgba(176,16,32,0.1));
+  border-color: rgba(229,26,44,0.5);
+  color: var(--white);
+  box-shadow: 0 0 0 1px rgba(229,26,44,0.12), 0 4px 14px rgba(229,26,44,0.1);
+}
+
+/* ══════════════════════════════════
+   DAY CARD + NAVIGATION
+══════════════════════════════════ */
+.ru-day-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Day indicator dots */
+.ru-day-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ru-day-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--gray-faint);
+  transition: background 0.2s, transform 0.2s, width 0.2s;
+  cursor: pointer;
+}
+.ru-day-dot--active {
+  background: var(--red);
+  width: 18px;
+  border-radius: 4px;
+  transform: none;
+}
+
+/* Carousel track */
+.ru-carousel {
+  overflow: hidden;
+  border-radius: 20px;
+  position: relative;
+}
+.ru-carousel-track {
+  display: flex;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* Individual day card */
+.ru-day-card {
+  min-width: 100%;
+  background: var(--black-card);
+  border: 1px solid var(--gray-border2);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+.ru-day-card:active { transform: scale(0.99); }
+
+/* Day card header */
+.ru-day-card__head {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--gray-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.ru-day-card__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ru-day-card__num {
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, var(--red-bright), var(--red-dark));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--white);
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(229,26,44,0.3);
+}
+.ru-day-card__title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+}
+.ru-day-card__muscle {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--gray-dim);
+  background: var(--gray-dark);
+  border: 1px solid var(--gray-border2);
+  border-radius: 6px;
+  padding: 3px 8px;
+}
+
+/* Day card body — exercise list */
+.ru-day-card__body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 200px;
+}
+
+/* Exercise row inside card */
+.ru-ex-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--gray-dark);
+  border: 1px solid var(--gray-border2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  text-decoration: none;
+}
+.ru-ex-row:hover, .ru-ex-row:active {
+  border-color: rgba(229,26,44,0.3);
+  background: rgba(229,26,44,0.04);
+}
+.ru-ex-row__num {
+  width: 26px; height: 26px;
+  flex-shrink: 0;
+  background: var(--gray-mid);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--gray-light);
+}
+.ru-ex-row__info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.ru-ex-row__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white-soft);
+}
+.ru-ex-row__detail {
+  font-size: 11px;
+  color: var(--gray-dim);
+}
+.ru-ex-row__arrow {
+  color: var(--gray-faint);
+  flex-shrink: 0;
+}
+
+/* Day card footer – sets/reps badge */
+.ru-day-card__foot {
+  padding: 10px 14px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ru-day-badge {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--gray-dim);
+  background: var(--gray-dark);
+  border: 1px solid var(--gray-border2);
+  border-radius: 6px;
+  padding: 4px 9px;
+}
+
+/* Empty day */
+.ru-day-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px 20px;
+  color: var(--gray-faint);
+  font-size: 13px;
+  text-align: center;
+}
+.ru-day-empty svg { opacity: 0.3; }
+
+/* ── Nav arrows ── */
+.ru-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+.ru-nav__btn {
+  width: 44px; height: 44px;
+  background: var(--black-card);
+  border: 1px solid var(--gray-border2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--white-soft);
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+}
+.ru-nav__btn:hover {
+  background: var(--gray-dark);
+  border-color: rgba(229,26,44,0.4);
+  color: var(--red);
+  transform: scale(1.06);
+}
+.ru-nav__btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+  transform: none;
+}
+.ru-nav__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-dim);
+  letter-spacing: 0.3px;
+}
+
+/* ══════════════════════════════════
+   DRAWER MENÚ (hamburger)
+══════════════════════════════════ */
+.ru-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+.ru-drawer-overlay.open { opacity: 1; pointer-events: auto; }
+
+.ru-drawer {
+  position: fixed;
+  top: 0; right: 0;
+  z-index: 51;
+  width: 260px;
+  height: 100dvh;
+  background: var(--black-light);
+  border-left: 1px solid var(--gray-border);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+}
+.ru-drawer.open { transform: translateX(0); }
+
+.ru-drawer__head {
+  padding: 24px 20px 18px;
+  border-bottom: 1px solid var(--gray-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ru-drawer__logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.ru-drawer__icon {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--red-bright), var(--red-dark));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 10px rgba(229,26,44,0.3);
+}
+.ru-drawer__brand {
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--white);
+}
+.ru-drawer__close {
+  background: var(--gray-dark);
+  border: 1px solid var(--gray-border2);
+  color: var(--gray-light);
+  width: 30px; height: 30px;
+  border-radius: 7px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: color 0.2s, background 0.2s;
+}
+.ru-drawer__close:hover { color: var(--white); background: var(--gray-mid); }
+
+.ru-drawer__user {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--gray-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ru-drawer__avatar {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, rgba(229,26,44,0.25), rgba(176,16,32,0.1));
+  border: 1px solid rgba(229,26,44,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--red);
+  flex-shrink: 0;
+}
+.ru-drawer__username {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white-soft);
+}
+.ru-drawer__cedula {
+  font-size: 11px;
+  color: var(--gray-dim);
+  margin-top: 1px;
+}
+
+.ru-drawer__nav {
+  padding: 12px 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ru-drawer__section {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  color: var(--gray-faint);
+  padding: 10px 8px 6px;
+}
+.ru-drawer__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--gray-light);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+.ru-drawer__item:hover { background: var(--gray-dark); color: var(--white-soft); }
+.ru-drawer__item--active {
+  background: linear-gradient(90deg, rgba(229,26,44,0.12) 0%, transparent 100%);
+  color: var(--white);
+  border-left: 2px solid var(--red);
+  padding-left: 10px;
+}
+.ru-drawer__item svg { flex-shrink: 0; }
+
+.ru-drawer__foot {
+  padding: 14px 12px 24px;
+  border-top: 1px solid var(--gray-border);
+}
+.ru-drawer__logout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--red);
+  cursor: pointer;
+  transition: background 0.15s;
+  text-decoration: none;
+}
+.ru-drawer__logout:hover { background: rgba(229,26,44,0.08); }
+
+/* ══════════════════════════════════
+   POP-UP EJERCICIO
+══════════════════════════════════ */
+.ru-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-end;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+.ru-popup-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ru-popup {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--black-card);
+  border: 1px solid var(--gray-border2);
+  border-radius: 22px 22px 0 0;
+  max-height: 92dvh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-mid) transparent;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 -12px 50px rgba(0,0,0,0.6);
+}
+.ru-popup-overlay.open .ru-popup {
+  transform: translateY(0);
+}
+.ru-popup::-webkit-scrollbar { width: 3px; }
+.ru-popup::-webkit-scrollbar-thumb { background: var(--gray-mid); border-radius: 2px; }
+
+/* Drag handle */
+.ru-popup__handle {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0 6px;
+}
+.ru-popup__handle span {
+  width: 36px; height: 4px;
+  background: var(--gray-faint);
+  border-radius: 2px;
+}
+
+/* Popup header */
+.ru-popup__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 4px 18px 14px;
+  border-bottom: 1px solid var(--gray-border);
+  gap: 12px;
+}
+.ru-popup__head-left { display: flex; align-items: center; gap: 12px; }
+.ru-popup__num {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--red-bright), var(--red-dark));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--white);
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(229,26,44,0.3);
+}
+.ru-popup__exercise-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.2;
+}
+.ru-popup__machine-desc {
+  font-size: 11.5px;
+  color: var(--gray-dim);
+  margin-top: 3px;
+}
+.ru-popup__close {
+  background: var(--gray-dark);
+  border: 1px solid var(--gray-border2);
+  color: var(--gray-light);
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  transition: color 0.2s, background 0.2s;
+  margin-top: 2px;
+}
+.ru-popup__close:hover { color: var(--white); background: var(--gray-mid); }
+
+/* Popup photo */
+.ru-popup__photo {
+  margin: 14px 18px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--gray-dark);
+  border: 1px solid var(--gray-border2);
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ru-popup__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ru-popup__photo--placeholder {
+  flex-direction: column;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-dimmer);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+}
+.ru-popup__photo--placeholder svg { opacity: 0.35; }
+
+/* Técnica section */
+.ru-popup__tecnica {
+  padding: 0 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ru-popup__tec-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--white);
+}
+.ru-popup__tec-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white-soft);
+  line-height: 1.45;
+}
+.ru-popup__tec-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gray-dim);
+  margin-bottom: 2px;
+}
+.ru-popup__tec-text {
+  font-size: 13.5px;
+  color: var(--gray-light);
+  line-height: 1.6;
+}
+
+/* Stats row (series x reps) */
+.ru-popup__stats {
+  display: flex;
+  gap: 10px;
+  margin: 0 18px 14px;
+}
+.ru-popup__stat {
+  flex: 1;
+  background: var(--gray-dark);
+  border: 1px solid var(--gray-border2);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+.ru-popup__stat-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--white);
+}
+.ru-popup__stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--gray-dim);
+}
+
+/* More exercises indicator */
+.ru-popup__more {
+  padding: 10px 18px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-dim);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* ══════════════════════════════════
+   BOTTOM BAR (indicador de semana)
+══════════════════════════════════ */
+.ru-bottom-bar {
+  position: fixed;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  z-index: 10;
+  background: rgba(10,10,10,0.95);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid var(--gray-border);
+  padding: 12px 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ru-bottom-bar__dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gray-faint);
+  transition: background 0.2s, width 0.2s;
+}
+.ru-bottom-bar__dot--active {
+  background: var(--red);
+  width: 16px;
+  border-radius: 3px;
+}
+
+/* ══════════════════════════════════
+   ERROR / LOADING
+══════════════════════════════════ */
+.ru-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  gap: 14px;
+  color: var(--gray-dim);
+  font-size: 13px;
+  text-align: center;
+}
+.ru-spinner {
+  width: 32px; height: 32px;
+  border: 2.5px solid var(--gray-faint);
+  border-top-color: var(--red);
+  border-radius: 50%;
+  animation: ru-spin 0.7s linear infinite;
+}
+@keyframes ru-spin { to { transform: rotate(360deg); } }
+
+/* ══════════════════════════════════
+   DESKTOP WRAPPER
+══════════════════════════════════ */
+@media (min-width: 481px) {
+  body {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    background: var(--black-light);
+  }
+  .ru-app {
+    border-left: 1px solid var(--gray-border);
+    border-right: 1px solid var(--gray-border);
+    box-shadow: 0 0 60px rgba(0,0,0,0.6);
+  }
+  .ru-popup, .ru-bottom-bar {
+    max-width: 480px;
+  }
+}

@@ -298,9 +298,13 @@
           </div>
 
           <div class="gm-form-group">
-            <label class="gm-form-label" for="machineLocation">Ubicación en el gimnasio</label>
-            <input type="text" id="machineLocation" class="gm-form-input"
-              placeholder="Ej: Zona de pesas — fila 2">
+            <label class="gm-form-label" for="machineLocation">Piso / Ubicación</label>
+            <select id="machineLocation" class="gm-form-select">
+              <option value="">Seleccionar piso</option>
+              <option value="Piso 2">Piso 2</option>
+              <option value="Piso 3">Piso 3</option>
+              <option value="Piso 4">Piso 4</option>
+            </select>
           </div>
 
         </div><!-- /form-side -->
