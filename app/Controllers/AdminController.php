@@ -137,6 +137,22 @@ class AdminController
                 $this->saveRutinaGlobal();
             }
 
+            if ($method === 'GET' && $resource === 'dietas') {
+                $this->getDietas();
+            }
+
+            if ($method === 'POST' && $resource === 'dietas') {
+                $this->addDieta();
+            }
+
+            if ($method === 'PUT' && $resource === 'dietas') {
+                $this->updateDieta();
+            }
+
+            if ($method === 'DELETE' && $resource === 'dietas') {
+                $this->deleteDieta();
+            }
+
             $this->jsonResponse(['ok' => false, 'error' => 'recurso_no_soportado'], 404);
 
         } catch (\PDOException $e) {
@@ -501,6 +517,76 @@ class AdminController
         }
 
         $this->model->saveRutinaGlobal($genero, $semana, $dias);
+        $this->jsonResponse(['ok' => true]);
+    }
+
+    /**
+     * Obtiene todas las dietas.
+     */
+    private function getDietas(): void
+    {
+        $dietas = $this->model->getAllDietas();
+        $this->jsonResponse(['ok' => true, 'dietas' => $dietas]);
+    }
+
+    /**
+     * Agrega una nueva dieta.
+     */
+    private function addDieta(): void
+    {
+        $data = json_decode((string) file_get_contents('php://input'), true);
+        if (!is_array($data)) {
+            $this->jsonResponse(['ok' => false, 'error' => 'datos_invalidos'], 400);
+        }
+
+        $tipo = trim((string) ($data['tipo'] ?? ''));
+        $descripcion = trim((string) ($data['descripcion'] ?? ''));
+
+        if ($tipo === '') {
+            $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
+        }
+
+        $id = $this->model->addDieta($tipo, $descripcion);
+        $this->jsonResponse(['ok' => true, 'id' => $id]);
+    }
+
+    /**
+     * Actualiza una dieta existente.
+     */
+    private function updateDieta(): void
+    {
+        $id = (int) ($_GET['id'] ?? 0);
+        if ($id <= 0) {
+            $this->jsonResponse(['ok' => false, 'error' => 'id_invalido'], 422);
+        }
+
+        $data = json_decode((string) file_get_contents('php://input'), true);
+        if (!is_array($data)) {
+            $this->jsonResponse(['ok' => false, 'error' => 'datos_invalidos'], 400);
+        }
+
+        $tipo = trim((string) ($data['tipo'] ?? ''));
+        $descripcion = trim((string) ($data['descripcion'] ?? ''));
+
+        if ($tipo === '') {
+            $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
+        }
+
+        $this->model->updateDieta($id, $tipo, $descripcion);
+        $this->jsonResponse(['ok' => true]);
+    }
+
+    /**
+     * Elimina una dieta.
+     */
+    private function deleteDieta(): void
+    {
+        $id = (int) ($_GET['id'] ?? 0);
+        if ($id <= 0) {
+            $this->jsonResponse(['ok' => false, 'error' => 'id_invalido'], 422);
+        }
+
+        $this->model->deleteDieta($id);
         $this->jsonResponse(['ok' => true]);
     }
 }

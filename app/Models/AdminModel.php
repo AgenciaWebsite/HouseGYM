@@ -606,4 +606,40 @@ class AdminModel
         $stmt = $this->pdo->prepare('DELETE FROM maquinas WHERE id_maquina = ?');
         return $stmt->execute([$id]);
     }
+
+    /**
+     * Obtiene todas las dietas
+     */
+    public function getAllDietas(): array
+    {
+        return $this->pdo->query('SELECT * FROM dietas ORDER BY id_dieta DESC')->fetchAll();
+    }
+
+    /**
+     * Agrega una nueva dieta
+     */
+    public function addDieta(string $tipo, ?string $descripcion): int
+    {
+        $stmt = $this->pdo->prepare('INSERT INTO dietas (tipo, descripcion) VALUES (?, ?)');
+        $stmt->execute([$tipo, $descripcion]);
+        return (int) $this->pdo->lastInsertId();
+    }
+
+    /**
+     * Actualiza una dieta existente
+     */
+    public function updateDieta(int $id, string $tipo, ?string $descripcion): void
+    {
+        $stmt = $this->pdo->prepare('UPDATE dietas SET tipo = ?, descripcion = ? WHERE id_dieta = ?');
+        $stmt->execute([$tipo, $descripcion, $id]);
+    }
+
+    /**
+     * Elimina una dieta
+     */
+    public function deleteDieta(int $id): void
+    {
+        $stmt = $this->pdo->prepare('DELETE FROM dietas WHERE id_dieta = ?');
+        $stmt->execute([$id]);
+    }
 }
