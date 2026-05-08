@@ -54,6 +54,30 @@
         </svg>
         Mi Rutina
       </a>
+
+      <a class="nav-item" href="#seccion-rutina">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+        </svg>
+        Mi Dieta
+      </a>
+
+      <a class="nav-item" href="#seccion-rutina">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+        </svg>
+        Maquinas
+      </a>
+
+      <a class="nav-item" href="#seccion-rutina">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+        </svg>
+        Ejercicios
+      </a>
     </nav>
 
     <!-- Sidebar Footer -->
@@ -98,12 +122,13 @@
       <!-- Page Header -->
       <div class="page-title">
         <h1>Bienvenido, <span id="headerUserName">Usuario</span></h1>
-        <p class="page-subtitle">Este es tu panel personal. Aquí puedes ver tu plan actual y tu rutina de entrenamiento.</p>
+        <p class="page-subtitle">Este es tu panel personal. Aquí puedes ver tu plan actual y tu rutina de entrenamiento.
+        </p>
       </div>
 
       <!-- Perfil y Plan -->
       <div class="user-dashboard-top">
-        
+
         <!-- Profile Card -->
         <div class="user-card">
           <div class="user-card__header">
@@ -133,12 +158,14 @@
         <div class="info-banner">
           <div class="info-banner__icon">
             <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div class="info-banner__text">
             <h3>Información de tu Plan</h3>
-            <p>Si deseas actualizar tu plan, adquirir una rutina personalizada o un plan de nutrición (dieta), por favor acércate a la recepción de HouseGYM.</p>
+            <p>Si deseas actualizar tu plan, adquirir una rutina personalizada o un plan de nutrición (dieta), por favor
+              acércate a la recepción de HouseGYM.</p>
           </div>
         </div>
       </div>
@@ -155,11 +182,13 @@
         <div id="routineStateMsg" class="routine-empty-state">
           <div class="empty-icon">
             <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <h3>Sin Rutina Asignada</h3>
-          <p>Actualmente no cuentas con una rutina personalizada. Si ya adquiriste el plan, contacta con tu entrenador.</p>
+          <p>Actualmente no cuentas con una rutina personalizada. Si ya adquiriste el plan, contacta con tu entrenador.
+          </p>
         </div>
 
         <div id="routineDaysContainer" class="routine-days" style="display: none;">
@@ -243,11 +272,11 @@
       const dataProfile = await fetchApi('profile');
       if (dataProfile && dataProfile.profile) {
         const p = dataProfile.profile;
-        
+
         const firstName = p.nombre.split(' ')[0];
         document.getElementById('topbarUserName').textContent = firstName;
         document.getElementById('headerUserName').textContent = firstName;
-        
+
         document.getElementById('profileName').textContent = p.nombre;
         document.getElementById('profileDoc').textContent = 'CC ' + p.cedula;
         setInitials(p.nombre);
@@ -294,7 +323,7 @@
         dataRoutine.routine.forEach((dia, index) => {
           const numEjs = dia.ejercicios.length;
           let ejHtml = '';
-          
+
           if (numEjs === 0) {
             ejHtml = '<p class="day-empty">Día de descanso.</p>';
           } else {
@@ -333,4 +362,5 @@
     loadDashboard();
   </script>
 </body>
+
 </html>
