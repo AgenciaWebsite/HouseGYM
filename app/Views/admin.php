@@ -244,233 +244,251 @@
 
           <!-- Toggles -->
           <div class="toggle-group">
-            <div class="toggle-row">
-              <div>
-                <div class="toggle-label-main">Rutina <span>Personalizada</span></div>
-                <div class="toggle-label-sub">Acceso a rutina de pago</div>
+
+            <!-- Gender Accordion -->
+            <div class="toggle-row" style="flex-direction: column; align-items: stretch; gap: 8px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <div class="toggle-label-main">Género del <span>Usuario</span></div>
+                  <div class="toggle-label-sub">Selecciona el género</div>
+                </div>
               </div>
-              <label class="toggle-switch">
-                <input type="checkbox" id="toggleRutina" onchange="updateToggleState('rutina', this.checked)">
-                <span class="toggle-switch__track"></span>
-              </label>
-            </div>
-            <div class="toggle-row">
-              <div>
-                <div class="toggle-label-main">Acceso a <span>Dieta</span></div>
-                <div class="toggle-label-sub">Acceso a dietas de pago</div>
+              <div id="dietaSelectContainer" style="display: none; margin-top: 10px;">
+                <label class="form-label" style="font-size: 12px; margin-bottom: 4px;">Tipo de Dieta</label>
+                <select id="selectDieta" class="form-input" style="padding: 8px; font-size: 14px;">
+                  <option value="1">Hipercalórica</option>
+                  <option value="2">Normocalórica</option>
+                  <option value="3">Hipocalórica</option>
+                </select>
               </div>
-              <label class="toggle-switch">
-                <input type="checkbox" id="toggleDieta" onchange="toggleDietaSelect(this.checked)">
-                <span class="toggle-switch__track"></span>
-              </label>
+
+              <div class="toggle-row">
+                <div>
+                  <div class="toggle-label-main">Rutina <span>Personalizada</span></div>
+                  <div class="toggle-label-sub">Acceso a rutina de pago</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggleRutina" onchange="updateToggleState('rutina', this.checked)">
+                  <span class="toggle-switch__track"></span>
+                </label>
+              </div>
+              <div class="toggle-row">
+                <div>
+                  <div class="toggle-label-main">Acceso a <span>Dieta</span></div>
+                  <div class="toggle-label-sub">Acceso a dietas de pago</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggleDieta" onchange="toggleDietaSelect(this.checked)">
+                  <span class="toggle-switch__track"></span>
+                </label>
+              </div>
+              <div id="dietaSelectContainer" style="display: none; margin-top: 10px;">
+                <label class="form-label" style="font-size: 12px; margin-bottom: 4px;">Tipo de Dieta</label>
+                <select id="selectDieta" class="form-input" style="padding: 8px; font-size: 14px;">
+                  <option value="1">Hipercalórica</option>
+                  <option value="2">Normocalórica</option>
+                  <option value="3">Hipocalórica</option>
+                </select>
+              </div>
             </div>
-            <div id="dietaSelectContainer" style="display: none; margin-top: 10px;">
-              <label class="form-label" style="font-size: 12px; margin-bottom: 4px;">Tipo de Dieta</label>
-              <select id="selectDieta" class="form-input" style="padding: 8px; font-size: 14px;">
-                <option value="1">Hipercalórica</option>
-                <option value="2">Normocalórica</option>
-                <option value="3">Hipocalórica</option>
-              </select>
+
+            <div class="form-actions">
+              <button class="btn btn--ghost" onclick="clearForm()">Limpiar</button>
+              <button class="btn btn--primary" onclick="addUser()">
+                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                Agregar
+              </button>
+            </div>
+
+            <div class="feedback-msg feedback-msg--success" id="successMsg">
+              Usuario agregado correctamente
             </div>
           </div>
 
-          <div class="form-actions">
-            <button class="btn btn--ghost" onclick="clearForm()">Limpiar</button>
-            <button class="btn btn--primary" onclick="addUser()">
-              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-              </svg>
-              Agregar
-            </button>
+          <!-- Ultimos Registrados -->
+          <div class="card">
+            <div class="card__header card__header--space-between">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div class="card__accent-bar"></div>
+                <span class="card__title">Ultimos Registrados</span>
+              </div>
+              <span class="card__link" onclick="window.location.href='index.php?route=admin_usuarios'">Ver todos</span>
+            </div>
+            <div id="userList"><!-- Populated by JS --></div>
           </div>
 
-          <div class="feedback-msg feedback-msg--success" id="successMsg">
-            Usuario agregado correctamente
-          </div>
-        </div>
+        </div><!-- /two-col -->
 
-        <!-- Ultimos Registrados -->
-        <div class="card">
-          <div class="card__header card__header--space-between">
-            <div style="display:flex;align-items:center;gap:8px;">
+        <!-- BOTTOM: Chart + Quick Actions -->
+        <div class="two-col">
+
+          <!-- Chart -->
+          <div class="card">
+            <div class="card__header card__header--space-between">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div class="card__accent-bar"></div>
+                <span class="card__title">Usuarios Registrados</span>
+              </div>
+              <span style="font-size:11px;color:#3a3a3a;font-weight:500;">ultimo mes</span>
+            </div>
+            <div class="chart-bars" id="chartBars"><!-- Populated by JS --></div>
+            <div class="chart-labels" id="chartLabels"><!-- Populated by JS --></div>
+          </div>
+
+          <!-- Acciones Rapidas -->
+          <div class="card">
+            <div class="card__header">
               <div class="card__accent-bar"></div>
-              <span class="card__title">Ultimos Registrados</span>
+              <span class="card__title">Acciones Rapidas</span>
             </div>
-            <span class="card__link" onclick="window.location.href='index.php?route=admin_usuarios'">Ver todos</span>
-          </div>
-          <div id="userList"><!-- Populated by JS --></div>
-        </div>
-
-      </div><!-- /two-col -->
-
-      <!-- BOTTOM: Chart + Quick Actions -->
-      <div class="two-col">
-
-        <!-- Chart -->
-        <div class="card">
-          <div class="card__header card__header--space-between">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <div class="card__accent-bar"></div>
-              <span class="card__title">Usuarios Registrados</span>
-            </div>
-            <span style="font-size:11px;color:#3a3a3a;font-weight:500;">ultimo mes</span>
-          </div>
-          <div class="chart-bars" id="chartBars"><!-- Populated by JS --></div>
-          <div class="chart-labels" id="chartLabels"><!-- Populated by JS --></div>
-        </div>
-
-        <!-- Acciones Rapidas -->
-        <div class="card">
-          <div class="card__header">
-            <div class="card__accent-bar"></div>
-            <span class="card__title">Acciones Rapidas</span>
-          </div>
-          <div class="actions-grid">
-            <div class="action-btn" onclick="setSection('maquinas')">
-              <svg width="22" height="22" fill="none" stroke="#e51a2c" viewBox="0 0 24 24" stroke-width="2">
-                <rect x="2" y="7" width="4" height="10" rx="1" />
-                <rect x="18" y="7" width="4" height="10" rx="1" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 10h12M6 14h12" />
-              </svg>
-              <div class="action-btn__title">Maquinas</div>
-              <div class="action-btn__sub">Gestionar catalogo</div>
-            </div>
-            <div class="action-btn" onclick="setSection('ejercicios')">
-              <svg width="22" height="22" fill="none" stroke="#fbbf24" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              <div class="action-btn__title">Ejercicios</div>
-              <div class="action-btn__sub">Ver y editar</div>
-            </div>
-            <div class="action-btn" onclick="setSection('rutinas-personalizadas')">
-              <svg width="22" height="22" fill="none" stroke="#a78bfa" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-              </svg>
-              <div class="action-btn__title">Rutinas</div>
-              <div class="action-btn__sub">Activar / Desactivar</div>
-            </div>
-            <div class="action-btn" onclick="setSection('dietas')">
-              <svg width="22" height="22" fill="none" stroke="#4ade80" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-              </svg>
-              <div class="action-btn__title">Dietas</div>
-              <div class="action-btn__sub">Hipercal / Normo / Hipo</div>
+            <div class="actions-grid">
+              <div class="action-btn" onclick="setSection('maquinas')">
+                <svg width="22" height="22" fill="none" stroke="#e51a2c" viewBox="0 0 24 24" stroke-width="2">
+                  <rect x="2" y="7" width="4" height="10" rx="1" />
+                  <rect x="18" y="7" width="4" height="10" rx="1" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 10h12M6 14h12" />
+                </svg>
+                <div class="action-btn__title">Maquinas</div>
+                <div class="action-btn__sub">Gestionar catalogo</div>
+              </div>
+              <div class="action-btn" onclick="setSection('ejercicios')">
+                <svg width="22" height="22" fill="none" stroke="#fbbf24" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <div class="action-btn__title">Ejercicios</div>
+                <div class="action-btn__sub">Ver y editar</div>
+              </div>
+              <div class="action-btn" onclick="setSection('rutinas-personalizadas')">
+                <svg width="22" height="22" fill="none" stroke="#a78bfa" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                <div class="action-btn__title">Rutinas</div>
+                <div class="action-btn__sub">Activar / Desactivar</div>
+              </div>
+              <div class="action-btn" onclick="setSection('dietas')">
+                <svg width="22" height="22" fill="none" stroke="#4ade80" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+                <div class="action-btn__title">Dietas</div>
+                <div class="action-btn__sub">Hipercal / Normo / Hipo</div>
+              </div>
             </div>
           </div>
-        </div>
 
-      </div><!-- /two-col bottom -->
+        </div><!-- /two-col bottom -->
 
-    </div><!-- /content -->
-  </div><!-- /main-wrap -->
+      </div><!-- /content -->
+    </div><!-- /main-wrap -->
 
-  <script>
-    /* ── Mobile sidebar ── */
-    function isMobileView() { return window.innerWidth <= 900; }
+    <script>
+      /* ── Mobile sidebar ── */
+      function isMobileView() { return window.innerWidth <= 900; }
 
-    function closeSidebar() {
-      document.getElementById('sidebar').classList.remove('sidebar--open');
-      document.getElementById('sidebarOverlay').classList.remove('sidebar-overlay--visible');
-      document.body.style.overflow = '';
-    }
-
-    function openSidebar() {
-      if (!isMobileView()) return;
-      document.getElementById('sidebar').classList.add('sidebar--open');
-      document.getElementById('sidebarOverlay').classList.add('sidebar-overlay--visible');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      sidebar.classList.contains('sidebar--open') ? closeSidebar() : openSidebar();
-    }
-
-    if (window.innerWidth <= 900) document.getElementById('menuBtn').style.display = 'block';
-    window.addEventListener('resize', () => {
-      document.getElementById('menuBtn').style.display = window.innerWidth <= 900 ? 'block' : 'none';
-      if (window.innerWidth > 900) closeSidebar();
-    });
-
-    /* ── Nav section ── */
-    function setSection(section) {
-      document.querySelectorAll('.nav-item').forEach(i => {
-        i.classList.remove('nav-item--active');
-      });
-      if (event && event.currentTarget && event.currentTarget.classList) {
-        event.currentTarget.classList.add('nav-item--active');
+      function closeSidebar() {
+        document.getElementById('sidebar').classList.remove('sidebar--open');
+        document.getElementById('sidebarOverlay').classList.remove('sidebar-overlay--visible');
+        document.body.style.overflow = '';
       }
-      closeSidebar();
 
-      const subtitles = {
-        'dashboard': 'Gestion completa de HouseGYM',
-        'usuarios': 'Listado y gestion de usuarios desde la tabla usuarios',
-        'rutina-global': 'Rutina disponible para todos desde rutina_global',
-        'rutinas-personalizadas': 'Rutinas de acceso por pago desde rutina_personalizada',
-        'maquinas': 'Catalogo de maquinas por piso desde maquinas',
-        'ejercicios': 'Biblioteca de ejercicios desde ejercicios',
-        'dietas': 'Planes de dieta desde dietas',
-      };
-      document.getElementById('pageSubtitle').textContent = subtitles[section] || '';
-    }
+      function openSidebar() {
+        if (!isMobileView()) return;
+        document.getElementById('sidebar').classList.add('sidebar--open');
+        document.getElementById('sidebarOverlay').classList.add('sidebar-overlay--visible');
+        document.body.style.overflow = 'hidden';
+      }
 
-    /* ── API ── */
-    const API_URL = 'index.php';
+      function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.contains('sidebar--open') ? closeSidebar() : openSidebar();
+      }
 
-    async function apiRequest(resource, options = {}) {
-      const response = await fetch(`${API_URL}?route=admin_api&resource=${resource}`, {
-        credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
-        ...options,
+      if (window.innerWidth <= 900) document.getElementById('menuBtn').style.display = 'block';
+      window.addEventListener('resize', () => {
+        document.getElementById('menuBtn').style.display = window.innerWidth <= 900 ? 'block' : 'none';
+        if (window.innerWidth > 900) closeSidebar();
       });
 
-      if (response.status === 401) {
-        window.location.href = 'index.php?route=login&error=no_autorizado';
-        return null;
+      /* ── Nav section ── */
+      function setSection(section) {
+        document.querySelectorAll('.nav-item').forEach(i => {
+          i.classList.remove('nav-item--active');
+        });
+        if (event && event.currentTarget && event.currentTarget.classList) {
+          event.currentTarget.classList.add('nav-item--active');
+        }
+        closeSidebar();
+
+        const subtitles = {
+          'dashboard': 'Gestion completa de HouseGYM',
+          'usuarios': 'Listado y gestion de usuarios desde la tabla usuarios',
+          'rutina-global': 'Rutina disponible para todos desde rutina_global',
+          'rutinas-personalizadas': 'Rutinas de acceso por pago desde rutina_personalizada',
+          'maquinas': 'Catalogo de maquinas por piso desde maquinas',
+          'ejercicios': 'Biblioteca de ejercicios desde ejercicios',
+          'dietas': 'Planes de dieta desde dietas',
+        };
+        document.getElementById('pageSubtitle').textContent = subtitles[section] || '';
       }
 
-      const data = await response.json();
-      if (!response.ok || !data.ok) throw new Error(data.error || 'request_failed');
-      return data;
-    }
+      /* ── API ── */
+      const API_URL = 'index.php';
 
-    /* ── Dashboard ── */
-    async function loadDashboard() {
-      try {
-        const data = await apiRequest('dashboard');
-        if (!data) return;
-        document.getElementById('statUsuarios').textContent = data.stats.usuarios || 0;
-        document.getElementById('statRutinas').textContent = data.stats.rutinas_personalizadas || 0;
-        document.getElementById('statMaquinas').textContent = data.stats.maquinas || 0;
-        document.getElementById('statDietas').textContent = data.stats.dietas || 0;
-        renderUsers(data.recent_users);
-        renderChart(data.chart);
-      } catch (e) {
-        showMessage('No se pudo cargar la base de datos del panel.', true);
+      async function apiRequest(resource, options = {}) {
+        const response = await fetch(`${API_URL}?route=admin_api&resource=${resource}`, {
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+          ...options,
+        });
+
+        if (response.status === 401) {
+          window.location.href = 'index.php?route=login&error=no_autorizado';
+          return null;
+        }
+
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error || 'request_failed');
+        return data;
       }
-    }
 
-    /* ── Render users ── */
-    function userLabel(u) { return u.nombre || `Usuario ${u.id_usuario || ''}`.trim(); }
-
-    function renderUsers(list) {
-      const el = document.getElementById('userList');
-      if (!list || !list.length) {
-        el.innerHTML = '<div style="padding:18px;color:#5a5a5a;font-size:13px;text-align:center;">No hay usuarios registrados.</div>';
-        return;
+      /* ── Dashboard ── */
+      async function loadDashboard() {
+        try {
+          const data = await apiRequest('dashboard');
+          if (!data) return;
+          document.getElementById('statUsuarios').textContent = data.stats.usuarios || 0;
+          document.getElementById('statRutinas').textContent = data.stats.rutinas_personalizadas || 0;
+          document.getElementById('statMaquinas').textContent = data.stats.maquinas || 0;
+          document.getElementById('statDietas').textContent = data.stats.dietas || 0;
+          renderUsers(data.recent_users);
+          renderChart(data.chart);
+        } catch (e) {
+          showMessage('No se pudo cargar la base de datos del panel.', true);
+        }
       }
-      el.innerHTML = list.map(u => {
-        const label = userLabel(u);
-        const initials = (u.nombre || `U${u.id_usuario || ''}`).split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-        const activeBadge = Number(u.activo) === 1
-          ? '<span class="badge badge--active">Activo</span>'
-          : '<span class="badge badge--neutral">Inactivo</span>';
-        const planBadge = Number(u.plan_personalizado) === 1
-          ? '<span class="badge badge--rutina">Rutina</span>'
-          : '<span class="badge badge--neutral">Basico</span>';
-        return `
+
+      /* ── Render users ── */
+      function userLabel(u) { return u.nombre || `Usuario ${u.id_usuario || ''}`.trim(); }
+
+      function renderUsers(list) {
+        const el = document.getElementById('userList');
+        if (!list || !list.length) {
+          el.innerHTML = '<div style="padding:18px;color:#5a5a5a;font-size:13px;text-align:center;">No hay usuarios registrados.</div>';
+          return;
+        }
+        el.innerHTML = list.map(u => {
+          const label = userLabel(u);
+          const initials = (u.nombre || `U${u.id_usuario || ''}`).split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+          const activeBadge = Number(u.activo) === 1
+            ? '<span class="badge badge--active">Activo</span>'
+            : '<span class="badge badge--neutral">Inactivo</span>';
+          const planBadge = Number(u.plan_personalizado) === 1
+            ? '<span class="badge badge--rutina">Rutina</span>'
+            : '<span class="badge badge--neutral">Basico</span>';
+          return `
           <div class="user-row">
             <div class="user-row__left">
               <div class="user-avatar">${initials}</div>
@@ -489,112 +507,123 @@
               </button>
             </div>
           </div>`;
-      }).join('');
-    }
+        }).join('');
+      }
 
-    /* ── Render chart ── */
-    function renderChart(chartData) {
-      const data = chartData && chartData.length ? chartData : [{ month: 'Hoy', val: 0 }];
-      const max = Math.max(1, ...data.map(d => Number(d.val) || 0));
+      /* ── Render chart ── */
+      function renderChart(chartData) {
+        const data = chartData && chartData.length ? chartData : [{ month: 'Hoy', val: 0 }];
+        const max = Math.max(1, ...data.map(d => Number(d.val) || 0));
 
-      document.getElementById('chartBars').innerHTML = data.map(d => `
+        document.getElementById('chartBars').innerHTML = data.map(d => `
         <div class="chart-bar-wrap" title="${d.val} usuarios">
           <div class="chart-bar-fill" style="height:${((Number(d.val) || 0) / max) * 100}%;"></div>
         </div>`).join('');
 
-      document.getElementById('chartLabels').innerHTML = data.map(d => `
+        document.getElementById('chartLabels').innerHTML = data.map(d => `
         <div class="chart-label">${d.month}</div>`).join('');
-    }
-
-    /* ── Feedback ── */
-    function showMessage(text, isError = false) {
-      const msg = document.getElementById('successMsg');
-      msg.textContent = text;
-      msg.style.display = 'block';
-      if (isError) {
-        msg.classList.add('feedback-msg--error');
-        msg.classList.remove('feedback-msg--success');
-      } else {
-        msg.classList.add('feedback-msg--success');
-        msg.classList.remove('feedback-msg--error');
       }
-      setTimeout(() => msg.style.display = 'none', 3500);
-    }
 
-    /* ── Form ── */
-    function clearForm() {
-      document.getElementById('userNombre').value = '';
-      document.getElementById('userCedula').value = '';
-      document.getElementById('userPassword').value = '';
-      document.getElementById('toggleRutina').checked = false;
-      document.getElementById('toggleDieta').checked = false;
-      document.getElementById('dietaSelectContainer').style.display = 'none';
-      document.getElementById('successMsg').style.display = 'none';
-      document.querySelectorAll('.form-input').forEach(i => i.style.borderColor = '');
-    }
+      /* ── Feedback ── */
+      function showMessage(text, isError = false) {
+        const msg = document.getElementById('successMsg');
+        msg.textContent = text;
+        msg.style.display = 'block';
+        if (isError) {
+          msg.classList.add('feedback-msg--error');
+          msg.classList.remove('feedback-msg--success');
+        } else {
+          msg.classList.add('feedback-msg--success');
+          msg.classList.remove('feedback-msg--error');
+        }
+        setTimeout(() => msg.style.display = 'none', 3500);
+      }
 
-    function toggleDietaSelect(checked) {
-      document.getElementById('dietaSelectContainer').style.display = checked ? 'block' : 'none';
-    }
-
-    async function addUser() {
-      const nombre = document.getElementById('userNombre');
-      const cedula = document.getElementById('userCedula');
-      const password = document.getElementById('userPassword');
-      let ok = true;
-
-      [nombre, cedula, password].forEach(input => {
-        const empty = !input.value.trim();
-        input.style.borderColor = empty ? 'rgba(229,26,44,0.5)' : '';
-        if (empty) ok = false;
-      });
-
-      if (!ok) return;
-
-      try {
-        await apiRequest('users', {
-          method: 'POST',
-          body: JSON.stringify({
-            nombre: nombre.value.trim(),
-            cedula: cedula.value.trim(),
-            contrasena: password.value,
-            plan_personalizado: document.getElementById('toggleRutina').checked ? 1 : 0,
-            dieta: document.getElementById('toggleDieta').checked ? document.getElementById('selectDieta').value : 0,
-          }),
+      /* ── Form ── */
+      function clearForm() {
+        document.getElementById('userNombre').value = '';
+        document.getElementById('userCedula').value = '';
+        document.getElementById('userPassword').value = '';
+        document.getElementById('toggleRutina').checked = false;
+        document.getElementById('toggleDieta').checked = false;
+        document.getElementById('dietaSelectContainer').style.display = 'none';
+        document.getElementById('userGenero').value = 'Hombre';
+        document.querySelectorAll('.genero-opt').forEach(b => {
+          b.classList.toggle('genero-opt--active', b.dataset.value === 'Hombre');
         });
-        clearForm();
-        showMessage('Usuario agregado correctamente');
-        loadDashboard();
-      } catch (error) {
-        const msg = error.message === 'base_de_datos'
-          ? 'No se pudo guardar. Revisa si la cedula ya existe.'
-          : 'No se pudo crear el usuario.';
-        showMessage(msg, true);
+        document.getElementById('successMsg').style.display = 'none';
+        document.querySelectorAll('.form-input').forEach(i => i.style.borderColor = '');
       }
-    }
 
-    async function deleteUser(btn, id) {
-      if (!id || !confirm('Eliminar este usuario?')) return;
-      try {
-        await apiRequest(`users&id=${encodeURIComponent(id)}`, { method: 'DELETE' });
-        const row = btn.closest('.user-row');
-        row.style.opacity = '0';
-        row.style.transform = 'translateX(20px)';
-        row.style.transition = 'all 0.25s';
-        setTimeout(loadDashboard, 250);
-      } catch (e) {
-        showMessage('No se pudo eliminar el usuario.', true);
+      function selectGenero(btn) {
+        document.querySelectorAll('.genero-opt').forEach(b => b.classList.remove('genero-opt--active'));
+        btn.classList.add('genero-opt--active');
+        document.getElementById('userGenero').value = btn.dataset.value;
       }
-    }
 
-    /* ── Search ── */
-    function renderSearchResults(results) {
-      const box = document.getElementById('searchResults');
-      if (!results.length) {
-        box.innerHTML = '<div class="search-result-item"><div style="font-size:13px;color:#5a5a5a;">Sin resultados</div></div>';
-        return;
+      function toggleDietaSelect(checked) {
+        document.getElementById('dietaSelectContainer').style.display = checked ? 'block' : 'none';
       }
-      box.innerHTML = results.map(item => `
+
+      async function addUser() {
+        const nombre = document.getElementById('userNombre');
+        const cedula = document.getElementById('userCedula');
+        const password = document.getElementById('userPassword');
+        let ok = true;
+
+        [nombre, cedula, password].forEach(input => {
+          const empty = !input.value.trim();
+          input.style.borderColor = empty ? 'rgba(229,26,44,0.5)' : '';
+          if (empty) ok = false;
+        });
+
+        if (!ok) return;
+
+        try {
+          await apiRequest('users', {
+            method: 'POST',
+            body: JSON.stringify({
+              nombre: nombre.value.trim(),
+              cedula: cedula.value.trim(),
+              contrasena: password.value,
+              genero: document.getElementById('userGenero').value,
+              plan_personalizado: document.getElementById('toggleRutina').checked ? 1 : 0,
+              dieta: document.getElementById('toggleDieta').checked ? document.getElementById('selectDieta').value : 0,
+            }),
+          });
+          clearForm();
+          showMessage('Usuario agregado correctamente');
+          loadDashboard();
+        } catch (error) {
+          const msg = error.message === 'base_de_datos'
+            ? 'No se pudo guardar. Revisa si la cedula ya existe.'
+            : 'No se pudo crear el usuario.';
+          showMessage(msg, true);
+        }
+      }
+
+      async function deleteUser(btn, id) {
+        if (!id || !confirm('Eliminar este usuario?')) return;
+        try {
+          await apiRequest(`users&id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+          const row = btn.closest('.user-row');
+          row.style.opacity = '0';
+          row.style.transform = 'translateX(20px)';
+          row.style.transition = 'all 0.25s';
+          setTimeout(loadDashboard, 250);
+        } catch (e) {
+          showMessage('No se pudo eliminar el usuario.', true);
+        }
+      }
+
+      /* ── Search ── */
+      function renderSearchResults(results) {
+        const box = document.getElementById('searchResults');
+        if (!results.length) {
+          box.innerHTML = '<div class="search-result-item"><div style="font-size:13px;color:#5a5a5a;">Sin resultados</div></div>';
+          return;
+        }
+        box.innerHTML = results.map(item => `
         <div class="search-result-item">
           <div class="search-result-avatar">${String(item.tipo || '?').charAt(0).toUpperCase()}</div>
           <div>
@@ -603,67 +632,67 @@
           </div>
           <span class="search-result-badge">${item.tipo}</span>
         </div>`).join('');
-    }
+      }
 
-    let searchTimer = null;
-    function handleSearch(val) {
-      const box = document.getElementById('searchResults');
-      clearTimeout(searchTimer);
-      if (val.trim().length < 2) {
+      let searchTimer = null;
+      function handleSearch(val) {
+        const box = document.getElementById('searchResults');
+        clearTimeout(searchTimer);
+        if (val.trim().length < 2) {
+          box.classList.add('hidden');
+          box.innerHTML = '';
+          return;
+        }
+        box.classList.remove('hidden');
+        searchTimer = setTimeout(async () => {
+          try {
+            const data = await apiRequest(`search&q=${encodeURIComponent(val.trim())}`);
+            if (data) renderSearchResults(data.results || []);
+          } catch (e) {
+            renderSearchResults([]);
+          }
+        }, 250);
+      }
+
+      function clearSearch() {
+        document.getElementById('globalSearch').value = '';
+        const box = document.getElementById('searchResults');
         box.classList.add('hidden');
         box.innerHTML = '';
-        return;
       }
-      box.classList.remove('hidden');
-      searchTimer = setTimeout(async () => {
-        try {
-          const data = await apiRequest(`search&q=${encodeURIComponent(val.trim())}`);
-          if (data) renderSearchResults(data.results || []);
-        } catch (e) {
-          renderSearchResults([]);
-        }
-      }, 250);
-    }
 
-    function clearSearch() {
-      document.getElementById('globalSearch').value = '';
-      const box = document.getElementById('searchResults');
-      box.classList.add('hidden');
-      box.innerHTML = '';
-    }
-
-    document.addEventListener('click', e => {
-      if (!e.target.closest('.search-wrap')) clearSearch();
-    });
-
-    function updateToggleState(type, val) { /* ready for backend */ }
-
-    window.renderUsers = renderUsers;
-    window.renderChart = renderChart;
-    window.handleSearch = handleSearch;
-    window.clearSearch = clearSearch;
-    window.clearForm = clearForm;
-    window.addUser = addUser;
-    window.deleteUser = deleteUser;
-    window.updateToggleState = updateToggleState;
-    window.openSidebar = openSidebar;
-    window.closeSidebar = closeSidebar;
-    window.toggleSidebar = toggleSidebar;
-    window.setSection = setSection;
-
-    /* ── Boot ── */
-    apiRequest('session')
-      .then(data => {
-        if (data && data.admin) {
-          const el = document.getElementById('adminUserLabel');
-          if (el) el.textContent = data.admin.usuario;
-        }
-        loadDashboard();
-      })
-      .catch(() => {
-        window.location.href = 'index.php?route=login&error=no_autorizado';
+      document.addEventListener('click', e => {
+        if (!e.target.closest('.search-wrap')) clearSearch();
       });
-  </script>
+
+      function updateToggleState(type, val) { /* ready for backend */ }
+
+      window.renderUsers = renderUsers;
+      window.renderChart = renderChart;
+      window.handleSearch = handleSearch;
+      window.clearSearch = clearSearch;
+      window.clearForm = clearForm;
+      window.addUser = addUser;
+      window.deleteUser = deleteUser;
+      window.updateToggleState = updateToggleState;
+      window.openSidebar = openSidebar;
+      window.closeSidebar = closeSidebar;
+      window.toggleSidebar = toggleSidebar;
+      window.setSection = setSection;
+
+      /* ── Boot ── */
+      apiRequest('session')
+        .then(data => {
+          if (data && data.admin) {
+            const el = document.getElementById('adminUserLabel');
+            if (el) el.textContent = data.admin.usuario;
+          }
+          loadDashboard();
+        })
+        .catch(() => {
+          window.location.href = 'index.php?route=login&error=no_autorizado';
+        });
+    </script>
 
 </body>
 
