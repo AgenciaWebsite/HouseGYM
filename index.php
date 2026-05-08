@@ -23,6 +23,7 @@ spl_autoload_register(function ($class) {
 
 use App\Controllers\AdminController;
 use App\Controllers\AuthController;
+use App\Controllers\UsuarioController;
 
 $route = $_GET['route'] ?? 'login';
 $method = $_SERVER['REQUEST_METHOD'];
@@ -56,6 +57,13 @@ switch ($route) {
         $adminController = new AdminController();
         $resource = (string) ($_GET['resource'] ?? 'dashboard');
         $adminController->handleRequest($method, $resource);
+        break;
+
+    case 'usuario_api':
+        // Manejar las peticiones de la API para la vista de usuario
+        $usuarioController = new UsuarioController();
+        $resource = (string) ($_GET['resource'] ?? 'profile');
+        $usuarioController->handleRequest($method, $resource);
         break;
 
     case 'usuarios':
