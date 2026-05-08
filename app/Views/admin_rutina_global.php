@@ -82,7 +82,22 @@
         Maquinas
       </div>
 
+      <div class="nav-item" onclick="window.location.href='index.php?route=admin'">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        Ejercicios
+      </div>
+
+      <div class="nav-item" onclick="window.location.href='index.php?route=admin'">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+        </svg>
+        Dietas
+      </div>
     </nav>
+
 
     <div class="sidebar-footer">
       <div class="nav-item nav-item--logout" onclick="window.location='index.php?route=logout'">
@@ -210,12 +225,17 @@
                     d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z" />
                 </svg>
               </button>
-              
+
               <!-- Dropdown de grupos musculares -->
-              <div class="rp-filter-menu" id="rgFilterMenu" style="display:none; position:absolute; right:0; top:45px; background:#222; border:1px solid #333; border-radius:8px; z-index:100; min-width: 150px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
-                <div style="padding:10px 12px; font-size:11px; color:#888; border-bottom:1px solid #333; font-weight:bold;">GRUPO MUSCULAR</div>
+              <div class="rp-filter-menu" id="rgFilterMenu"
+                style="display:none; position:absolute; right:0; top:45px; background:#222; border:1px solid #333; border-radius:8px; z-index:100; min-width: 150px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                <div
+                  style="padding:10px 12px; font-size:11px; color:#888; border-bottom:1px solid #333; font-weight:bold;">
+                  GRUPO MUSCULAR</div>
                 <div id="rgFilterList" style="max-height:200px; overflow-y:auto;"></div>
-                <button id="rgFilterClear" onclick="clearFilter()" style="display:none; width:100%; background:none; border:none; padding:10px; color:#f87171; font-size:12px; cursor:pointer; font-weight:600;">Quitar filtro</button>
+                <button id="rgFilterClear" onclick="clearFilter()"
+                  style="display:none; width:100%; background:none; border:none; padding:10px; color:#f87171; font-size:12px; cursor:pointer; font-weight:600;">Quitar
+                  filtro</button>
               </div>
             </div>
           </div>
@@ -338,7 +358,7 @@
     async function loadRutina() {
       const genero = document.getElementById('selectGenero').value;
       const semana = document.getElementById('selectSemana').value;
-      
+
       loadedParams = { genero, semana };
       document.getElementById('rgDaysList').innerHTML = '<div style="color:#aaa; text-align:center; padding: 40px;">Cargando rutina...</div>';
       document.getElementById('btnSaveRutina').style.display = 'none';
@@ -347,17 +367,17 @@
 
       try {
         const data = await apiRequest(`rutina_global&genero=${encodeURIComponent(genero)}&semana=${encodeURIComponent(semana)}`);
-        
+
         // Mapear los datos que vienen del servidor (pueden faltar días si están vacíos)
         if (data.dias && data.dias.length > 0) {
-            data.dias.forEach(dbDia => {
-                const dayIndex = dbDia.dia - 1;
-                if (dayIndex >= 0 && dayIndex < 5) {
-                    rutinaDays[dayIndex].ejercicios = dbDia.ejercicios || [];
-                }
-            });
+          data.dias.forEach(dbDia => {
+            const dayIndex = dbDia.dia - 1;
+            if (dayIndex >= 0 && dayIndex < 5) {
+              rutinaDays[dayIndex].ejercicios = dbDia.ejercicios || [];
+            }
+          });
         }
-        
+
         renderDays();
         document.getElementById('btnSaveRutina').style.display = 'flex';
       } catch (e) {
@@ -529,13 +549,13 @@
 
     function confirmAddExercise() {
       if (!pendingExercise) return;
-      
+
       const reps = parseInt(document.getElementById('modalReps').value) || 12;
       const series = parseInt(document.getElementById('modalSeries').value) || 3;
       const dayIdx = parseInt(document.getElementById('modalDaySelect').value) || 0;
 
       if (!rutinaDays[dayIdx].ejercicios) rutinaDays[dayIdx].ejercicios = [];
-      
+
       rutinaDays[dayIdx].ejercicios.push({
         id_ejercicio: pendingExercise.id_ejercicio,
         nombre: pendingExercise.nombre,
@@ -559,22 +579,22 @@
       try {
         await apiRequest('rutina_global', {
           method: 'POST',
-          body: JSON.stringify({ 
-              genero: loadedParams.genero, 
-              semana: parseInt(loadedParams.semana),
-              dias: rutinaDays 
+          body: JSON.stringify({
+            genero: loadedParams.genero,
+            semana: parseInt(loadedParams.semana),
+            dias: rutinaDays
           }),
         });
-        
+
         btn.style.background = '#4ade80';
         btn.style.color = '#000';
         btn.innerHTML = '¡Guardado!';
-        
+
         setTimeout(() => {
-            btn.style.background = '';
-            btn.style.color = '';
-            btn.innerHTML = originalText;
-            btn.disabled = false;
+          btn.style.background = '';
+          btn.style.color = '';
+          btn.innerHTML = originalText;
+          btn.disabled = false;
         }, 2000);
       } catch (e) {
         alert('Error al guardar la rutina: ' + e.message);

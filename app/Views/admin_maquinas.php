@@ -57,7 +57,7 @@
 
       <div class="nav-section-label">Contenido</div>
 
-      <div class="nav-item" onclick="window.location.href='index.php?route=admin'">
+      <div class="nav-item" onclick="window.location.href='index.php?route=admin_rutina_global'">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -176,7 +176,8 @@
 
         <!-- Filtro por grupo muscular -->
         <div class="gm-filter-wrap">
-          <select class="gm-filter-select" id="muscleFilter" onchange="filterMachines(document.getElementById('machineSearch').value)">
+          <select class="gm-filter-select" id="muscleFilter"
+            onchange="filterMachines(document.getElementById('machineSearch').value)">
             <option value="">Todas las categorías</option>
             <option value="Pecho">Pecho</option>
             <option value="Espalda">Espalda</option>
@@ -245,7 +246,8 @@
             <input type="file" id="photoInput" accept="image/*" onchange="previewPhoto(event)">
 
             <!-- Placeholder (visible sin imagen) -->
-            <div id="photoPlaceholder" style="display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;">
+            <div id="photoPlaceholder"
+              style="display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;">
               <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                 <rect x="3" y="3" width="18" height="18" rx="2" />
                 <circle cx="8.5" cy="8.5" r="1.5" />
@@ -259,7 +261,8 @@
             <img id="photoPreview" src="" alt="preview" style="display:none;">
             <div class="gm-photo-zone__overlay" id="photoOverlay">
               <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 13l6.5-6.5a2.121 2.121 0 013 3L12 16H9v-3z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15.232 5.232l3.536 3.536M9 13l6.5-6.5a2.121 2.121 0 013 3L12 16H9v-3z" />
               </svg>
               Cambiar foto
             </div>
@@ -315,9 +318,9 @@
         <div class="gm-feedback" id="modalFeedback"></div>
         <button class="gm-btn gm-btn--danger" id="deleteBtn" onclick="deleteMachine()" style="display:none;">
           <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-            <polyline points="3 6 5 6 21 6"/>
+            <polyline points="3 6 5 6 21 6" />
             <path stroke-linecap="round" stroke-linejoin="round"
-              d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+              d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2" />
           </svg>
           Eliminar
         </button>
@@ -349,14 +352,14 @@
     }
 
     /* ── State ── */
-    let allMachines  = [];
+    let allMachines = [];
     let currentMachine = null; // null = nueva máquina
-    let photoBase64  = null;
+    let photoBase64 = null;
 
     /* ══════════════════════════════
        SIDEBAR (reutilizado de admin)
     ══════════════════════════════ */
-    function openSidebar()  { document.getElementById('sidebar').classList.add('sidebar--open'); document.getElementById('sidebarOverlay').classList.add('active'); }
+    function openSidebar() { document.getElementById('sidebar').classList.add('sidebar--open'); document.getElementById('sidebarOverlay').classList.add('active'); }
     function closeSidebar() { document.getElementById('sidebar').classList.remove('sidebar--open'); document.getElementById('sidebarOverlay').classList.remove('active'); }
     function toggleSidebar() { document.getElementById('sidebar').classList.contains('sidebar--open') ? closeSidebar() : openSidebar(); }
 
@@ -455,22 +458,22 @@
       photoBase64 = null;
 
       // Titles
-      document.getElementById('modalTitle').textContent    = currentMachine ? 'Editar Máquina' : 'Agregar Máquina';
+      document.getElementById('modalTitle').textContent = currentMachine ? 'Editar Máquina' : 'Agregar Máquina';
       document.getElementById('modalSubtitle').textContent = currentMachine ? `Editando: ${currentMachine.nombre}` : 'Nueva máquina al inventario';
 
       // Delete button
       document.getElementById('deleteBtn').style.display = currentMachine ? 'flex' : 'none';
 
       // Reset form
-      document.getElementById('machineName').value     = currentMachine ? currentMachine.nombre       : '';
-      document.getElementById('machineCategory').value = currentMachine ? (currentMachine.categoria  || '') : '';
-      document.getElementById('machineDesc').value     = currentMachine ? (currentMachine.descripcion || '') : '';
-      document.getElementById('machineLocation').value = currentMachine ? (currentMachine.ubicacion   || '') : '';
-      document.getElementById('photoInput').value      = '';
+      document.getElementById('machineName').value = currentMachine ? currentMachine.nombre : '';
+      document.getElementById('machineCategory').value = currentMachine ? (currentMachine.categoria || '') : '';
+      document.getElementById('machineDesc').value = currentMachine ? (currentMachine.descripcion || '') : '';
+      document.getElementById('machineLocation').value = currentMachine ? (currentMachine.ubicacion || '') : '';
+      document.getElementById('photoInput').value = '';
       document.getElementById('modalFeedback').style.display = 'none';
 
       // Photo
-      const preview   = document.getElementById('photoPreview');
+      const preview = document.getElementById('photoPreview');
       const placeholder = document.getElementById('photoPlaceholder');
       if (currentMachine && currentMachine.foto) {
         preview.src = currentMachine.foto;
@@ -490,7 +493,7 @@
       document.getElementById('machineModal').classList.remove('visible');
       document.body.style.overflow = '';
       currentMachine = null;
-      photoBase64    = null;
+      photoBase64 = null;
     }
 
     function handleOverlayClick(e) {
@@ -518,10 +521,10 @@
 
     /* ── Save ── */
     async function saveMachine() {
-      const nombre     = document.getElementById('machineName').value.trim();
-      const categoria  = document.getElementById('machineCategory').value;
+      const nombre = document.getElementById('machineName').value.trim();
+      const categoria = document.getElementById('machineCategory').value;
       const descripcion = document.getElementById('machineDesc').value.trim();
-      const ubicacion  = document.getElementById('machineLocation').value.trim();
+      const ubicacion = document.getElementById('machineLocation').value.trim();
 
       if (!nombre) {
         document.getElementById('machineName').style.borderColor = 'rgba(229,26,44,0.5)';
@@ -576,7 +579,7 @@
     function showModalMsg(text, isError = false) {
       const el = document.getElementById('modalFeedback');
       el.textContent = text;
-      el.className   = `gm-feedback ${isError ? 'gm-feedback--error' : 'gm-feedback--success'}`;
+      el.className = `gm-feedback ${isError ? 'gm-feedback--error' : 'gm-feedback--success'}`;
       el.style.display = 'block';
       if (!isError) setTimeout(() => { el.style.display = 'none'; }, 3000);
     }
@@ -626,7 +629,7 @@
 
     /* ── Escape HTML ── */
     function escHtml(str) {
-      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     /* ── ESC closes modal ── */
@@ -649,12 +652,13 @@
         window.location.href = 'index.php?route=login&error=no_autorizado';
       });
 
-    window.openSidebar  = openSidebar;
+    window.openSidebar = openSidebar;
     window.closeSidebar = closeSidebar;
     window.toggleSidebar = toggleSidebar;
     window.handleSearch = handleSearch;
-    window.clearSearch  = clearSearch;
+    window.clearSearch = clearSearch;
   </script>
 
 </body>
+
 </html>
