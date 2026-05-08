@@ -175,20 +175,12 @@
       <!-- Rutina Section -->
       <div id="seccion-rutina" class="routine-section">
         <div class="routine-header">
-          <h2>Mi Rutina <span>Personalizada</span></h2>
-          <p>Tus ejercicios agrupados por día de entrenamiento.</p>
+          <h2>Rutina <span>Global</span></h2>
+          <p>ejercicios agrupados por semana de entrenamiento.</p>
         </div>
 
         <div id="routineStateMsg" class="routine-empty-state">
-          <div class="empty-icon">
-            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <h3>Sin Rutina Asignada</h3>
-          <p>Actualmente no cuentas con una rutina personalizada. Si ya adquiriste el plan, contacta con tu entrenador.
-          </p>
+
         </div>
 
         <div id="routineDaysContainer" class="routine-days" style="display: none;">
