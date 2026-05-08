@@ -243,147 +243,153 @@
                   <span class="toggle-switch__track"></span>
                 </label>
               </div>
-              <div class="gu-toggle-row" id="toggleRowDieta">
-                <div class="gu-toggle-info">
-                  <span class="gu-toggle-label">Dieta</span>
-                  <span class="gu-toggle-sub">Acceso a plan de dieta</span>
-                </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="editDieta">
-                  <span class="toggle-switch__track"></span>
-                </label>
-              </div>
-            </div>
+              <div>
 
-            <!-- Subpanel: Dieta content -->
-            <div class="gu-subpanel" id="subpanelDieta" style="display:none">
-              <div class="gu-subpanel__header">
-                <span class="gu-subpanel__title">Dieta</span>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="subDietaToggle" onchange="toggleSubDieta(this.checked)">
-                  <span class="toggle-switch__track"></span>
-                </label>
+                <!-- Subpanel: Rutina Personalizada content -->
+                <div class="gu-subpanel" id="subpanelRutina" style="display:none">
+                  <div class="gu-subpanel__header">
+                    <span class="gu-subpanel__title">Personalizado</span>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="subRutinaToggle" onchange="toggleSubRutina(this.checked)">
+                      <span class="toggle-switch__track"></span>
+                    </label>
+                  </div>
+                  <div class="gu-subpanel__body gu-blur-wrap" id="subRutinaBody">
+                    <div class="gu-blur-overlay" id="rutinaBlurOverlay">
+                      <span>Usuario sin rutina personalizada</span>
+                    </div>
+                    <div class="gu-day-list" id="rutinaDayList"></div>
+                    <button class="gu-add-btn" onclick="addRutinaDay()">
+                      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Toggles -->
+
+                <div class="gu-toggle-row" id="toggleRowDieta">
+                  <div class="gu-toggle-info">
+                    <span class="gu-toggle-label">Dieta</span>
+                    <span class="gu-toggle-sub">Acceso a plan de dieta</span>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="editDieta">
+                    <span class="toggle-switch__track"></span>
+                  </label>
+                </div>
               </div>
-              <div class="gu-subpanel__body" id="subDietaBody">
-                <div class="gu-day-list" id="dietaDayList"></div>
-                <button class="gu-add-btn" onclick="addDietaDay()">
-                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+
+              <!-- Subpanel: Dieta content -->
+              <div class="gu-subpanel" id="subpanelDieta" style="display:none">
+                <div class="gu-subpanel__header">
+                  <span class="gu-subpanel__title">Dieta</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="subDietaToggle" onchange="toggleSubDieta(this.checked)">
+                    <span class="toggle-switch__track"></span>
+                  </label>
+                </div>
+                <div class="gu-subpanel__body" id="subDietaBody">
+                  <div class="gu-day-list" id="dietaDayList"></div>
+                  <button class="gu-add-btn" onclick="addDietaDay()">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                      stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="gu-detail-actions">
+                <button class="btn btn--ghost" onclick="cancelEdit()">Cancelar</button>
+                <button class="btn btn--primary" onclick="saveUser()">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
+                  Guardar
                 </button>
               </div>
-            </div>
 
-            <!-- Subpanel: Rutina Personalizada content -->
-            <div class="gu-subpanel" id="subpanelRutina" style="display:none">
-              <div class="gu-subpanel__header">
-                <span class="gu-subpanel__title">Personalizado</span>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="subRutinaToggle" onchange="toggleSubRutina(this.checked)">
-                  <span class="toggle-switch__track"></span>
-                </label>
-              </div>
-              <div class="gu-subpanel__body gu-blur-wrap" id="subRutinaBody">
-                <div class="gu-blur-overlay" id="rutinaBlurOverlay">
-                  <span>Usuario sin rutina personalizada</span>
-                </div>
-                <div class="gu-day-list" id="rutinaDayList"></div>
-                <button class="gu-add-btn" onclick="addRutinaDay()">
-                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+              <div class="feedback-msg" id="detailFeedback"></div>
 
-            <!-- Actions -->
-            <div class="gu-detail-actions">
-              <button class="btn btn--ghost" onclick="cancelEdit()">Cancelar</button>
-              <button class="btn btn--primary" onclick="saveUser()">
-                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                Guardar
-              </button>
-            </div>
+            </div><!-- /gu-detail-card -->
 
-            <div class="feedback-msg" id="detailFeedback"></div>
+          </div><!-- /right -->
 
-          </div><!-- /gu-detail-card -->
+        </div><!-- /gu-layout -->
 
-        </div><!-- /right -->
+      </div><!-- /content -->
+    </div><!-- /main-wrap -->
 
-      </div><!-- /gu-layout -->
-
-    </div><!-- /content -->
-  </div><!-- /main-wrap -->
-
-  <script>
-    /* ─── Mobile sidebar ─── */
-    function isMobileView() { return window.innerWidth <= 900; }
-    function closeSidebar() {
-      document.getElementById('sidebar').classList.remove('sidebar--open');
-      document.getElementById('sidebarOverlay').classList.remove('sidebar-overlay--visible');
-      document.body.style.overflow = '';
-    }
-    function openSidebar() {
-      if (!isMobileView()) return;
-      document.getElementById('sidebar').classList.add('sidebar--open');
-      document.getElementById('sidebarOverlay').classList.add('sidebar-overlay--visible');
-      document.body.style.overflow = 'hidden';
-    }
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.contains('sidebar--open') ? closeSidebar() : openSidebar();
-    }
-    if (window.innerWidth <= 900) document.getElementById('menuBtn').style.display = 'block';
-    window.addEventListener('resize', () => {
-      document.getElementById('menuBtn').style.display = window.innerWidth <= 900 ? 'block' : 'none';
-      if (window.innerWidth > 900) closeSidebar();
-    });
-
-    /* ─── API ─── */
-    const API_URL = 'index.php';
-    async function apiRequest(resource, options = {}) {
-      const response = await fetch(`${API_URL}?route=admin_api&resource=${resource}`, {
-        credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
-        ...options,
+    <script>
+      /* ─── Mobile sidebar ─── */
+      function isMobileView() { return window.innerWidth <= 900; }
+      function closeSidebar() {
+        document.getElementById('sidebar').classList.remove('sidebar--open');
+        document.getElementById('sidebarOverlay').classList.remove('sidebar-overlay--visible');
+        document.body.style.overflow = '';
+      }
+      function openSidebar() {
+        if (!isMobileView()) return;
+        document.getElementById('sidebar').classList.add('sidebar--open');
+        document.getElementById('sidebarOverlay').classList.add('sidebar-overlay--visible');
+        document.body.style.overflow = 'hidden';
+      }
+      function toggleSidebar() {
+        document.getElementById('sidebar').classList.contains('sidebar--open') ? closeSidebar() : openSidebar();
+      }
+      if (window.innerWidth <= 900) document.getElementById('menuBtn').style.display = 'block';
+      window.addEventListener('resize', () => {
+        document.getElementById('menuBtn').style.display = window.innerWidth <= 900 ? 'block' : 'none';
+        if (window.innerWidth > 900) closeSidebar();
       });
-      if (response.status === 401) { window.location.href = 'index.php?route=login&error=no_autorizado'; return null; }
-      const data = await response.json();
-      if (!response.ok || !data.ok) throw new Error(data.error || 'request_failed');
-      return data;
-    }
 
-    /* ─── State ─── */
-    let allUsers = [];
-    let currentUser = null;
-
-    /* ─── Load users ─── */
-    async function loadUsers() {
-      try {
-        const data = await apiRequest('users');
-        allUsers = data.users || [];
-        renderUserList(allUsers);
-      } catch (e) {
-        document.getElementById('userList').innerHTML = '<div class="gu-empty">No se pudo cargar la lista.</div>';
+      /* ─── API ─── */
+      const API_URL = 'index.php';
+      async function apiRequest(resource, options = {}) {
+        const response = await fetch(`${API_URL}?route=admin_api&resource=${resource}`, {
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+          ...options,
+        });
+        if (response.status === 401) { window.location.href = 'index.php?route=login&error=no_autorizado'; return null; }
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error || 'request_failed');
+        return data;
       }
-    }
 
-    function renderUserList(list) {
-      const el = document.getElementById('userList');
-      document.getElementById('userCount').textContent = `${list.length} usuario${list.length !== 1 ? 's' : ''}`;
-      if (!list.length) {
-        el.innerHTML = '<div class="gu-empty">Sin resultados</div>';
-        return;
+      /* ─── State ─── */
+      let allUsers = [];
+      let currentUser = null;
+
+      /* ─── Load users ─── */
+      async function loadUsers() {
+        try {
+          const data = await apiRequest('users');
+          allUsers = data.users || [];
+          renderUserList(allUsers);
+        } catch (e) {
+          document.getElementById('userList').innerHTML = '<div class="gu-empty">No se pudo cargar la lista.</div>';
+        }
       }
-      el.innerHTML = list.map(u => {
-        const name = u.nombre || `Usuario ${u.id_usuario}`;
-        const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-        const isActive = Number(u.activo) === 1;
-        const hasRutina = Number(u.plan_personalizado) === 1;
-        const hasDieta = Number(u.dieta) === 1;
-        return `
+
+      function renderUserList(list) {
+        const el = document.getElementById('userList');
+        document.getElementById('userCount').textContent = `${list.length} usuario${list.length !== 1 ? 's' : ''}`;
+        if (!list.length) {
+          el.innerHTML = '<div class="gu-empty">Sin resultados</div>';
+          return;
+        }
+        el.innerHTML = list.map(u => {
+          const name = u.nombre || `Usuario ${u.id_usuario}`;
+          const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+          const isActive = Number(u.activo) === 1;
+          const hasRutina = Number(u.plan_personalizado) === 1;
+          const hasDieta = Number(u.dieta) === 1;
+          return `
           <div class="gu-user-row ${currentUser && currentUser.id_usuario == u.id_usuario ? 'gu-user-row--active' : ''}"
                onclick="selectUser(${u.id_usuario})">
             <div class="gu-user-row__left">
@@ -399,111 +405,111 @@
               ${!isActive ? '<span class="badge badge--neutral">Inactivo</span>' : ''}
             </div>
           </div>`;
-      }).join('');
-    }
+        }).join('');
+      }
 
-    /* ─── Filter ─── */
-    function filterUsers(q) {
-      const clearBtn = document.getElementById('userSearchClear');
-      clearBtn.style.display = q.trim() ? 'flex' : 'none';
-      const filtered = q.trim().length < 1
-        ? allUsers
-        : allUsers.filter(u => {
-          const name = (u.nombre || '').toLowerCase();
-          const doc = String(u.cedula || '');
-          return name.includes(q.toLowerCase()) || doc.includes(q);
-        });
-      renderUserList(filtered);
-    }
-    function clearUserSearch() {
-      document.getElementById('userSearch').value = '';
-      document.getElementById('userSearchClear').style.display = 'none';
-      renderUserList(allUsers);
-    }
+      /* ─── Filter ─── */
+      function filterUsers(q) {
+        const clearBtn = document.getElementById('userSearchClear');
+        clearBtn.style.display = q.trim() ? 'flex' : 'none';
+        const filtered = q.trim().length < 1
+          ? allUsers
+          : allUsers.filter(u => {
+            const name = (u.nombre || '').toLowerCase();
+            const doc = String(u.cedula || '');
+            return name.includes(q.toLowerCase()) || doc.includes(q);
+          });
+        renderUserList(filtered);
+      }
+      function clearUserSearch() {
+        document.getElementById('userSearch').value = '';
+        document.getElementById('userSearchClear').style.display = 'none';
+        renderUserList(allUsers);
+      }
 
-    /* ─── Select user ─── */
-    function selectUser(id) {
-      currentUser = allUsers.find(u => u.id_usuario == id) || null;
-      if (!currentUser) return;
-      renderUserList(allUsers); // re-render to highlight active row
-      showDetail(currentUser);
-    }
+      /* ─── Select user ─── */
+      function selectUser(id) {
+        currentUser = allUsers.find(u => u.id_usuario == id) || null;
+        if (!currentUser) return;
+        renderUserList(allUsers); // re-render to highlight active row
+        showDetail(currentUser);
+      }
 
-    function showDetail(u) {
-      document.getElementById('detailEmpty').style.display = 'none';
-      document.getElementById('detailCard').style.display = 'flex';
+      function showDetail(u) {
+        document.getElementById('detailEmpty').style.display = 'none';
+        document.getElementById('detailCard').style.display = 'flex';
 
-      const name = u.nombre || `Usuario ${u.id_usuario}`;
-      const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-      const hasRutina = Number(u.plan_personalizado) === 1;
-      const hasDieta = Number(u.dieta) === 1;
+        const name = u.nombre || `Usuario ${u.id_usuario}`;
+        const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+        const hasRutina = Number(u.plan_personalizado) === 1;
+        const hasDieta = Number(u.dieta) === 1;
 
-      document.getElementById('detailAvatar').textContent = initials;
-      document.getElementById('detailName').textContent = name;
-      document.getElementById('detailCedula').textContent = `CC ${u.cedula || '--'}`;
+        document.getElementById('detailAvatar').textContent = initials;
+        document.getElementById('detailName').textContent = name;
+        document.getElementById('detailCedula').textContent = `CC ${u.cedula || '--'}`;
 
-      const badges = [];
-      if (Number(u.activo) === 1) badges.push('<span class="badge badge--active">Activo</span>');
-      else badges.push('<span class="badge badge--neutral">Inactivo</span>');
-      if (hasRutina) badges.push('<span class="badge badge--rutina">Rutina</span>');
-      if (hasDieta) badges.push('<span class="badge badge--dieta">Dieta</span>');
-      document.getElementById('detailBadges').innerHTML = badges.join('');
+        const badges = [];
+        if (Number(u.activo) === 1) badges.push('<span class="badge badge--active">Activo</span>');
+        else badges.push('<span class="badge badge--neutral">Inactivo</span>');
+        if (hasRutina) badges.push('<span class="badge badge--rutina">Rutina</span>');
+        if (hasDieta) badges.push('<span class="badge badge--dieta">Dieta</span>');
+        document.getElementById('detailBadges').innerHTML = badges.join('');
 
-      document.getElementById('editNombre').value = u.nombre || '';
-      document.getElementById('editCedula').value = u.cedula || '';
-      document.getElementById('currentPassword').value = u.contrasena || '';
-      document.getElementById('editPassword').value = '';
-      document.getElementById('editRutina').checked = hasRutina;
-      document.getElementById('editDieta').checked = hasDieta;
+        document.getElementById('editNombre').value = u.nombre || '';
+        document.getElementById('editCedula').value = u.cedula || '';
+        document.getElementById('currentPassword').value = u.contrasena || '';
+        document.getElementById('editPassword').value = '';
+        document.getElementById('editRutina').checked = hasRutina;
+        document.getElementById('editDieta').checked = hasDieta;
 
-      // Subpanels
-      toggleSubDieta(hasDieta, false);
-      toggleSubRutina(hasRutina, false);
-      document.getElementById('subDietaToggle').checked = hasDieta;
-      document.getElementById('subRutinaToggle').checked = hasRutina;
+        // Subpanels
+        toggleSubDieta(hasDieta, false);
+        toggleSubRutina(hasRutina, false);
+        document.getElementById('subDietaToggle').checked = hasDieta;
+        document.getElementById('subRutinaToggle').checked = hasRutina;
 
-      // Populate demo day lists (in a real app, fetch from API)
-      renderDietaDays(u.dieta_dias || []);
-      renderRutinaDays(u.rutina_dias || []);
+        // Populate demo day lists (in a real app, fetch from API)
+        renderDietaDays(u.dieta_dias || []);
+        renderRutinaDays(u.rutina_dias || []);
 
-      document.getElementById('detailFeedback').style.display = 'none';
-    }
+        document.getElementById('detailFeedback').style.display = 'none';
+      }
 
-    function cancelEdit() {
-      currentUser = null;
-      document.getElementById('detailEmpty').style.display = 'flex';
-      document.getElementById('detailCard').style.display = 'none';
-      renderUserList(allUsers);
-    }
+      function cancelEdit() {
+        currentUser = null;
+        document.getElementById('detailEmpty').style.display = 'flex';
+        document.getElementById('detailCard').style.display = 'none';
+        renderUserList(allUsers);
+      }
 
-    /* ─── Subpanels ─── */
-    function toggleSubDieta(active, updateCheck = true) {
-      const body = document.getElementById('subDietaBody');
-      const panel = document.getElementById('subpanelDieta');
-      panel.style.display = 'block';
-      body.style.opacity = active ? '1' : '0.4';
-      body.style.pointerEvents = active ? 'auto' : 'none';
-      if (updateCheck) document.getElementById('subDietaToggle').checked = active;
-      if (updateCheck) document.getElementById('editDieta').checked = active;
-    }
+      /* ─── Subpanels ─── */
+      function toggleSubDieta(active, updateCheck = true) {
+        const body = document.getElementById('subDietaBody');
+        const panel = document.getElementById('subpanelDieta');
+        panel.style.display = 'block';
+        body.style.opacity = active ? '1' : '0.4';
+        body.style.pointerEvents = active ? 'auto' : 'none';
+        if (updateCheck) document.getElementById('subDietaToggle').checked = active;
+        if (updateCheck) document.getElementById('editDieta').checked = active;
+      }
 
-    function toggleSubRutina(active, updateCheck = true) {
-      const body = document.getElementById('subRutinaBody');
-      const overlay = document.getElementById('rutinaBlurOverlay');
-      const panel = document.getElementById('subpanelRutina');
-      panel.style.display = 'block';
-      overlay.style.display = active ? 'none' : 'flex';
-      body.style.filter = active ? 'none' : 'blur(4px)';
-      body.style.pointerEvents = active ? 'auto' : 'none';
-      if (updateCheck) document.getElementById('subRutinaToggle').checked = active;
-      if (updateCheck) document.getElementById('editRutina').checked = active;
-    }
+      function toggleSubRutina(active, updateCheck = true) {
+        const body = document.getElementById('subRutinaBody');
+        const overlay = document.getElementById('rutinaBlurOverlay');
+        const panel = document.getElementById('subpanelRutina');
+        panel.style.display = 'block';
+        overlay.style.display = active ? 'none' : 'flex';
+        body.style.filter = active ? 'none' : 'blur(4px)';
+        body.style.pointerEvents = active ? 'auto' : 'none';
+        if (updateCheck) document.getElementById('subRutinaToggle').checked = active;
+        if (updateCheck) document.getElementById('editRutina').checked = active;
+      }
 
-    /* ─── Day lists (Dieta) ─── */
-    function renderDietaDays(days) {
-      const container = document.getElementById('dietaDayList');
-      if (!days.length) { container.innerHTML = ''; return; }
-      container.innerHTML = days.map((d, i) => `
+      /* ─── Day lists (Dieta) ─── */
+      function renderDietaDays(days) {
+        const container = document.getElementById('dietaDayList');
+        if (!days.length) { container.innerHTML = ''; return; }
+        container.innerHTML = days.map((d, i) => `
         <div class="gu-day-card">
           <div class="gu-day-label">Día ${i + 1}</div>
           <div class="gu-day-body">
@@ -524,25 +530,25 @@
             </button>
           </div>
         </div>`).join('');
-    }
+      }
 
-    function addDietaDay() {
-      if (!currentUser) return;
-      const dias = currentUser.dieta_dias || [];
-      currentUser.dieta_dias = [...dias, { nombre: 'Nuevo plan', descripcion: 'descripcion' }];
-      renderDietaDays(currentUser.dieta_dias);
-    }
-    function removeDietaDay(i) {
-      if (!currentUser || !currentUser.dieta_dias) return;
-      currentUser.dieta_dias.splice(i, 1);
-      renderDietaDays(currentUser.dieta_dias);
-    }
+      function addDietaDay() {
+        if (!currentUser) return;
+        const dias = currentUser.dieta_dias || [];
+        currentUser.dieta_dias = [...dias, { nombre: 'Nuevo plan', descripcion: 'descripcion' }];
+        renderDietaDays(currentUser.dieta_dias);
+      }
+      function removeDietaDay(i) {
+        if (!currentUser || !currentUser.dieta_dias) return;
+        currentUser.dieta_dias.splice(i, 1);
+        renderDietaDays(currentUser.dieta_dias);
+      }
 
-    /* ─── Day lists (Rutina) ─── */
-    function renderRutinaDays(days) {
-      const container = document.getElementById('rutinaDayList');
-      if (!days.length) { container.innerHTML = ''; return; }
-      container.innerHTML = days.map((d, i) => `
+      /* ─── Day lists (Rutina) ─── */
+      function renderRutinaDays(days) {
+        const container = document.getElementById('rutinaDayList');
+        if (!days.length) { container.innerHTML = ''; return; }
+        container.innerHTML = days.map((d, i) => `
         <div class="gu-day-card">
           <div class="gu-day-label">Día ${i + 1}</div>
           <div class="gu-day-body">
@@ -565,70 +571,70 @@
             </button>
           </div>
         </div>`).join('');
-    }
-
-    function addRutinaDay() {
-      if (!currentUser) return;
-      const dias = currentUser.rutina_dias || [];
-      currentUser.rutina_dias = [...dias, { dias: 'Nuevo día', descripcion: '"descripcion del día"', grupo_muscular: 'grupo muscular' }];
-      renderRutinaDays(currentUser.rutina_dias);
-    }
-    function removeRutinaDay(i) {
-      if (!currentUser || !currentUser.rutina_dias) return;
-      currentUser.rutina_dias.splice(i, 1);
-      renderRutinaDays(currentUser.rutina_dias);
-    }
-
-    /* ─── Save ─── */
-    async function saveUser() {
-      if (!currentUser) return;
-      const nombre = document.getElementById('editNombre').value.trim();
-      const cedula = document.getElementById('editCedula').value.trim();
-      const password = document.getElementById('editPassword').value;
-      const rutina = document.getElementById('editRutina').checked ? 1 : 0;
-      const dieta = document.getElementById('editDieta').checked ? 1 : 0;
-
-      if (!nombre || !cedula) {
-        showDetailMsg('Nombre y documento son obligatorios.', true);
-        return;
       }
 
-      const payload = { nombre, cedula, plan_personalizado: rutina, dieta };
-      if (password) payload.contrasena = password;
-
-      try {
-        await apiRequest(`users&id=${encodeURIComponent(currentUser.id_usuario)}`, {
-          method: 'PUT',
-          body: JSON.stringify(payload),
-        });
-        // Update local state
-        Object.assign(currentUser, { nombre, cedula, plan_personalizado: rutina, dieta });
-        if (password) currentUser.contrasena = password;
-        allUsers = allUsers.map(u => u.id_usuario == currentUser.id_usuario ? { ...u, ...currentUser } : u);
-        showDetail(currentUser);
-        renderUserList(allUsers);
-        showDetailMsg('Cambios guardados correctamente.');
-      } catch (e) {
-        showDetailMsg('No se pudo guardar los cambios.', true);
+      function addRutinaDay() {
+        if (!currentUser) return;
+        const dias = currentUser.rutina_dias || [];
+        currentUser.rutina_dias = [...dias, { dias: 'Nuevo día', descripcion: '"descripcion del día"', grupo_muscular: 'grupo muscular' }];
+        renderRutinaDays(currentUser.rutina_dias);
       }
-    }
-
-    function showDetailMsg(text, isError = false) {
-      const el = document.getElementById('detailFeedback');
-      el.textContent = text;
-      el.style.display = 'block';
-      el.className = `feedback-msg ${isError ? 'feedback-msg--error' : 'feedback-msg--success'}`;
-      setTimeout(() => el.style.display = 'none', 3500);
-    }
-
-    /* ─── Global search (topbar) ─── */
-    function renderSearchResults(results) {
-      const box = document.getElementById('searchResults');
-      if (!results.length) {
-        box.innerHTML = '<div class="search-result-item"><div style="font-size:13px;color:#5a5a5a;">Sin resultados</div></div>';
-        return;
+      function removeRutinaDay(i) {
+        if (!currentUser || !currentUser.rutina_dias) return;
+        currentUser.rutina_dias.splice(i, 1);
+        renderRutinaDays(currentUser.rutina_dias);
       }
-      box.innerHTML = results.map(item => `
+
+      /* ─── Save ─── */
+      async function saveUser() {
+        if (!currentUser) return;
+        const nombre = document.getElementById('editNombre').value.trim();
+        const cedula = document.getElementById('editCedula').value.trim();
+        const password = document.getElementById('editPassword').value;
+        const rutina = document.getElementById('editRutina').checked ? 1 : 0;
+        const dieta = document.getElementById('editDieta').checked ? 1 : 0;
+
+        if (!nombre || !cedula) {
+          showDetailMsg('Nombre y documento son obligatorios.', true);
+          return;
+        }
+
+        const payload = { nombre, cedula, plan_personalizado: rutina, dieta };
+        if (password) payload.contrasena = password;
+
+        try {
+          await apiRequest(`users&id=${encodeURIComponent(currentUser.id_usuario)}`, {
+            method: 'PUT',
+            body: JSON.stringify(payload),
+          });
+          // Update local state
+          Object.assign(currentUser, { nombre, cedula, plan_personalizado: rutina, dieta });
+          if (password) currentUser.contrasena = password;
+          allUsers = allUsers.map(u => u.id_usuario == currentUser.id_usuario ? { ...u, ...currentUser } : u);
+          showDetail(currentUser);
+          renderUserList(allUsers);
+          showDetailMsg('Cambios guardados correctamente.');
+        } catch (e) {
+          showDetailMsg('No se pudo guardar los cambios.', true);
+        }
+      }
+
+      function showDetailMsg(text, isError = false) {
+        const el = document.getElementById('detailFeedback');
+        el.textContent = text;
+        el.style.display = 'block';
+        el.className = `feedback-msg ${isError ? 'feedback-msg--error' : 'feedback-msg--success'}`;
+        setTimeout(() => el.style.display = 'none', 3500);
+      }
+
+      /* ─── Global search (topbar) ─── */
+      function renderSearchResults(results) {
+        const box = document.getElementById('searchResults');
+        if (!results.length) {
+          box.innerHTML = '<div class="search-result-item"><div style="font-size:13px;color:#5a5a5a;">Sin resultados</div></div>';
+          return;
+        }
+        box.innerHTML = results.map(item => `
         <div class="search-result-item">
           <div class="search-result-avatar">${String(item.tipo || '?').charAt(0).toUpperCase()}</div>
           <div>
@@ -637,44 +643,44 @@
           </div>
           <span class="search-result-badge">${item.tipo}</span>
         </div>`).join('');
-    }
+      }
 
-    let searchTimer = null;
-    function handleSearch(val) {
-      const box = document.getElementById('searchResults');
-      clearTimeout(searchTimer);
-      if (val.trim().length < 2) { box.classList.add('hidden'); box.innerHTML = ''; return; }
-      box.classList.remove('hidden');
-      searchTimer = setTimeout(async () => {
-        try {
-          const data = await apiRequest(`search&q=${encodeURIComponent(val.trim())}`);
-          if (data) renderSearchResults(data.results || []);
-        } catch (e) { renderSearchResults([]); }
-      }, 250);
-    }
-    function clearSearch() {
-      document.getElementById('globalSearch').value = '';
-      const box = document.getElementById('searchResults');
-      box.classList.add('hidden');
-      box.innerHTML = '';
-    }
-    document.addEventListener('click', e => {
-      if (!e.target.closest('.search-wrap')) clearSearch();
-    });
-
-    /* ─── Boot ─── */
-    apiRequest('session')
-      .then(data => {
-        if (data && data.admin) {
-          const el = document.getElementById('adminUserLabel');
-          if (el) el.textContent = data.admin.usuario;
-        }
-        loadUsers();
-      })
-      .catch(() => {
-        window.location.href = 'index.php?route=login&error=no_autorizado';
+      let searchTimer = null;
+      function handleSearch(val) {
+        const box = document.getElementById('searchResults');
+        clearTimeout(searchTimer);
+        if (val.trim().length < 2) { box.classList.add('hidden'); box.innerHTML = ''; return; }
+        box.classList.remove('hidden');
+        searchTimer = setTimeout(async () => {
+          try {
+            const data = await apiRequest(`search&q=${encodeURIComponent(val.trim())}`);
+            if (data) renderSearchResults(data.results || []);
+          } catch (e) { renderSearchResults([]); }
+        }, 250);
+      }
+      function clearSearch() {
+        document.getElementById('globalSearch').value = '';
+        const box = document.getElementById('searchResults');
+        box.classList.add('hidden');
+        box.innerHTML = '';
+      }
+      document.addEventListener('click', e => {
+        if (!e.target.closest('.search-wrap')) clearSearch();
       });
-  </script>
+
+      /* ─── Boot ─── */
+      apiRequest('session')
+        .then(data => {
+          if (data && data.admin) {
+            const el = document.getElementById('adminUserLabel');
+            if (el) el.textContent = data.admin.usuario;
+          }
+          loadUsers();
+        })
+        .catch(() => {
+          window.location.href = 'index.php?route=login&error=no_autorizado';
+        });
+    </script>
 
 </body>
 

@@ -243,7 +243,20 @@
           </div>
 
           <!-- Toggles -->
+          <!-- Toggles -->
           <div class="toggle-group">
+            <!-- GÉNERO -->
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label"
+                style="font-size: 11px; letter-spacing: 0.08em; color: #888; text-transform: uppercase; margin-bottom: 8px; display: block;">Género</label>
+              <select id="selectGenero" class="form-input"
+                style="padding: 10px 12px; font-size: 14px; background-color: #1e1e1e; color: #fff; border: 1px solid #333; border-radius: 6px; width: 100%; appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23888\' stroke-width=\'2\'><polyline points=\'6 9 12 15 18 9\'></polyline></svg>'); background-repeat: no-repeat; background-position: right 12px center; cursor: pointer;">
+                <option value="" disabled selected>Seleccionar género</option>
+                <option value="masculino">Masculino</option>
+                <option value="femenino">Femenino</option>
+              </select>
+            </div>
+
             <div class="toggle-row">
               <div>
                 <div class="toggle-label-main">Rutina <span>Personalizada</span></div>
