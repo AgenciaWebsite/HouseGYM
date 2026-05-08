@@ -89,7 +89,7 @@
         Ejercicios
       </div>
 
-      <div class="nav-item" onclick="window.location.href='index.php?route=admin'">
+      <div class="nav-item" onclick="window.location.href='index.php?route=admin_dieta'">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
@@ -196,7 +196,8 @@
           </div>
 
           <!-- Footer: añadir día y guardar -->
-          <div class="rp-panel-footer" id="rpPanelFooter" style="display:none; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <div class="rp-panel-footer" id="rpPanelFooter"
+            style="display:none; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
             <button class="rp-add-day-btn" onclick="addDay()">
               <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
