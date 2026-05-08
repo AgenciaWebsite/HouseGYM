@@ -507,38 +507,6 @@ body::-webkit-scrollbar-thumb:hover { background: var(--red); }
   margin-top: 1px;
 }
 
-/* ── Gender Accordion (Agregar Usuario) ── */
-.genero-opt {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 9px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--gray-border2);
-  background: var(--black-card);
-  color: var(--gray-dim);
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-.genero-opt:hover {
-  border-color: rgba(229,26,44,0.3);
-  color: var(--gray-light);
-}
-.genero-opt--active {
-  border-color: var(--red);
-  background: rgba(229,26,44,0.1);
-  color: var(--red);
-  box-shadow: 0 0 12px rgba(229,26,44,0.15);
-}
-.genero-opt--active svg {
-  color: var(--red);
-}
-
 /* ── Toggle Switch ── */
 .toggle-switch {
   position: relative;

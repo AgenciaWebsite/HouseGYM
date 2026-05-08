@@ -231,37 +231,6 @@
               </div>
             </div>
 
-            <!-- Gender accordion -->
-            <div class="gu-genero-section">
-              <div class="gu-genero-header">
-                <div class="gu-genero-info">
-                  <span class="gu-genero-label">Género</span>
-                  <span class="gu-genero-sub">Hombre o Mujer</span>
-                </div>
-                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                  <circle cx="12" cy="7" r="4" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-2a7 7 0 0114 0v2" />
-                </svg>
-              </div>
-              <div class="gu-genero-options">
-                <button type="button" class="gu-genero-opt gu-genero-opt--active" data-value="Hombre" onclick="selectEditGenero(this)">
-                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                    <circle cx="12" cy="7" r="4" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-2a7 7 0 0114 0v2" />
-                  </svg>
-                  Hombre
-                </button>
-                <button type="button" class="gu-genero-opt" data-value="Mujer" onclick="selectEditGenero(this)">
-                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                    <circle cx="12" cy="7" r="4" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-2a7 7 0 0114 0v2" />
-                  </svg>
-                  Mujer
-                </button>
-              </div>
-              <input type="hidden" id="editGenero" value="Hombre">
-            </div>
-
             <!-- Toggles -->
             <div class="gu-toggles">
               <div class="gu-toggle-row" id="toggleRowPersonalizado">
@@ -421,7 +390,7 @@
               <div class="gu-user-avatar">${initials}</div>
               <div>
                 <div class="gu-user-name">${name}</div>
-                <div class="gu-user-doc">CC ${u.cedula || '--'} · ${u.genero || 'N/A'}</div>
+                <div class="gu-user-doc">CC ${u.cedula || '--'}</div>
               </div>
             </div>
             <div class="gu-user-row__right">
@@ -487,13 +456,6 @@
       document.getElementById('editRutina').checked = hasRutina;
       document.getElementById('editDieta').checked = hasDieta;
 
-      // Set gender accordion
-      const genero = u.genero || 'Hombre';
-      document.getElementById('editGenero').value = genero;
-      document.querySelectorAll('.gu-genero-opt').forEach(b => {
-        b.classList.toggle('gu-genero-opt--active', b.dataset.value === genero);
-      });
-
       // Subpanels
       toggleSubDieta(hasDieta, false);
       toggleSubRutina(hasRutina, false);
@@ -512,13 +474,6 @@
       document.getElementById('detailEmpty').style.display = 'flex';
       document.getElementById('detailCard').style.display = 'none';
       renderUserList(allUsers);
-    }
-
-    /* ─── Gender accordion ─── */
-    function selectEditGenero(btn) {
-      document.querySelectorAll('.gu-genero-opt').forEach(b => b.classList.remove('gu-genero-opt--active'));
-      btn.classList.add('gu-genero-opt--active');
-      document.getElementById('editGenero').value = btn.dataset.value;
     }
 
     /* ─── Subpanels ─── */
@@ -632,14 +587,13 @@
       const password = document.getElementById('editPassword').value;
       const rutina = document.getElementById('editRutina').checked ? 1 : 0;
       const dieta = document.getElementById('editDieta').checked ? 1 : 0;
-      const genero = document.getElementById('editGenero').value;
 
       if (!nombre || !cedula) {
         showDetailMsg('Nombre y documento son obligatorios.', true);
         return;
       }
 
-      const payload = { nombre, cedula, plan_personalizado: rutina, dieta, genero };
+      const payload = { nombre, cedula, plan_personalizado: rutina, dieta };
       if (password) payload.contrasena = password;
 
       try {
@@ -648,7 +602,7 @@
           body: JSON.stringify(payload),
         });
         // Update local state
-        Object.assign(currentUser, { nombre, cedula, genero, plan_personalizado: rutina, dieta });
+        Object.assign(currentUser, { nombre, cedula, plan_personalizado: rutina, dieta });
         if (password) currentUser.contrasena = password;
         allUsers = allUsers.map(u => u.id_usuario == currentUser.id_usuario ? { ...u, ...currentUser } : u);
         showDetail(currentUser);

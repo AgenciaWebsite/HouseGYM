@@ -185,7 +185,6 @@ class AdminController
         $cedula = trim((string) ($data['cedula'] ?? ''));
         $password = (string) ($data['contrasena'] ?? $data['password'] ?? '');
         $plan = !empty($data['plan_personalizado']) ? 1 : 0;
-        $genero = in_array(($data['genero'] ?? ''), ['Hombre', 'Mujer'], true) ? $data['genero'] : 'Hombre';
         
         // Ahora dieta puede ser un id_dieta en lugar de un booleano (0 si es false/vacio)
         $id_dieta = !empty($data['dieta']) ? (int) $data['dieta'] : null;
@@ -194,7 +193,7 @@ class AdminController
             $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
         }
 
-        $userId = $this->model->addUser($nombre, $cedula, $password, $plan, $id_dieta, $genero);
+        $userId = $this->model->addUser($nombre, $cedula, $password, $plan, $id_dieta);
 
         $this->jsonResponse(['ok' => true, 'id_usuario' => $userId], 201);
     }
@@ -228,13 +227,12 @@ class AdminController
         $password = (string) ($data['contrasena'] ?? '');
         $plan = !empty($data['plan_personalizado']) ? 1 : 0;
         $id_dieta = !empty($data['dieta']) ? 1 : 0; // The frontend sends 1 or 0 for true/false right now, but ideally id_dieta.
-        $genero = in_array(($data['genero'] ?? ''), ['Hombre', 'Mujer'], true) ? $data['genero'] : 'Hombre';
         
         if ($nombre === '' || $cedula === '') {
             $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
         }
 
-        $this->model->updateUser($id, $nombre, $cedula, $password, $plan, $id_dieta, $genero);
+        $this->model->updateUser($id, $nombre, $cedula, $password, $plan, $id_dieta);
         $this->jsonResponse(['ok' => true]);
     }
 

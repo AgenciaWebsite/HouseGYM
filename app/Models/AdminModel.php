@@ -50,7 +50,7 @@ class AdminModel
     public function getRecentUsers(int $limit = 5): array
     {
         $stmt = $this->pdo->prepare(
-            'SELECT id_usuario, nombre, genero, cedula, activo, plan_personalizado
+            'SELECT id_usuario, nombre, cedula, activo, plan_personalizado
              FROM usuarios
              ORDER BY id_usuario DESC
              LIMIT ?'
@@ -82,7 +82,7 @@ class AdminModel
     public function getAllUsers(): array
     {
         return $this->pdo->query(
-            'SELECT u.id_usuario, u.nombre, u.genero, u.cedula, u.contrasena, u.activo, u.plan_personalizado,
+            'SELECT u.id_usuario, u.nombre, u.cedula, u.contrasena, u.activo, u.plan_personalizado,
                     (SELECT COUNT(*) FROM rutina_personalizada rp WHERE rp.id_usuario = u.id_usuario AND rp.id_dieta IS NOT NULL AND rp.activa = 1) as dieta
              FROM usuarios u
              ORDER BY u.id_usuario DESC'
@@ -146,17 +146,17 @@ class AdminModel
      * @param int|null $id_dieta El ID de la dieta seleccionada (null si no tiene dieta).
      * @return int El ID del usuario insertado.
      */
-    public function addUser(string $nombre, string $cedula, string $password, int $plan_personalizado, ?int $id_dieta, string $genero = 'Hombre'): int
+    public function addUser(string $nombre, string $cedula, string $password, int $plan_personalizado, ?int $id_dieta): int
     {
         $this->pdo->beginTransaction();
 
         try {
             // Insertar usuario
             $stmt = $this->pdo->prepare(
-                'INSERT INTO usuarios (nombre, genero, cedula, contrasena, activo, plan_personalizado)
-                 VALUES (?, ?, ?, ?, 1, ?)'
+                'INSERT INTO usuarios (nombre, cedula, contrasena, activo, plan_personalizado)
+                 VALUES (?, ?, ?, 1, ?)'
             );
-            $stmt->execute([$nombre, $genero, $cedula, $password, $plan_personalizado]);
+            $stmt->execute([$nombre, $cedula, $password, $plan_personalizado]);
             $userId = (int) $this->pdo->lastInsertId();
 
             // Insertar rutina si tiene plan o dieta
@@ -179,17 +179,17 @@ class AdminModel
     /**
      * Actualiza un usuario.
      */
-    public function updateUser(int $id, string $nombre, string $cedula, string $password, int $plan_personalizado, int $id_dieta, string $genero = 'Hombre'): void
+    public function updateUser(int $id, string $nombre, string $cedula, string $password, int $plan_personalizado, int $id_dieta): void
     {
         $this->pdo->beginTransaction();
 
         try {
             if ($password !== '') {
-                $stmt = $this->pdo->prepare('UPDATE usuarios SET nombre = ?, genero = ?, cedula = ?, contrasena = ?, plan_personalizado = ? WHERE id_usuario = ?');
-                $stmt->execute([$nombre, $genero, $cedula, $password, $plan_personalizado, $id]);
+                $stmt = $this->pdo->prepare('UPDATE usuarios SET nombre = ?, cedula = ?, contrasena = ?, plan_personalizado = ? WHERE id_usuario = ?');
+                $stmt->execute([$nombre, $cedula, $password, $plan_personalizado, $id]);
             } else {
-                $stmt = $this->pdo->prepare('UPDATE usuarios SET nombre = ?, genero = ?, cedula = ?, plan_personalizado = ? WHERE id_usuario = ?');
-                $stmt->execute([$nombre, $genero, $cedula, $plan_personalizado, $id]);
+                $stmt = $this->pdo->prepare('UPDATE usuarios SET nombre = ?, cedula = ?, plan_personalizado = ? WHERE id_usuario = ?');
+                $stmt->execute([$nombre, $cedula, $plan_personalizado, $id]);
             }
 
             // Simple update for routine and diet just like add
