@@ -273,7 +273,7 @@
     function renderDays() {
       const container = document.getElementById('rgDaysList');
       container.innerHTML = rutinaDays.map((diaObj, di) => `
-        <div class="rg-day-card" id="dayCard${di}">
+        <div class="rg-day-card" id="dayCard${di}" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, ${di})">
           <div class="rg-day-header">
             <span class="rg-day-label">DÍA ${diaObj.dia}</span>
           </div>
@@ -342,7 +342,7 @@
         return;
       }
       grid.innerHTML = list.map(ej => `
-        <div class="rg-catalog-card" onclick="openModal(${ej.id_ejercicio})" title="${ej.nombre}">
+        <div class="rg-catalog-card" draggable="true" ondragstart="handleDragStart(event, ${ej.id_ejercicio})" ondragend="handleDragEnd(event)" onclick="openModal(${ej.id_ejercicio})" title="${ej.nombre}">
           <div class="rg-catalog-card__img">
             ${ej.imagen_url
           ? `<img src="${ej.imagen_url}" alt="${ej.nombre}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
@@ -399,8 +399,30 @@
       filterCatalog(document.getElementById('catalogSearch').value);
     }
 
+    /* ══ DRAG AND DROP ══ */
+    function handleDragStart(e, id) {
+      e.dataTransfer.setData('text/plain', id);
+      e.currentTarget.classList.add('rg-dragging');
+    }
+    function handleDragEnd(e) {
+      e.currentTarget.classList.remove('rg-dragging');
+    }
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('rg-dragover');
+    }
+    function handleDragLeave(e) {
+      e.currentTarget.classList.remove('rg-dragover');
+    }
+    function handleDrop(e, dayIdx) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('rg-dragover');
+      const id = e.dataTransfer.getData('text/plain');
+      if (id) openModal(parseInt(id), dayIdx);
+    }
+
     /* ══ MODAL reps/series ══ */
-    function openModal(ejercicioId) {
+    function openModal(ejercicioId, dayIdx = null) {
       if (!rutinaDays || rutinaDays.length === 0) {
         alert('Cargando la rutina... por favor espera.');
         return;
@@ -422,7 +444,7 @@
           <div style="margin-top: 12px;">
             <label class="rg-modal__label">Agregar al día</label>
             <select class="rg-modal__select" id="modalDaySelect" style="margin-top: 4px;">
-              ${rutinaDays.map(d => `<option value="${d.dia - 1}">Día ${d.dia}</option>`).join('')}
+              ${rutinaDays.map(d => `<option value="${d.dia - 1}" ${ (d.dia - 1) === dayIdx ? 'selected' : '' }>Día ${d.dia}</option>`).join('')}
             </select>
           </div>
         </div>`;

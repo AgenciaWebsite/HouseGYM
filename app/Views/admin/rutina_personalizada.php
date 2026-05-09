@@ -327,7 +327,7 @@
       }
 
       container.innerHTML = rutinaDays.map((dia, di) => `
-        <div class="rp-day-card" id="dayCard${di}">
+        <div class="rp-day-card" id="dayCard${di}" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, ${di})">
           <div class="rp-day-header">
             <span class="rp-day-label">DÍA ${di + 1}</span>
             <button class="rp-day-remove" onclick="removeDay(${di})" title="Eliminar día">
@@ -421,7 +421,7 @@
         return;
       }
       grid.innerHTML = list.map(ej => `
-        <div class="rp-catalog-card" onclick="openModal(${ej.id_ejercicio})" title="${ej.nombre}">
+        <div class="rp-catalog-card" draggable="true" ondragstart="handleDragStart(event, ${ej.id_ejercicio})" ondragend="handleDragEnd(event)" onclick="openModal(${ej.id_ejercicio})" title="${ej.nombre}">
           <div class="rp-catalog-card__img">
             ${ej.imagen_url
           ? `<img src="${ej.imagen_url}" alt="${ej.nombre}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
@@ -478,8 +478,30 @@
       filterCatalog(document.getElementById('catalogSearch').value);
     }
 
+    /* ══ DRAG AND DROP ══ */
+    function handleDragStart(e, id) {
+      e.dataTransfer.setData('text/plain', id);
+      e.currentTarget.classList.add('rp-dragging');
+    }
+    function handleDragEnd(e) {
+      e.currentTarget.classList.remove('rp-dragging');
+    }
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('rp-dragover');
+    }
+    function handleDragLeave(e) {
+      e.currentTarget.classList.remove('rp-dragover');
+    }
+    function handleDrop(e, dayIdx) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('rp-dragover');
+      const id = e.dataTransfer.getData('text/plain');
+      if (id) openModal(parseInt(id), dayIdx);
+    }
+
     /* ══ MODAL reps/series ══ */
-    function openModal(ejercicioId) {
+    function openModal(ejercicioId, dayIdx = null) {
       if (!currentUser) {
         alert('Primero selecciona un usuario.');
         return;
@@ -509,7 +531,7 @@
             <div class="rp-modal__day-select-wrap">
               <label class="rp-modal__label">Agregar al día</label>
               <select class="rp-modal__select" id="modalDaySelect">
-                ${rutinaDays.map((_, i) => `<option value="${i}">Día ${i + 1}</option>`).join('')}
+                ${rutinaDays.map((_, i) => `<option value="${i}" ${i === dayIdx ? 'selected' : ''}>Día ${i + 1}</option>`).join('')}
               </select>
             </div>` : ''}
         </div>`;

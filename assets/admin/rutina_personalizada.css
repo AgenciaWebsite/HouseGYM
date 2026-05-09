@@ -652,8 +652,8 @@
   overflow-y: auto;
   padding: 14px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
   align-content: start;
   scrollbar-width: thin;
   scrollbar-color: var(--gray-mid) transparent;
@@ -722,11 +722,11 @@
 }
 
 .rp-catalog-card__info {
-  padding: 8px 10px;
+  padding: 6px 8px;
 }
 
 .rp-catalog-card__name {
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--white-soft);
   white-space: nowrap;
@@ -737,7 +737,7 @@
 }
 
 .rp-catalog-card__muscle {
-  font-size: 10px;
+  font-size: 9.5px;
   color: var(--gray-faint);
   margin-top: 2px;
   text-transform: lowercase;
@@ -942,6 +942,20 @@
 }
 
 /* ══ RESPONSIVE ══ */
+/* Drag & Drop Feedback */
+.rp-catalog-card.rp-dragging {
+  opacity: 0.4;
+  border: 1px dashed var(--red);
+  transform: scale(0.95);
+}
+
+.rp-day-card.rp-dragover {
+  border-color: var(--red);
+  background: rgba(229, 26, 44, 0.05);
+  transform: scale(1.01);
+  box-shadow: 0 4px 20px rgba(229, 26, 44, 0.15);
+}
+
 @media (max-width: 1200px) {
   .rp-layout {
     grid-template-columns: 320px 1fr;
