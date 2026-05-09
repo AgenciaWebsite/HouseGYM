@@ -551,6 +551,26 @@
   padding: 16px 20px 4px;
 }
 
+.btn--danger {
+  background: linear-gradient(135deg, var(--red), var(--red-dark));
+  color: var(--white);
+  font-size: 13px;
+  padding: 10px 20px;
+  box-shadow: 0 4px 20px rgba(176, 16, 32, 0.25);
+  border: none;
+}
+
+.btn--danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 30px rgba(176, 16, 32, 0.45);
+}
+
+.btn--danger svg {
+  display: inline;
+  margin-right: 6px;
+  vertical-align: -2px;
+}
+
 /* ── Responsive ── */
 @media (max-width: 1100px) {
   .gu-layout {

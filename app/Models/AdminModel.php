@@ -248,8 +248,26 @@ class AdminModel
      */
     public function deleteUser(int $id): bool
     {
-        $stmt = $this->pdo->prepare('DELETE FROM usuarios WHERE id_usuario = ?');
-        return $stmt->execute([$id]);
+        $this->pdo->beginTransaction();
+        try {
+            // 1. Eliminar detalles de la rutina personalizada (si existen)
+            $stmt = $this->pdo->prepare('DELETE FROM rutina_personalizada_detalle WHERE id_rutina_pers IN (SELECT id_rutina_pers FROM rutina_personalizada WHERE id_usuario = ?)');
+            $stmt->execute([$id]);
+
+            // 2. Eliminar la cabecera de la rutina personalizada
+            $stmt = $this->pdo->prepare('DELETE FROM rutina_personalizada WHERE id_usuario = ?');
+            $stmt->execute([$id]);
+
+            // 3. Eliminar el usuario
+            $stmt = $this->pdo->prepare('DELETE FROM usuarios WHERE id_usuario = ?');
+            $success = $stmt->execute([$id]);
+
+            $this->pdo->commit();
+            return $success;
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
     }
 
     /**

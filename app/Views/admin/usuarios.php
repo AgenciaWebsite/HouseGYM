@@ -168,6 +168,12 @@
               <!-- Actions -->
               <div class="gu-detail-actions">
                 <button class="btn btn--ghost" onclick="cancelEdit()">Cancelar</button>
+                <button class="btn btn--danger" onclick="deleteUser()">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  Eliminar
+                </button>
                 <button class="btn btn--primary" onclick="saveUser()">
                   <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
@@ -463,6 +469,33 @@
         el.style.display = 'block';
         el.className = `feedback-msg ${isError ? 'feedback-msg--error' : 'feedback-msg--success'}`;
         setTimeout(() => el.style.display = 'none', 3500);
+      }
+
+      async function deleteUser() {
+        if (!currentUser) return;
+
+        if (!confirm(`¿Estás seguro de eliminar a ${currentUser.nombre}? Esta acción no se puede deshacer.`)) {
+          return;
+        }
+
+        try {
+          await apiRequest(`users&id=${encodeURIComponent(currentUser.id_usuario)}`, {
+            method: 'DELETE'
+          });
+
+          // Eliminar del estado local
+          allUsers = allUsers.filter(u => u.id_usuario != currentUser.id_usuario);
+
+          // Resetear UI
+          currentUser = null;
+          document.getElementById('detailEmpty').style.display = 'flex';
+          document.getElementById('detailCard').style.display = 'none';
+
+          // Refrescar lista
+          renderUserList(allUsers);
+        } catch (e) {
+          showDetailMsg('No se pudo eliminar el usuario.', true);
+        }
       }
 
       /* ─── Global search (topbar) ─── */
