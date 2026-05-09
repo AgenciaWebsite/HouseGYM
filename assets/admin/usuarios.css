@@ -392,50 +392,6 @@
   color: var(--gray-faint);
 }
 
-/* ── Subpanels (Dieta & Rutina) ── */
-.gu-subpanel {
-  margin: 12px 20px;
-  border: 1px solid var(--gray-border2);
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--gray-dark);
-}
-
-.gu-subpanel__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--gray-border);
-  background: var(--black-card);
-}
-
-.gu-subpanel__title {
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--gray-dim);
-}
-
-.gu-subpanel__body {
-  padding: 12px;
-  position: relative;
-  transition: opacity 0.3s, filter 0.3s;
-  max-height: 260px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--gray-mid) transparent;
-}
-
-.gu-subpanel__body::-webkit-scrollbar {
-  width: 4px;
-}
-
-.gu-subpanel__body::-webkit-scrollbar-thumb {
-  background: var(--gray-mid);
-  border-radius: 2px;
-}
 
 /* Blur overlay for locked subpanel */
 .gu-blur-wrap {

@@ -151,29 +151,6 @@
               </div>
               <div>
 
-                <!-- Subpanel: Rutina Personalizada content -->
-                <div class="gu-subpanel" id="subpanelRutina" style="display:none">
-                  <div class="gu-subpanel__header">
-                    <span class="gu-subpanel__title">Personalizado</span>
-                    <label class="toggle-switch">
-                      <input type="checkbox" id="subRutinaToggle" onchange="toggleSubRutina(this.checked)">
-                      <span class="toggle-switch__track"></span>
-                    </label>
-                  </div>
-                  <div class="gu-subpanel__body gu-blur-wrap" id="subRutinaBody">
-                    <div class="gu-blur-overlay" id="rutinaBlurOverlay">
-                      <span>Usuario sin rutina personalizada</span>
-                    </div>
-                    <div class="gu-day-list" id="rutinaDayList"></div>
-                    <button class="gu-add-btn" onclick="addRutinaDay()">
-                      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-
                 <!-- Toggles -->
 
                 <div class="gu-toggle-row" id="toggleRowDieta">
@@ -185,26 +162,6 @@
                     <input type="checkbox" id="editDieta">
                     <span class="toggle-switch__track"></span>
                   </label>
-                </div>
-              </div>
-
-              <!-- Subpanel: Dieta content -->
-              <div class="gu-subpanel" id="subpanelDieta" style="display:none">
-                <div class="gu-subpanel__header">
-                  <span class="gu-subpanel__title">Dieta</span>
-                  <label class="toggle-switch">
-                    <input type="checkbox" id="subDietaToggle" onchange="toggleSubDieta(this.checked)">
-                    <span class="toggle-switch__track"></span>
-                  </label>
-                </div>
-                <div class="gu-subpanel__body" id="subDietaBody">
-                  <div class="gu-day-list" id="dietaDayList"></div>
-                  <button class="gu-add-btn" onclick="addDietaDay()">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                      stroke-width="2.5">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                    </svg>
-                  </button>
                 </div>
               </div>
 
@@ -348,15 +305,10 @@
         document.getElementById('editRutina').checked = hasRutina;
         document.getElementById('editDieta').checked = hasDieta;
 
-        // Subpanels
-        toggleSubDieta(hasDieta, false);
-        toggleSubRutina(hasRutina, false);
-        document.getElementById('subDietaToggle').checked = hasDieta;
-        document.getElementById('subRutinaToggle').checked = hasRutina;
+        // Subpanels (Removed as they don't exist in this view)
+        // toggleSubDieta(hasDieta, false);
+        // toggleSubRutina(hasRutina, false);
 
-        // Populate demo day lists (in a real app, fetch from API)
-        renderDietaDays(u.dieta_dias || []);
-        renderRutinaDays(u.rutina_dias || []);
 
         document.getElementById('detailFeedback').style.display = 'none';
       }

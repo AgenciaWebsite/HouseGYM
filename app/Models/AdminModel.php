@@ -184,6 +184,7 @@ class AdminModel
         $this->pdo->beginTransaction();
 
         try {
+            // Actualizar datos básicos del usuario
             if ($password !== '') {
                 $stmt = $this->pdo->prepare('UPDATE usuarios SET nombre = ?, cedula = ?, contrasena = ?, plan_personalizado = ? WHERE id_usuario = ?');
                 $stmt->execute([$nombre, $cedula, $password, $plan_personalizado, $id]);
@@ -192,18 +193,44 @@ class AdminModel
                 $stmt->execute([$nombre, $cedula, $plan_personalizado, $id]);
             }
 
-            // Simple update for routine and diet just like add
-            $stmt = $this->pdo->prepare('DELETE FROM rutina_personalizada WHERE id_usuario = ?');
+            // Gestionar rutina/dieta de forma no destructiva
+            // Primero verificamos si ya tiene una rutina creada
+            $stmt = $this->pdo->prepare('SELECT id_rutina_pers, id_dieta FROM rutina_personalizada WHERE id_usuario = ? LIMIT 1');
             $stmt->execute([$id]);
+            $rutinaExistente = $stmt->fetch();
 
             if ($plan_personalizado || $id_dieta) {
-                // Determine real id_dieta if they send 1
-                $real_id_dieta = $id_dieta > 0 ? 1 : null;
-                $stmt = $this->pdo->prepare(
-                    'INSERT INTO rutina_personalizada (id_usuario, nombre, activa, id_dieta)
-                     VALUES (?, ?, ?, ?)'
-                );
-                $stmt->execute([$id, 'Rutina personalizada', $plan_personalizado, $real_id_dieta]);
+                if (!$rutinaExistente) {
+                    // Si no existe, la creamos (comportamiento igual al de agregar usuario)
+                    $real_id_dieta = $id_dieta > 0 ? 1 : null; 
+                    $stmt = $this->pdo->prepare(
+                        'INSERT INTO rutina_personalizada (id_usuario, nombre, activa, id_dieta)
+                         VALUES (?, ?, ?, ?)'
+                    );
+                    $stmt->execute([$id, 'Rutina personalizada', $plan_personalizado, $real_id_dieta]);
+                } else {
+                    // Si ya existe, solo actualizamos los flags, así no perdemos los ejercicios (detalle)
+                    $nuevo_id_dieta = $rutinaExistente['id_dieta'];
+                    
+                    if ($id_dieta == 0) {
+                        $nuevo_id_dieta = null;
+                    } elseif ($nuevo_id_dieta === null && $id_dieta > 0) {
+                        // Si no tenía dieta y se activó, asignamos la ID 1 por defecto si existe
+                        $nuevo_id_dieta = 1; 
+                    }
+
+                    $stmt = $this->pdo->prepare(
+                        'UPDATE rutina_personalizada SET activa = ?, id_dieta = ? WHERE id_rutina_pers = ?'
+                    );
+                    $stmt->execute([$plan_personalizado, $nuevo_id_dieta, $rutinaExistente['id_rutina_pers']]);
+                }
+            } else {
+                // Si ambos están desactivados, desactivamos la rutina pero conservamos el registro
+                // para no borrar el histórico de ejercicios del usuario accidentalmente.
+                if ($rutinaExistente) {
+                    $stmt = $this->pdo->prepare('UPDATE rutina_personalizada SET activa = 0, id_dieta = NULL WHERE id_rutina_pers = ?');
+                    $stmt->execute([$rutinaExistente['id_rutina_pers']]);
+                }
             }
 
             $this->pdo->commit();

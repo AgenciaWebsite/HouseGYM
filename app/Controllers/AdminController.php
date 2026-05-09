@@ -171,7 +171,7 @@ class AdminController
         $stats = $this->model->getDashboardStats();
         $recentUsers = $this->model->getRecentUsers(5);
         $allUsers = $this->model->getAllUsersForChart();
-        
+
         $totalUsers = count($allUsers);
         $chart = [];
         $monthLabels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
@@ -221,7 +221,7 @@ class AdminController
         $cedula = trim((string) ($data['cedula'] ?? ''));
         $password = (string) ($data['contrasena'] ?? $data['password'] ?? '');
         $plan = !empty($data['plan_personalizado']) ? 1 : 0;
-        
+
         // Ahora dieta puede ser un id_dieta en lugar de un booleano (0 si es false/vacio)
         $id_dieta = !empty($data['dieta']) ? (int) $data['dieta'] : null;
 
@@ -262,8 +262,8 @@ class AdminController
         $cedula = trim((string) ($data['cedula'] ?? ''));
         $password = (string) ($data['contrasena'] ?? '');
         $plan = !empty($data['plan_personalizado']) ? 1 : 0;
-        $id_dieta = !empty($data['dieta']) ? 1 : 0; // The frontend sends 1 or 0 for true/false right now, but ideally id_dieta.
-        
+        $id_dieta = !empty($data['dieta']) ? (int) $data['dieta'] : 0;
+
         if ($nombre === '' || $cedula === '') {
             $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
         }
@@ -504,7 +504,7 @@ class AdminController
 
         $genero = (string) ($data['genero'] ?? '');
         $semana = (int) ($data['semana'] ?? 0);
-        $dias   = $data['dias'] ?? [];
+        $dias = $data['dias'] ?? [];
 
         if (!in_array($genero, ['Hombre', 'Mujer'], true)) {
             $this->jsonResponse(['ok' => false, 'error' => 'genero_invalido'], 422);
