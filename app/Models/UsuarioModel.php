@@ -42,20 +42,25 @@ class UsuarioModel
     public function getUserRoutine(int $userId): array
     {
         // Obtener el ID de la rutina personalizada activa para el usuario
-        $stmt = $this->pdo->prepare('SELECT id_rutina_pers FROM rutina_personalizada WHERE id_usuario = ? LIMIT 1');
+        $stmt = $this->pdo->prepare(
+            'SELECT id_rutina_pers FROM rutina_personalizada
+             WHERE id_usuario = ? AND activa = 1
+             ORDER BY id_rutina_pers DESC LIMIT 1'
+        );
         $stmt->execute([$userId]);
         $rutinaId = $stmt->fetchColumn();
 
         if (!$rutinaId) {
-            return []; // El usuario no tiene rutina asignada
+            return []; // El usuario no tiene rutina asignada o no está activa
         }
 
-        // Obtener los detalles agrupados por dia
+        // Obtener los detalles agrupados por día, con JOIN correcto a grupo_muscular
         $stmt = $this->pdo->prepare(
-            'SELECT d.dia, d.id_ejercicio, d.series, d.repeticiones as reps,
-                    e.nombre, e.imagen_url, e.grupo_muscular
+            'SELECT d.dia, d.id_ejercicio, d.series, d.repeticiones AS reps,
+                    e.nombre, e.foto_url AS imagen_url, g.nombre AS grupo_muscular
              FROM rutina_personalizada_detalle d
-             JOIN ejercicios e ON d.id_ejercicio = e.id_ejercicio
+             JOIN ejercicios e ON e.id_ejercicio = d.id_ejercicio
+             JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
              WHERE d.id_rutina_pers = ?
              ORDER BY d.dia ASC, d.id ASC'
         );
@@ -64,24 +69,24 @@ class UsuarioModel
 
         $diasMap = [];
         foreach ($rows as $row) {
-            $diaIndex = (int)$row['dia'] - 1; 
+            $diaIndex = (int)$row['dia'] - 1;
             if (!isset($diasMap[$diaIndex])) {
                 $diasMap[$diaIndex] = ['ejercicios' => []];
             }
             $diasMap[$diaIndex]['ejercicios'][] = [
-                'id_ejercicio' => $row['id_ejercicio'],
-                'nombre' => $row['nombre'],
-                'imagen_url' => $row['imagen_url'],
+                'id_ejercicio'   => (int)$row['id_ejercicio'],
+                'nombre'         => $row['nombre'],
+                'imagen_url'     => $row['imagen_url'],
                 'grupo_muscular' => $row['grupo_muscular'],
-                'reps' => $row['reps'],
-                'series' => $row['series']
+                'reps'           => (int)$row['reps'],
+                'series'         => (int)$row['series'],
             ];
         }
 
         $maxDia = empty($diasMap) ? -1 : max(array_keys($diasMap));
         $result = [];
         for ($i = 0; $i <= $maxDia; $i++) {
-            $result[] = isset($diasMap[$i]) ? $diasMap[$i] : ['ejercicios' => []];
+            $result[] = $diasMap[$i] ?? ['ejercicios' => []];
         }
 
         return $result;

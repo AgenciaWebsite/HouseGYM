@@ -102,6 +102,15 @@ switch ($route) {
         require_once __DIR__ . '/app/Views/usuarios_ejercicios.php';
         break;
 
+    case 'usuarios_rutina':
+        // Mostrar la rutina personalizada del usuario (solo lectura)
+        if (($_SESSION['rol'] ?? '') !== 'usuario') {
+            header('Location: index.php?route=login&error=no_autorizado');
+            exit;
+        }
+        require_once __DIR__ . '/app/Views/usuarios_rutina.php';
+        break;
+
     case 'admin_usuarios':
         // Mostrar la vista de gestión de usuarios para el admin
         if (($_SESSION['rol'] ?? '') !== 'admin' || empty($_SESSION['admin_id'])) {

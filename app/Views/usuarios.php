@@ -176,8 +176,16 @@
       <!-- Rutina Section -->
       <div id="seccion-rutina" class="routine-section">
         <div class="routine-header">
-          <h2>Rutina <span>Global</span></h2>
-          <p>ejercicios agrupados por semana de entrenamiento.</p>
+          <div>
+            <h2>Rutina <span>Personalizada</span></h2>
+            <p>Vista previa de tu plan de entrenamiento.</p>
+          </div>
+          <a href="index.php?route=usuarios_rutina" class="routine-header__btn">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            Ver Rutina Completa
+          </a>
         </div>
 
         <div id="routineStateMsg" class="routine-empty-state">
