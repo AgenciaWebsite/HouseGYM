@@ -5,7 +5,7 @@
  * @var string $current_page The ID of the current page to highlight in the nav.
  */
 ?>
-<link rel="stylesheet" href="assets/admin_sidebar.css">
+<link rel="stylesheet" href="assets/admin/sidebar.css">
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">

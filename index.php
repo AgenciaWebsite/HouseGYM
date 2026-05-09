@@ -49,7 +49,7 @@ switch ($route) {
             header('Location: index.php?route=login&error=no_autorizado');
             exit;
         }
-        require_once __DIR__ . '/app/Views/admin.php';
+        require_once __DIR__ . '/app/Views/admin/dashboard.php';
         break;
 
     case 'admin_api':
@@ -72,7 +72,7 @@ switch ($route) {
             header('Location: index.php?route=login&error=no_autorizado');
             exit;
         }
-        require_once __DIR__ . '/app/Views/usuarios.php';
+        require_once __DIR__ . '/app/Views/usuarios/dashboard.php';
         break;
 
     case 'usuarios_rutina':
@@ -81,7 +81,7 @@ switch ($route) {
             header('Location: index.php?route=login&error=no_autorizado');
             exit;
         }
-        require_once __DIR__ . '/app/Views/usuarios_rutina.php';
+        require_once __DIR__ . '/app/Views/usuarios/rutina.php';
         break;
 
     case 'usuarios_maquinas':
@@ -90,7 +90,7 @@ switch ($route) {
             header('Location: index.php?route=login&error=no_autorizado');
             exit;
         }
-        require_once __DIR__ . '/app/Views/usuarios_maquinas.php';
+        require_once __DIR__ . '/app/Views/usuarios/maquinas.php';
         break;
 
     case 'usuarios_ejercicios':
@@ -99,16 +99,7 @@ switch ($route) {
             header('Location: index.php?route=login&error=no_autorizado');
             exit;
         }
-        require_once __DIR__ . '/app/Views/usuarios_ejercicios.php';
-        break;
-
-    case 'usuarios_rutina':
-        // Mostrar la rutina personalizada del usuario (solo lectura)
-        if (($_SESSION['rol'] ?? '') !== 'usuario') {
-            header('Location: index.php?route=login&error=no_autorizado');
-            exit;
-        }
-        require_once __DIR__ . '/app/Views/usuarios_rutina.php';
+        require_once __DIR__ . '/app/Views/usuarios/ejercicios.php';
         break;
 
     case 'admin_usuarios':
@@ -117,7 +108,7 @@ switch ($route) {
             header('Location: index.php?route=login&error=no_autorizado');
             exit;
         }
-        require_once __DIR__ . '/app/Views/admin_usuarios.php';
+        require_once __DIR__ . '/app/Views/admin/usuarios.php';
         break;
 
     case 'admin_rutina_personalizada':
@@ -125,7 +116,7 @@ switch ($route) {
             header('Location: index.php?route=login&error=no_autorizado');
             exit;
         }
-        require_once __DIR__ . '/app/Views/admin_rutina_personalizada.php';
+        require_once __DIR__ . '/app/Views/admin/rutina_personalizada.php';
         break;
 
     case 'admin_rutina_global':
@@ -133,7 +124,7 @@ switch ($route) {
             header('Location: index.php?route=login&error=no_autorizado');
             exit;
         }
-        require_once __DIR__ . '/app/Views/admin_rutina_global.php';
+        require_once __DIR__ . '/app/Views/admin/rutina_global.php';
         break;
 
     case 'admin_maquinas':
@@ -141,7 +132,7 @@ switch ($route) {
             header('Location: index.php?route=login&error=no_autorizado');
             exit;
         }
-        require_once __DIR__ . '/app/Views/admin_maquinas.php';
+        require_once __DIR__ . '/app/Views/admin/maquinas.php';
         break;
 
     case 'admin_ejercicios':
@@ -149,7 +140,7 @@ switch ($route) {
             header('Location: index.php?route=login&error=no_autorizado');
             exit;
         }
-        require_once __DIR__ . '/app/Views/admin_ejercicios.php';
+        require_once __DIR__ . '/app/Views/admin/ejercicios.php';
         break;
 
     case 'admin_dieta':
@@ -157,7 +148,7 @@ switch ($route) {
             header('Location: index.php?route=login&error=no_autorizado');
             exit;
         }
-        require_once __DIR__ . '/app/Views/admin_dieta.php';
+        require_once __DIR__ . '/app/Views/admin/dieta.php';
         break;
 
     default:

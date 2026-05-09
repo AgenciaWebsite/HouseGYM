@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Administrador - HouseGYM</title>
-  <link rel="stylesheet" href="assets/admin.css">
+  <link rel="stylesheet" href="assets/admin/dashboard.css">
 </head>
 
 <body>
@@ -15,7 +15,7 @@
   <div class="bg-glow bg-glow--bottom-left"></div>
 
   <?php $current_page = 'dashboard';
-  include 'admin_sidebar.php'; ?>
+  include 'sidebar.php'; ?>
 
   <!-- MAIN -->
   <div class="main-wrap">

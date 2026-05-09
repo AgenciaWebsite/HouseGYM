@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ejercicios - HouseGYM</title>
-  <link rel="stylesheet" href="assets/admin.css">
-  <link rel="stylesheet" href="assets/admin_ejercicios.css">
+  <title>Máquinas - HouseGYM</title>
+  <link rel="stylesheet" href="assets/admin/dashboard.css">
+  <link rel="stylesheet" href="assets/admin/maquinas.css">
 </head>
 
 <body>
@@ -15,8 +15,8 @@
   <div class="bg-glow bg-glow--top-right"></div>
   <div class="bg-glow bg-glow--bottom-left"></div>
 
-  <?php $current_page = 'ejercicios';
-  include 'admin_sidebar.php'; ?>
+  <?php $current_page = 'maquinas';
+  include 'sidebar.php'; ?>
 
   <!-- MAIN -->
   <div class="main-wrap">
@@ -54,22 +54,22 @@
     <div class="content">
 
       <div class="page-title">
-        <h1>Gestión de <span>Ejercicios</span></h1>
-        <p class="page-subtitle">Agrega, edita y organiza los ejercicios del gimnasio</p>
+        <h1>Gestión de <span>Máquinas</span></h1>
+        <p class="page-subtitle">Agrega, edita y organiza las máquinas del gimnasio</p>
       </div>
 
       <!-- TOOLBAR -->
       <div class="gm-toolbar">
 
-        <!-- Search de ejercicios -->
+        <!-- Search de máquinas -->
         <div class="gm-search-wrap">
           <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
             <circle cx="11" cy="11" r="8" />
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35" />
           </svg>
-          <input type="text" id="ejercicioSearch" class="gm-search-input" placeholder="Buscar ejercicio..."
-            oninput="filterEjercicios(this.value)" autocomplete="off">
-          <button class="gm-search-clear" id="ejercicioSearchClear" onclick="clearEjercicioSearch()">&times;</button>
+          <input type="text" id="machineSearch" class="gm-search-input" placeholder="Buscar máquina..."
+            oninput="filterMachines(this.value)" autocomplete="off">
+          <button class="gm-search-clear" id="machineSearchClear" onclick="clearMachineSearch()">&times;</button>
         </div>
 
         <!-- Botón Agregar -->
@@ -83,14 +83,18 @@
         <!-- Filtro por grupo muscular -->
         <div class="gm-filter-wrap">
           <select class="gm-filter-select" id="muscleFilter"
-            onchange="filterEjercicios(document.getElementById('ejercicioSearch').value)">
-            <option value="">Todos los grupos</option>
-            <option value="Pierna">Pierna</option>
+            onchange="filterMachines(document.getElementById('machineSearch').value)">
+            <option value="">Todas las categorías</option>
             <option value="Pecho">Pecho</option>
             <option value="Espalda">Espalda</option>
-            <option value="Brazo">Brazo</option>
-            <option value="Cardio">Cardio</option>
+            <option value="Hombros">Hombros</option>
+            <option value="Biceps">Bíceps</option>
+            <option value="Triceps">Tríceps</option>
+            <option value="Pierna">Pierna</option>
+            <option value="Gluteos">Glúteos</option>
             <option value="Abdomen">Abdomen</option>
+            <option value="Cardio">Cardio</option>
+            <option value="Funcional">Funcional</option>
           </select>
           <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18M7 10h10M11 16h2" />
@@ -103,18 +107,18 @@
       <div class="gm-panel">
 
         <div class="gm-panel-header">
-          <span class="gm-panel-title">Ejercicios del Gimnasio</span>
-          <span class="gm-panel-count" id="ejercicioCount">0 ejercicios</span>
+          <span class="gm-panel-title">Máquinas del Gimnasio</span>
+          <span class="gm-panel-count" id="machineCount">0 máquinas</span>
         </div>
 
-        <div class="gm-grid" id="ejercicioGrid">
+        <div class="gm-grid" id="machineGrid">
           <div class="gm-empty">
             <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
               <rect x="2" y="7" width="4" height="10" rx="1" />
               <rect x="18" y="7" width="4" height="10" rx="1" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 10h12M6 14h12" />
             </svg>
-            Cargando ejercicios...
+            Cargando máquinas...
           </div>
         </div>
 
@@ -125,16 +129,16 @@
 
 
   <!-- ══════════════════════════════════════
-       MODAL: Agregar / Editar Ejercicio
+       MODAL: Agregar / Editar Máquina
   ══════════════════════════════════════ -->
-  <div class="gm-modal-overlay" id="ejercicioModal" onclick="handleOverlayClick(event)">
-    <div class="gm-modal" id="ejercicioModalInner">
+  <div class="gm-modal-overlay" id="machineModal" onclick="handleOverlayClick(event)">
+    <div class="gm-modal" id="machineModalInner">
 
       <!-- Head -->
       <div class="gm-modal__head">
         <div>
-          <div class="gm-modal__title" id="modalTitle">Agregar Ejercicio</div>
-          <div class="gm-modal__subtitle" id="modalSubtitle">Nuevo ejercicio al inventario</div>
+          <div class="gm-modal__title" id="modalTitle">Agregar Máquina</div>
+          <div class="gm-modal__subtitle" id="modalSubtitle">Nueva máquina al inventario</div>
         </div>
         <button class="gm-modal__close" onclick="closeModal()" title="Cerrar">&times;</button>
       </div>
@@ -155,7 +159,7 @@
                 <circle cx="8.5" cy="8.5" r="1.5" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 15l-5-5L5 21" />
               </svg>
-              <span class="gm-photo-zone__label">Subir foto<br>del ejercicio</span>
+              <span class="gm-photo-zone__label">Subir foto<br>de la máquina</span>
               <span class="gm-photo-zone__hint">JPG, PNG · Máx 5 MB</span>
             </div>
 
@@ -175,54 +179,41 @@
         <div class="gm-form-side">
 
           <div class="gm-form-group">
-            <label class="gm-form-label" for="ejercicioName">Nombre del ejercicio</label>
-            <input type="text" id="ejercicioName" class="gm-form-input" placeholder="Ej: Press de banca">
+            <label class="gm-form-label" for="machineName">Nombre de la máquina</label>
+            <input type="text" id="machineName" class="gm-form-input" placeholder="Ej: Prensa de piernas">
           </div>
 
           <div class="gm-form-group">
-            <label class="gm-form-label" for="ejercicioGrupo">Grupo Muscular <span
-                style="color:#e51a2c;">*</span></label>
-            <select id="ejercicioGrupo" class="gm-form-select">
-              <option value="">Seleccionar grupo</option>
-              <option value="1">Pierna</option>
-              <option value="2">Pecho</option>
-              <option value="3">Espalda</option>
-              <option value="4">Brazo</option>
-              <option value="5">Cardio</option>
-              <option value="6">Abdomen</option>
+            <label class="gm-form-label" for="machineCategory">Grupo muscular / Categoría</label>
+            <select id="machineCategory" class="gm-form-select">
+              <option value="">Seleccionar categoría</option>
+              <option value="Pecho">Pecho</option>
+              <option value="Espalda">Espalda</option>
+              <option value="Hombros">Hombros</option>
+              <option value="Biceps">Bíceps</option>
+              <option value="Triceps">Tríceps</option>
+              <option value="Pierna">Pierna</option>
+              <option value="Gluteos">Glúteos</option>
+              <option value="Abdomen">Abdomen</option>
+              <option value="Cardio">Cardio</option>
+              <option value="Funcional">Funcional</option>
             </select>
           </div>
 
           <div class="gm-form-group">
-            <label class="gm-form-label" for="ejercicioDesc">Descripción</label>
-            <textarea id="ejercicioDesc" class="gm-form-textarea"
-              placeholder="Descripción breve del ejercicio..."></textarea>
+            <label class="gm-form-label" for="machineDesc">Descripción</label>
+            <textarea id="machineDesc" class="gm-form-textarea"
+              placeholder="Descripción breve de la máquina y su uso..."></textarea>
           </div>
 
           <div class="gm-form-group">
-            <label class="gm-form-label" for="ejercicioMaquina">Máquina asignada (Opcional)</label>
-            <div class="gm-search-select-wrap" id="maquinaSelectWrap">
-              <input type="hidden" id="ejercicioMaquina" value="">
-              <div class="gm-search-select-trigger" onclick="toggleMaquinaDropdown(event)">
-                <span id="maquinaSelectedLabel">Ninguna / Peso Libre</span>
-                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-              <div class="gm-search-select-dropdown">
-                <div class="gm-search-select-search-wrap">
-                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                    <circle cx="11" cy="11" r="8" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35" />
-                  </svg>
-                  <input type="text" class="gm-search-select-search-input" id="maquinaSearchInput"
-                    placeholder="Buscar máquina..." oninput="filterMaquinaOptions(this.value)" autocomplete="off">
-                </div>
-                <div class="gm-search-select-options" id="maquinaOptionsList">
-                  <!-- Opciones se cargan dinámicamente -->
-                </div>
-              </div>
-            </div>
+            <label class="gm-form-label" for="machineLocation">Piso / Ubicación</label>
+            <select id="machineLocation" class="gm-form-select">
+              <option value="">Seleccionar piso</option>
+              <option value="Piso 2">Piso 2</option>
+              <option value="Piso 3">Piso 3</option>
+              <option value="Piso 4">Piso 4</option>
+            </select>
           </div>
 
         </div><!-- /form-side -->
@@ -231,7 +222,7 @@
       <!-- Footer -->
       <div class="gm-modal__foot">
         <div class="gm-feedback" id="modalFeedback"></div>
-        <button class="gm-btn gm-btn--danger" id="deleteBtn" onclick="deleteEjercicio()" style="display:none;">
+        <button class="gm-btn gm-btn--danger" id="deleteBtn" onclick="deleteMachine()" style="display:none;">
           <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
             <polyline points="3 6 5 6 21 6" />
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -240,7 +231,7 @@
           Eliminar
         </button>
         <button class="gm-btn gm-btn--ghost" onclick="closeModal()">Cancelar</button>
-        <button class="gm-btn gm-btn--primary" onclick="saveEjercicio()">
+        <button class="gm-btn gm-btn--primary" onclick="saveMachine()">
           <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
           </svg>
@@ -254,7 +245,7 @@
 
   <script>
     /* ══════════════════════════════════════════════════
-       HouseGYM — Admin Ejercicios
+       HouseGYM — Admin Máquinas
     ══════════════════════════════════════════════════ */
 
     const API_BASE = 'index.php?route=admin_api&resource=';
@@ -267,113 +258,41 @@
     }
 
     /* ── State ── */
-    let allEjercicios = [];
-    let currentEjercicio = null; // null = nuevo ejercicio
-    let photoBase64 = null;
     let allMachines = [];
+    let currentMachine = null; // null = nueva máquina
+    let photoBase64 = null;
 
 
 
     /* ══════════════════════════════
-       LOAD DATA
+       LOAD MACHINES
     ══════════════════════════════ */
-    async function loadEjercicios() {
+    async function loadMachines() {
       try {
-        const data = await apiRequest('ejercicios');
-        allEjercicios = data.ejercicios || [];
-        renderGrid(allEjercicios);
+        const data = await apiRequest('machines');
+        allMachines = data.machines || [];
+        renderGrid(allMachines);
       } catch (e) {
-        document.getElementById('ejercicioGrid').innerHTML = `
+        document.getElementById('machineGrid').innerHTML = `
           <div class="gm-empty">
             <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
               <circle cx="12" cy="12" r="10"/>
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01"/>
             </svg>
-            No se pudieron cargar los ejercicios.
+            No se pudieron cargar las máquinas.
           </div>`;
       }
     }
 
-    async function loadMachinesSelect() {
-      try {
-        const data = await apiRequest('machines');
-        allMachines = data.machines || [];
-        renderMaquinaOptions();
-      } catch (e) {
-        console.error("Error al cargar máquinas", e);
-      }
-    }
-
-    function renderMaquinaOptions(machines = allMachines) {
-      const list = document.getElementById('maquinaOptionsList');
-      const currentValue = document.getElementById('ejercicioMaquina').value;
-
-      let html = `<div class="gm-search-select-option ${!currentValue ? 'gm-search-select-option--selected' : ''}" 
-                  onclick="selectMaquina('', 'Ninguna / Peso Libre')">Ninguna / Peso Libre</div>`;
-
-      if (machines.length === 0 && allMachines.length > 0) {
-        html += `<div class="gm-search-select-option--empty">No se encontraron máquinas</div>`;
-      } else {
-        html += machines.map(m => `
-          <div class="gm-search-select-option ${currentValue == m.id_maquina ? 'gm-search-select-option--selected' : ''}" 
-               onclick="selectMaquina('${m.id_maquina}', '${escHtml(m.nombre)}')">
-            ${escHtml(m.nombre)}
-          </div>
-        `).join('');
-      }
-
-      list.innerHTML = html;
-    }
-
-    function toggleMaquinaDropdown(e) {
-      e.stopPropagation();
-      const wrap = document.getElementById('maquinaSelectWrap');
-      const isActive = wrap.classList.contains('active');
-
-      // Cerrar si estaba abierto, o abrir y enfocar input
-      if (isActive) {
-        closeMaquinaDropdown();
-      } else {
-        wrap.classList.add('active');
-        const input = document.getElementById('maquinaSearchInput');
-        input.value = '';
-        renderMaquinaOptions();
-        setTimeout(() => input.focus(), 50);
-      }
-    }
-
-    function closeMaquinaDropdown() {
-      document.getElementById('maquinaSelectWrap').classList.remove('active');
-    }
-
-    function filterMaquinaOptions(query) {
-      const q = query.toLowerCase().trim();
-      const filtered = allMachines.filter(m => m.nombre.toLowerCase().includes(q));
-      renderMaquinaOptions(filtered);
-    }
-
-    function selectMaquina(id, name) {
-      document.getElementById('ejercicioMaquina').value = id;
-      document.getElementById('maquinaSelectedLabel').textContent = name;
-      closeMaquinaDropdown();
-    }
-
-    // Cerrar dropdown al hacer click fuera
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.gm-search-select-wrap')) {
-        closeMaquinaDropdown();
-      }
-    });
-
     /* ══════════════════════════════
        RENDER GRID
     ══════════════════════════════ */
-    function renderGrid(ejercicios) {
-      const grid = document.getElementById('ejercicioGrid');
-      const count = document.getElementById('ejercicioCount');
-      count.textContent = `${ejercicios.length} ejercicio${ejercicios.length !== 1 ? 's' : ''}`;
+    function renderGrid(machines) {
+      const grid = document.getElementById('machineGrid');
+      const count = document.getElementById('machineCount');
+      count.textContent = `${machines.length} máquina${machines.length !== 1 ? 's' : ''}`;
 
-      if (!ejercicios.length) {
+      if (!machines.length) {
         grid.innerHTML = `
           <div class="gm-empty">
             <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
@@ -386,9 +305,9 @@
         return;
       }
 
-      grid.innerHTML = ejercicios.map(m => {
-        const photoHtml = m.imagen_url
-          ? `<img src="${escHtml(m.imagen_url)}" alt="${escHtml(m.nombre)}">`
+      grid.innerHTML = machines.map(m => {
+        const photoHtml = m.foto
+          ? `<img src="${escHtml(m.foto)}" alt="${escHtml(m.nombre)}">`
           : `<div class="gm-card__photo--placeholder" style="display:flex;flex-direction:column;align-items:center;gap:6px;">
                <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                  <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -399,10 +318,10 @@
              </div>`;
 
         return `
-          <div class="gm-card" onclick="openModal(${m.id_ejercicio})">
+          <div class="gm-card" onclick="openModal(${m.id_maquina})">
             <div class="gm-card__photo">${photoHtml}</div>
             <div class="gm-card__name">${escHtml(m.nombre)}</div>
-            ${m.grupo_muscular ? `<div class="gm-card__muscle">${escHtml(m.grupo_muscular)}</div>` : ''}
+            ${m.categoria ? `<div class="gm-card__muscle">${escHtml(m.categoria)}</div>` : ''}
           </div>`;
       }).join('');
     }
@@ -410,61 +329,55 @@
     /* ══════════════════════════════
        FILTER
     ══════════════════════════════ */
-    function filterEjercicios(query) {
+    function filterMachines(query) {
       const q = (query || '').toLowerCase().trim();
       const cat = document.getElementById('muscleFilter').value;
-      const clearBtn = document.getElementById('ejercicioSearchClear');
+      const clearBtn = document.getElementById('machineSearchClear');
       clearBtn.classList.toggle('visible', q.length > 0);
 
-      const filtered = allEjercicios.filter(m => {
+      const filtered = allMachines.filter(m => {
         const matchQ = !q
           || m.nombre.toLowerCase().includes(q)
-          || (m.descripcion || '').toLowerCase().includes(q);
-        const matchCat = !cat || (m.grupo_muscular || '') === cat;
+          || (m.descripcion || '').toLowerCase().includes(q)
+          || (m.ubicacion || '').toLowerCase().includes(q);
+        const matchCat = !cat || (m.categoria || '') === cat;
         return matchQ && matchCat;
       });
       renderGrid(filtered);
     }
 
-    function clearEjercicioSearch() {
-      document.getElementById('ejercicioSearch').value = '';
-      filterEjercicios('');
+    function clearMachineSearch() {
+      document.getElementById('machineSearch').value = '';
+      filterMachines('');
     }
 
     /* ══════════════════════════════
        MODAL
     ══════════════════════════════ */
     function openModal(id = null) {
-      currentEjercicio = id ? (allEjercicios.find(m => m.id_ejercicio == id) || null) : null;
+      currentMachine = id ? (allMachines.find(m => m.id_maquina == id) || null) : null;
       photoBase64 = null;
 
       // Titles
-      document.getElementById('modalTitle').textContent = currentEjercicio ? 'Editar Ejercicio' : 'Agregar Ejercicio';
-      document.getElementById('modalSubtitle').textContent = currentEjercicio ? `Editando: ${currentEjercicio.nombre}` : 'Nuevo ejercicio al inventario';
+      document.getElementById('modalTitle').textContent = currentMachine ? 'Editar Máquina' : 'Agregar Máquina';
+      document.getElementById('modalSubtitle').textContent = currentMachine ? `Editando: ${currentMachine.nombre}` : 'Nueva máquina al inventario';
 
       // Delete button
-      document.getElementById('deleteBtn').style.display = currentEjercicio ? 'flex' : 'none';
+      document.getElementById('deleteBtn').style.display = currentMachine ? 'flex' : 'none';
 
       // Reset form
-      document.getElementById('ejercicioName').value = currentEjercicio ? currentEjercicio.nombre : '';
-      document.getElementById('ejercicioGrupo').value = currentEjercicio ? (currentEjercicio.id_grupo || '') : '';
-      document.getElementById('ejercicioDesc').value = currentEjercicio ? (currentEjercicio.descripcion || '') : '';
-
-      // Reset searchable machine select
-      const machineId = currentEjercicio ? (currentEjercicio.id_maquina || '') : '';
-      document.getElementById('ejercicioMaquina').value = machineId;
-      const machine = allMachines.find(m => m.id_maquina == machineId);
-      document.getElementById('maquinaSelectedLabel').textContent = machine ? machine.nombre : 'Ninguna / Peso Libre';
-      closeMaquinaDropdown();
-
+      document.getElementById('machineName').value = currentMachine ? currentMachine.nombre : '';
+      document.getElementById('machineCategory').value = currentMachine ? (currentMachine.categoria || '') : '';
+      document.getElementById('machineDesc').value = currentMachine ? (currentMachine.descripcion || '') : '';
+      document.getElementById('machineLocation').value = currentMachine ? (currentMachine.ubicacion || '') : '';
       document.getElementById('photoInput').value = '';
       document.getElementById('modalFeedback').style.display = 'none';
 
       // Photo
       const preview = document.getElementById('photoPreview');
       const placeholder = document.getElementById('photoPlaceholder');
-      if (currentEjercicio && currentEjercicio.imagen_url) {
-        preview.src = currentEjercicio.imagen_url;
+      if (currentMachine && currentMachine.foto) {
+        preview.src = currentMachine.foto;
         preview.style.display = 'block';
         placeholder.style.display = 'none';
       } else {
@@ -473,19 +386,19 @@
         placeholder.style.display = 'flex';
       }
 
-      document.getElementById('ejercicioModal').classList.add('visible');
+      document.getElementById('machineModal').classList.add('visible');
       document.body.style.overflow = 'hidden';
     }
 
     function closeModal() {
-      document.getElementById('ejercicioModal').classList.remove('visible');
+      document.getElementById('machineModal').classList.remove('visible');
       document.body.style.overflow = '';
-      currentEjercicio = null;
+      currentMachine = null;
       photoBase64 = null;
     }
 
     function handleOverlayClick(e) {
-      if (e.target === document.getElementById('ejercicioModal')) closeModal();
+      if (e.target === document.getElementById('machineModal')) closeModal();
     }
 
     /* ── Photo preview ── */
@@ -508,43 +421,41 @@
     }
 
     /* ── Save ── */
-    async function saveEjercicio() {
-      const nombre = document.getElementById('ejercicioName').value.trim();
-      const id_grupo = document.getElementById('ejercicioGrupo').value;
-      const descripcion = document.getElementById('ejercicioDesc').value.trim();
-      const id_maquina = document.getElementById('ejercicioMaquina').value;
+    async function saveMachine() {
+      const nombre = document.getElementById('machineName').value.trim();
+      const categoria = document.getElementById('machineCategory').value;
+      const descripcion = document.getElementById('machineDesc').value.trim();
+      const ubicacion = document.getElementById('machineLocation').value.trim();
 
-      if (!nombre || !id_grupo) {
-        document.getElementById('ejercicioName').style.borderColor = !nombre ? 'rgba(229,26,44,0.5)' : '';
-        document.getElementById('ejercicioGrupo').style.borderColor = !id_grupo ? 'rgba(229,26,44,0.5)' : '';
-        showModalMsg('El nombre y grupo muscular son obligatorios.', true);
+      if (!nombre) {
+        document.getElementById('machineName').style.borderColor = 'rgba(229,26,44,0.5)';
+        showModalMsg('El nombre de la máquina es obligatorio.', true);
         return;
       }
-      document.getElementById('ejercicioName').style.borderColor = '';
-      document.getElementById('ejercicioGrupo').style.borderColor = '';
+      document.getElementById('machineName').style.borderColor = '';
 
-      const payload = { nombre, id_grupo, descripcion, id_maquina };
+      const payload = { nombre, categoria, descripcion, ubicacion };
       if (photoBase64) payload.foto = photoBase64;
 
       try {
-        if (currentEjercicio) {
-          await apiRequest(`ejercicios&id=${encodeURIComponent(currentEjercicio.id_ejercicio)}`, {
+        if (currentMachine) {
+          await apiRequest(`machines&id=${encodeURIComponent(currentMachine.id_maquina)}`, {
             method: 'PUT',
             body: JSON.stringify(payload),
           });
-
-          showModalMsg('Ejercicio actualizado correctamente.');
+          Object.assign(currentMachine, payload);
+          allMachines = allMachines.map(m => m.id_maquina == currentMachine.id_maquina ? { ...m, ...payload } : m);
+          showModalMsg('Máquina actualizada correctamente.');
         } else {
-          await apiRequest('ejercicios', {
+          const res = await apiRequest('machines', {
             method: 'POST',
             body: JSON.stringify(payload),
           });
-          showModalMsg('Ejercicio agregado correctamente.');
+          const newMachine = res.machine || { ...payload, id_maquina: res.id || Date.now() };
+          allMachines.unshift(newMachine);
+          showModalMsg('Máquina agregada correctamente.');
         }
-
-        // Recargar la lista de ejercicios para asegurar datos frescos
-        loadEjercicios();
-
+        renderGrid(allMachines);
         setTimeout(closeModal, 1400);
       } catch (e) {
         showModalMsg('No se pudo guardar. Intenta de nuevo.', true);
@@ -552,16 +463,16 @@
     }
 
     /* ── Delete ── */
-    async function deleteEjercicio() {
-      if (!currentEjercicio) return;
-      if (!confirm(`¿Eliminar el ejercicio "${currentEjercicio.nombre}"? Esta acción no se puede deshacer.`)) return;
+    async function deleteMachine() {
+      if (!currentMachine) return;
+      if (!confirm(`¿Eliminar la máquina "${currentMachine.nombre}"? Esta acción no se puede deshacer.`)) return;
       try {
-        await apiRequest(`ejercicios&id=${encodeURIComponent(currentEjercicio.id_ejercicio)}`, { method: 'DELETE' });
-        allEjercicios = allEjercicios.filter(m => m.id_ejercicio != currentEjercicio.id_ejercicio);
-        renderGrid(allEjercicios);
+        await apiRequest(`machines&id=${encodeURIComponent(currentMachine.id_maquina)}`, { method: 'DELETE' });
+        allMachines = allMachines.filter(m => m.id_maquina != currentMachine.id_maquina);
+        renderGrid(allMachines);
         closeModal();
       } catch (e) {
-        showModalMsg('No se pudo eliminar el ejercicio.', true);
+        showModalMsg('No se pudo eliminar la máquina.', true);
       }
     }
 
@@ -636,8 +547,7 @@
           const el = document.getElementById('adminUserLabel');
           if (el) el.textContent = data.admin.usuario;
         }
-        loadEjercicios();
-        loadMachinesSelect();
+        loadMachines();
       })
       .catch(() => {
         window.location.href = 'index.php?route=login&error=no_autorizado';

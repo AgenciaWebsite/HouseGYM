@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rutina Personalizada - HouseGYM</title>
-  <link rel="stylesheet" href="assets/admin.css">
-  <link rel="stylesheet" href="assets/admin_rutina_personalizada.css">
+  <link rel="stylesheet" href="assets/admin/dashboard.css">
+  <link rel="stylesheet" href="assets/admin/rutina_personalizada.css">
 </head>
 
 <body>
@@ -15,7 +15,7 @@
   <div class="bg-glow bg-glow--top-right"></div>
   <div class="bg-glow bg-glow--bottom-left"></div>
 
-  <?php $current_page = 'rutina_personalizada'; include 'admin_sidebar.php'; ?>
+  <?php $current_page = 'rutina_personalizada'; include 'sidebar.php'; ?>
 
   <!-- MAIN -->
   <div class="main-wrap">
