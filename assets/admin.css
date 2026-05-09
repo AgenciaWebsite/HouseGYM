@@ -817,14 +817,14 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 /* ── Responsive ── */
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-.stats-grid {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.two-col {
-  grid-template-columns: 1fr;
-}
+  .two-col {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 520px) {

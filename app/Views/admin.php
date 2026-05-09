@@ -14,7 +14,8 @@
   <div class="bg-glow bg-glow--top-right"></div>
   <div class="bg-glow bg-glow--bottom-left"></div>
 
-  <?php $current_page = 'dashboard'; include 'admin_sidebar.php'; ?>
+  <?php $current_page = 'dashboard';
+  include 'admin_sidebar.php'; ?>
 
   <!-- MAIN -->
   <div class="main-wrap">
