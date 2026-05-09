@@ -220,7 +220,7 @@
       </div><!-- /two-col -->
 
       <!-- BOTTOM: Chart + Quick Actions -->
-      <div class="two-col">
+      <div class="two-col--full">
 
         <!-- Chart -->
         <div class="card">
@@ -235,47 +235,6 @@
           <div class="chart-labels" id="chartLabels"><!-- Populated by JS --></div>
         </div>
 
-        <!-- Acciones Rapidas -->
-        <div class="card">
-          <div class="card__header">
-            <div class="card__accent-bar"></div>
-            <span class="card__title">Acciones Rapidas</span>
-          </div>
-          <div class="actions-grid">
-            <div class="action-btn" onclick="setSection('maquinas')">
-              <svg width="22" height="22" fill="none" stroke="#e51a2c" viewBox="0 0 24 24" stroke-width="2">
-                <rect x="2" y="7" width="4" height="10" rx="1" />
-                <rect x="18" y="7" width="4" height="10" rx="1" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 10h12M6 14h12" />
-              </svg>
-              <div class="action-btn__title">Maquinas</div>
-              <div class="action-btn__sub">Gestionar catalogo</div>
-            </div>
-            <div class="action-btn" onclick="setSection('ejercicios')">
-              <svg width="22" height="22" fill="none" stroke="#fbbf24" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              <div class="action-btn__title">Ejercicios</div>
-              <div class="action-btn__sub">Ver y editar</div>
-            </div>
-            <div class="action-btn" onclick="setSection('rutinas-personalizadas')">
-              <svg width="22" height="22" fill="none" stroke="#a78bfa" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-              </svg>
-              <div class="action-btn__title">Rutinas</div>
-              <div class="action-btn__sub">Activar / Desactivar</div>
-            </div>
-            <div class="action-btn" onclick="setSection('dietas')">
-              <svg width="22" height="22" fill="none" stroke="#4ade80" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-              </svg>
-              <div class="action-btn__title">Dietas</div>
-              <div class="action-btn__sub">Hipercal / Normo / Hipo</div>
-            </div>
-          </div>
-        </div>
 
       </div><!-- /two-col bottom -->
 
