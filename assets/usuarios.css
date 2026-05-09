@@ -339,3 +339,31 @@
 .exercise-stats div:last-child {
   margin-bottom: 0;
 }
+
+/* ── Week Tabs ── */
+.week-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.week-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--gray-light);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+}
+.week-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: var(--white);
+}
+.week-btn.active {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--white);
+}

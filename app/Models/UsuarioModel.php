@@ -26,7 +26,7 @@ class UsuarioModel
     public function getUserProfile(int $userId): ?array
     {
         $stmt = $this->pdo->prepare(
-            'SELECT u.id_usuario, u.nombre, u.cedula, u.activo, u.plan_personalizado, rp.id_dieta
+            'SELECT u.id_usuario, u.nombre, u.cedula, u.activo, u.plan_personalizado, u.genero, rp.id_dieta
              FROM usuarios u
              LEFT JOIN rutina_personalizada rp ON u.id_usuario = rp.id_usuario AND rp.activa = 1
              WHERE u.id_usuario = ? LIMIT 1'
@@ -86,6 +86,59 @@ class UsuarioModel
         $maxDia = empty($diasMap) ? -1 : max(array_keys($diasMap));
         $result = [];
         for ($i = 0; $i <= $maxDia; $i++) {
+            $result[] = $diasMap[$i] ?? ['ejercicios' => []];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Obtiene la rutina global por género y semana (5 días fijos).
+     */
+    public function getGlobalRoutine(string $genero, int $semana): array
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT id_rutina_global FROM rutina_global
+             WHERE genero = ? AND semana = ? AND activa = 1
+             ORDER BY id_rutina_global DESC LIMIT 1'
+        );
+        $stmt->execute([$genero, $semana]);
+        $rutinaId = $stmt->fetchColumn();
+
+        if (!$rutinaId) {
+            return [];
+        }
+
+        $stmt = $this->pdo->prepare(
+            'SELECT d.dia, d.id_ejercicio, d.series, d.repeticiones AS reps,
+                    e.nombre, e.foto_url AS imagen_url, g.nombre AS grupo_muscular
+             FROM rutina_global_detalle d
+             JOIN ejercicios e ON e.id_ejercicio = d.id_ejercicio
+             JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
+             WHERE d.id_rutina_global = ?
+             ORDER BY d.dia ASC, d.orden ASC'
+        );
+        $stmt->execute([$rutinaId]);
+        $rows = $stmt->fetchAll();
+
+        $diasMap = [];
+        foreach ($rows as $row) {
+            $diaIndex = (int)$row['dia'] - 1;
+            if (!isset($diasMap[$diaIndex])) {
+                $diasMap[$diaIndex] = ['ejercicios' => []];
+            }
+            $diasMap[$diaIndex]['ejercicios'][] = [
+                'id_ejercicio'   => (int)$row['id_ejercicio'],
+                'nombre'         => $row['nombre'],
+                'imagen_url'     => $row['imagen_url'],
+                'grupo_muscular' => $row['grupo_muscular'],
+                'reps'           => (int)$row['reps'],
+                'series'         => (int)$row['series'],
+            ];
+        }
+
+        $result = [];
+        for ($i = 0; $i < 5; $i++) {
             $result[] = $diasMap[$i] ?? ['ejercicios' => []];
         }
 

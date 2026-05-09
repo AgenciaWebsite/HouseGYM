@@ -47,6 +47,9 @@ class UsuarioController
                 case 'routine':
                     $this->getRoutine($method, $userId);
                     break;
+                case 'global_routine':
+                    $this->getGlobalRoutine($method, $userId);
+                    break;
                 case 'machines':
                     $this->getMachines($method);
                     break;
@@ -97,6 +100,28 @@ class UsuarioController
         }
 
         $routine = $this->model->getUserRoutine($userId);
+
+        echo json_encode([
+            'ok' => true,
+            'routine' => $routine
+        ]);
+    }
+
+    private function getGlobalRoutine(string $method, int $userId): void
+    {
+        if ($method !== 'GET') {
+            $this->sendMethodNotAllowed();
+        }
+
+        $semana = isset($_GET['semana']) ? (int)$_GET['semana'] : 1;
+        if ($semana < 1 || $semana > 4) {
+            $semana = 1;
+        }
+
+        $profile = $this->model->getUserProfile($userId);
+        $genero = $profile['genero'] ?? 'Hombre';
+
+        $routine = $this->model->getGlobalRoutine($genero, $semana);
 
         echo json_encode([
             'ok' => true,

@@ -177,15 +177,15 @@
       <div id="seccion-rutina" class="routine-section">
         <div class="routine-header">
           <div>
-            <h2>Rutina <span>Personalizada</span></h2>
-            <p>Vista previa de tu plan de entrenamiento.</p>
+            <h2>Rutina <span>Global</span></h2>
+            <p>Plan de entrenamiento general accesible para todos.</p>
           </div>
-          <a href="index.php?route=usuarios_rutina" class="routine-header__btn">
-            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-            Ver Rutina Completa
-          </a>
+          <div class="week-tabs">
+            <button class="week-btn active" onclick="loadGlobalRoutine(1)" id="btnWeek1">Semana 1</button>
+            <button class="week-btn" onclick="loadGlobalRoutine(2)" id="btnWeek2">Semana 2</button>
+            <button class="week-btn" onclick="loadGlobalRoutine(3)" id="btnWeek3">Semana 3</button>
+            <button class="week-btn" onclick="loadGlobalRoutine(4)" id="btnWeek4">Semana 4</button>
+          </div>
         </div>
 
         <div id="routineStateMsg" class="routine-empty-state">
@@ -304,17 +304,22 @@
           bDieta.textContent = getDietName(p.id_dieta);
         }
 
-        if (p.plan_personalizado) {
-          loadRoutine();
-        } else {
-          document.getElementById('routineStateMsg').style.display = 'flex';
-          document.getElementById('routineDaysContainer').style.display = 'none';
-        }
+        // Cargar siempre la rutina global
+        loadGlobalRoutine(1);
       }
     }
 
-    async function loadRoutine() {
-      const dataRoutine = await fetchApi('routine');
+    async function loadGlobalRoutine(semana = 1) {
+      // Actualizar estado de los botones
+      for(let i=1; i<=4; i++) {
+        const btn = document.getElementById('btnWeek'+i);
+        if(btn) {
+           btn.classList.remove('active');
+           if(i === semana) btn.classList.add('active');
+        }
+      }
+
+      const dataRoutine = await fetchApi('global_routine&semana=' + semana);
       if (dataRoutine && dataRoutine.routine && dataRoutine.routine.length > 0) {
         document.getElementById('routineStateMsg').style.display = 'none';
         const container = document.getElementById('routineDaysContainer');
@@ -356,6 +361,18 @@
           `;
         });
         container.innerHTML = html;
+      } else {
+        document.getElementById('routineStateMsg').style.display = 'flex';
+        document.getElementById('routineDaysContainer').style.display = 'none';
+        document.getElementById('routineStateMsg').innerHTML = `
+          <div class="empty-icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3>Sin rutina disponible</h3>
+          <p>La rutina global para esta semana aún no ha sido asignada por el administrador.</p>
+        `;
       }
     }
 
