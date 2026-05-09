@@ -66,7 +66,7 @@
           <!-- Header del panel: selector de usuario -->
           <div class="rp-panel-header">
             <div class="rp-header-user" id="rpHeaderUser">
-              <span class="rp-header-user__name" id="rpUserName">Seleccionar usuario</span>
+              <span class="rp-header-user__name" id="rpUserName" onclick="toggleUserPicker()">Seleccionar usuario</span>
               <button class="rp-header-user__btn" id="rpUserBtn" onclick="toggleUserPicker()">
                 <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />

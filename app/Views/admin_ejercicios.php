@@ -201,9 +201,28 @@
 
           <div class="gm-form-group">
             <label class="gm-form-label" for="ejercicioMaquina">Máquina asignada (Opcional)</label>
-            <select id="ejercicioMaquina" class="gm-form-select">
-              <option value="">Ninguna / Peso Libre</option>
-            </select>
+            <div class="gm-search-select-wrap" id="maquinaSelectWrap">
+              <input type="hidden" id="ejercicioMaquina" value="">
+              <div class="gm-search-select-trigger" onclick="toggleMaquinaDropdown(event)">
+                <span id="maquinaSelectedLabel">Ninguna / Peso Libre</span>
+                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+              <div class="gm-search-select-dropdown">
+                <div class="gm-search-select-search-wrap">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <circle cx="11" cy="11" r="8" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35" />
+                  </svg>
+                  <input type="text" class="gm-search-select-search-input" id="maquinaSearchInput"
+                    placeholder="Buscar máquina..." oninput="filterMaquinaOptions(this.value)" autocomplete="off">
+                </div>
+                <div class="gm-search-select-options" id="maquinaOptionsList">
+                  <!-- Opciones se cargan dinámicamente -->
+                </div>
+              </div>
+            </div>
           </div>
 
         </div><!-- /form-side -->
@@ -279,17 +298,72 @@
       try {
         const data = await apiRequest('machines');
         allMachines = data.machines || [];
-        const select = document.getElementById('ejercicioMaquina');
-        allMachines.forEach(m => {
-          const opt = document.createElement('option');
-          opt.value = m.id_maquina;
-          opt.textContent = m.nombre;
-          select.appendChild(opt);
-        });
+        renderMaquinaOptions();
       } catch (e) {
         console.error("Error al cargar máquinas", e);
       }
     }
+
+    function renderMaquinaOptions(machines = allMachines) {
+      const list = document.getElementById('maquinaOptionsList');
+      const currentValue = document.getElementById('ejercicioMaquina').value;
+
+      let html = `<div class="gm-search-select-option ${!currentValue ? 'gm-search-select-option--selected' : ''}" 
+                  onclick="selectMaquina('', 'Ninguna / Peso Libre')">Ninguna / Peso Libre</div>`;
+
+      if (machines.length === 0 && allMachines.length > 0) {
+        html += `<div class="gm-search-select-option--empty">No se encontraron máquinas</div>`;
+      } else {
+        html += machines.map(m => `
+          <div class="gm-search-select-option ${currentValue == m.id_maquina ? 'gm-search-select-option--selected' : ''}" 
+               onclick="selectMaquina('${m.id_maquina}', '${escHtml(m.nombre)}')">
+            ${escHtml(m.nombre)}
+          </div>
+        `).join('');
+      }
+
+      list.innerHTML = html;
+    }
+
+    function toggleMaquinaDropdown(e) {
+      e.stopPropagation();
+      const wrap = document.getElementById('maquinaSelectWrap');
+      const isActive = wrap.classList.contains('active');
+
+      // Cerrar si estaba abierto, o abrir y enfocar input
+      if (isActive) {
+        closeMaquinaDropdown();
+      } else {
+        wrap.classList.add('active');
+        const input = document.getElementById('maquinaSearchInput');
+        input.value = '';
+        renderMaquinaOptions();
+        setTimeout(() => input.focus(), 50);
+      }
+    }
+
+    function closeMaquinaDropdown() {
+      document.getElementById('maquinaSelectWrap').classList.remove('active');
+    }
+
+    function filterMaquinaOptions(query) {
+      const q = query.toLowerCase().trim();
+      const filtered = allMachines.filter(m => m.nombre.toLowerCase().includes(q));
+      renderMaquinaOptions(filtered);
+    }
+
+    function selectMaquina(id, name) {
+      document.getElementById('ejercicioMaquina').value = id;
+      document.getElementById('maquinaSelectedLabel').textContent = name;
+      closeMaquinaDropdown();
+    }
+
+    // Cerrar dropdown al hacer click fuera
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.gm-search-select-wrap')) {
+        closeMaquinaDropdown();
+      }
+    });
 
     /* ══════════════════════════════
        RENDER GRID
@@ -375,7 +449,14 @@
       document.getElementById('ejercicioName').value = currentEjercicio ? currentEjercicio.nombre : '';
       document.getElementById('ejercicioGrupo').value = currentEjercicio ? (currentEjercicio.id_grupo || '') : '';
       document.getElementById('ejercicioDesc').value = currentEjercicio ? (currentEjercicio.descripcion || '') : '';
-      document.getElementById('ejercicioMaquina').value = currentEjercicio ? (currentEjercicio.id_maquina || '') : '';
+
+      // Reset searchable machine select
+      const machineId = currentEjercicio ? (currentEjercicio.id_maquina || '') : '';
+      document.getElementById('ejercicioMaquina').value = machineId;
+      const machine = allMachines.find(m => m.id_maquina == machineId);
+      document.getElementById('maquinaSelectedLabel').textContent = machine ? machine.nombre : 'Ninguna / Peso Libre';
+      closeMaquinaDropdown();
+
       document.getElementById('photoInput').value = '';
       document.getElementById('modalFeedback').style.display = 'none';
 
