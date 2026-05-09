@@ -1,0 +1,157 @@
+/* =============================================
+   HouseGYM — Admin Sidebar & Layout Styles
+   ============================================= */
+
+/* ── Sidebar ── */
+.sidebar {
+  position: fixed;
+  left: 0; top: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: var(--sidebar-w);
+  border-right: 1px solid var(--gray-border);
+  background-color: var(--black-light);
+  transition: transform 0.3s ease;
+}
+
+/* ── Sidebar Logo ── */
+.sidebar-logo {
+  border-bottom: 1px solid var(--gray-border);
+  padding: 24px 20px 20px;
+}
+.sidebar-logo__inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sidebar-logo__icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--red-bright), var(--red-dark));
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(229,26,44,0.35);
+  flex-shrink: 0;
+}
+.sidebar-logo__name {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--white);
+  letter-spacing: 0.5px;
+}
+.sidebar-logo__sub {
+  font-size: 10px;
+  color: var(--red);
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ── Sidebar Nav ── */
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 12px;
+}
+.nav-section-label {
+  padding: 8px 8px 6px;
+  margin-top: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--gray-faint);
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  padding: 10px 12px;
+  margin-bottom: 2px;
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--gray-light);
+  transition: background 0.2s, color 0.2s;
+  text-decoration: none;
+}
+.nav-item svg { flex-shrink: 0; }
+.nav-item:hover {
+  background-color: var(--gray-dark);
+  color: var(--white-soft);
+}
+.nav-item--active {
+  background: linear-gradient(135deg, rgba(229,26,44,0.15) 0%, rgba(176,16,32,0.08) 100%);
+  color: var(--red-bright);
+  border-color: rgba(229,26,44,0.2);
+}
+.nav-item--logout { color: var(--red); }
+.nav-item--logout:hover { background-color: var(--gray-dark); color: var(--red-bright); }
+
+/* ── Sidebar Footer ── */
+.sidebar-footer {
+  border-top: 1px solid var(--gray-border);
+  padding: 16px 12px;
+}
+
+/* ── Sidebar Overlay (mobile) ── */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: none;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(1px);
+  transition: opacity 0.3s;
+}
+
+/* ── Topbar ── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--gray-border);
+  background-color: var(--black-light);
+  padding: 16px 28px;
+}
+.topbar__menu-btn {
+  display: none;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--gray-light);
+  padding: 0;
+}
+
+/* ── Layout Styles ── */
+.main-wrap {
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+  background-color: var(--black);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar--open {
+    transform: translateX(0);
+  }
+  .sidebar-overlay--visible {
+    display: block;
+  }
+  .main-wrap {
+    margin-left: 0;
+  }
+  .topbar__menu-btn {
+    display: block;
+  }
+}
