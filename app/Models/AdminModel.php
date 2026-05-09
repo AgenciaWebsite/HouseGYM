@@ -243,9 +243,10 @@ class AdminModel
     {
         return $this->pdo->query(
             'SELECT e.id_ejercicio, e.nombre, e.descripcion, e.foto_url AS imagen_url,
-                    e.id_grupo, e.id_maquina, g.nombre AS grupo_muscular
+                    e.id_grupo, e.id_maquina, g.nombre AS grupo_muscular, m.nombre AS maquina
              FROM ejercicios e
              JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
+             LEFT JOIN maquinas m ON m.id_maquina = e.id_maquina
              ORDER BY e.nombre ASC'
         )->fetchAll();
     }
@@ -345,10 +346,11 @@ class AdminModel
 
         $stmt = $this->pdo->prepare(
             'SELECT rgd.dia, rgd.id_ejercicio, rgd.series, rgd.repeticiones AS reps, rgd.orden,
-                    e.nombre, e.foto_url AS imagen_url, g.nombre AS grupo_muscular
+                    e.nombre, e.foto_url AS imagen_url, g.nombre AS grupo_muscular, m.nombre AS maquina
              FROM rutina_global_detalle rgd
              JOIN ejercicios e ON e.id_ejercicio = rgd.id_ejercicio
              JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
+             LEFT JOIN maquinas m ON m.id_maquina = e.id_maquina
              WHERE rgd.id_rutina_global = ?
              ORDER BY rgd.dia ASC, rgd.orden ASC, rgd.id ASC'
         );
@@ -367,6 +369,7 @@ class AdminModel
                 'nombre'        => $row['nombre'],
                 'imagen_url'    => $row['imagen_url'],
                 'grupo_muscular'=> $row['grupo_muscular'],
+                'maquina'       => $row['maquina'],
                 'reps'          => $row['reps'],
                 'series'        => $row['series'],
             ];

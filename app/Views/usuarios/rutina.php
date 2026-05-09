@@ -204,7 +204,10 @@
               <div class="ex-card__stats"><b>${ej.series}</b>×${ej.reps}</div>
             </div>
             <div class="ex-card__name">${ej.nombre}</div>
-            <div class="ex-card__muscle">${ej.grupo_muscular || ''}</div>
+            <div class="ex-card__muscle">
+              ${ej.grupo_muscular || ''}
+              ${ej.maquina ? ` · <span style="color:var(--red); font-weight:700;">${ej.maquina}</span>` : ''}
+            </div>
           </div>`;
       }).join('');
 

@@ -232,7 +232,7 @@
                 <div class="exercise-img" style="background-image: url('${ej.imagen_url || ''}')"></div>
                 <div class="exercise-info">
                   <h4>${ej.nombre}</h4>
-                  <span>${ej.grupo_muscular}</span>
+                  <span>${ej.grupo_muscular} ${ej.maquina ? ` · <strong style="color:var(--red);">${ej.maquina}</strong>` : ''}</span>
                 </div>
                 <div class="exercise-stats">
                   <div><strong>${ej.series}</strong> Series</div>

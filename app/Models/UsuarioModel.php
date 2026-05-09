@@ -57,10 +57,11 @@ class UsuarioModel
         // Obtener los detalles agrupados por día, con JOIN correcto a grupo_muscular
         $stmt = $this->pdo->prepare(
             'SELECT d.dia, d.id_ejercicio, d.series, d.repeticiones AS reps,
-                    e.nombre, e.foto_url AS imagen_url, g.nombre AS grupo_muscular
+                    e.nombre, e.foto_url AS imagen_url, g.nombre AS grupo_muscular, m.nombre AS maquina
              FROM rutina_personalizada_detalle d
              JOIN ejercicios e ON e.id_ejercicio = d.id_ejercicio
              JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
+             LEFT JOIN maquinas m ON m.id_maquina = e.id_maquina
              WHERE d.id_rutina_pers = ?
              ORDER BY d.dia ASC, d.id ASC'
         );
@@ -78,6 +79,7 @@ class UsuarioModel
                 'nombre'         => $row['nombre'],
                 'imagen_url'     => $row['imagen_url'],
                 'grupo_muscular' => $row['grupo_muscular'],
+                'maquina'        => $row['maquina'],
                 'reps'           => (int)$row['reps'],
                 'series'         => (int)$row['series'],
             ];
@@ -111,10 +113,11 @@ class UsuarioModel
 
         $stmt = $this->pdo->prepare(
             'SELECT d.dia, d.id_ejercicio, d.series, d.repeticiones AS reps,
-                    e.nombre, e.foto_url AS imagen_url, g.nombre AS grupo_muscular
+                    e.nombre, e.foto_url AS imagen_url, g.nombre AS grupo_muscular, m.nombre AS maquina
              FROM rutina_global_detalle d
              JOIN ejercicios e ON e.id_ejercicio = d.id_ejercicio
              JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
+             LEFT JOIN maquinas m ON m.id_maquina = e.id_maquina
              WHERE d.id_rutina_global = ?
              ORDER BY d.dia ASC, d.orden ASC'
         );
@@ -132,6 +135,7 @@ class UsuarioModel
                 'nombre'         => $row['nombre'],
                 'imagen_url'     => $row['imagen_url'],
                 'grupo_muscular' => $row['grupo_muscular'],
+                'maquina'        => $row['maquina'],
                 'reps'           => (int)$row['reps'],
                 'series'         => (int)$row['series'],
             ];
@@ -163,9 +167,10 @@ class UsuarioModel
     {
         return $this->pdo->query(
             'SELECT e.id_ejercicio, e.nombre, e.descripcion, e.foto_url AS imagen_url,
-                    e.id_grupo, e.id_maquina, g.nombre AS grupo_muscular
+                    e.id_grupo, e.id_maquina, g.nombre AS grupo_muscular, m.nombre AS maquina
              FROM ejercicios e
              JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
+             LEFT JOIN maquinas m ON m.id_maquina = e.id_maquina
              ORDER BY e.nombre ASC'
         )->fetchAll();
     }

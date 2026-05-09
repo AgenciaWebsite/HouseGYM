@@ -362,7 +362,10 @@
             <div class="rp-exercise-meta">
               REPS = <span>'${ej.reps || 12}'</span> &nbsp; SERIES = <span>'${ej.series || 3}'</span>
             </div>
-            <div class="rp-exercise-muscle">${ej.grupo_muscular || 'grupo muscular'}</div>
+            <div class="rp-exercise-muscle">
+              ${ej.grupo_muscular || 'grupo muscular'}
+              ${ej.maquina ? ` · <span style="color:var(--red); font-weight:600;">${ej.maquina}</span>` : ''}
+            </div>
           </div>
           <button class="rp-exercise-remove" onclick="removeExercise(${di}, ${ei})" title="Quitar ejercicio">
             <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -431,7 +434,10 @@
           </div>
           <div class="rp-catalog-card__info">
             <div class="rp-catalog-card__name">${ej.nombre || 'Ejercicio'}</div>
-            <div class="rp-catalog-card__muscle">${ej.grupo_muscular || ''}</div>
+            <div class="rp-catalog-card__muscle">
+              ${ej.grupo_muscular || ''}
+              ${ej.maquina ? ` · <span style="color:var(--red); font-weight:600;">${ej.maquina}</span>` : ''}
+            </div>
           </div>
         </div>`).join('');
     }
@@ -532,6 +538,7 @@
         nombre: pendingExercise.nombre,
         imagen_url: pendingExercise.imagen_url,
         grupo_muscular: pendingExercise.grupo_muscular,
+        maquina: pendingExercise.maquina,
         reps,
         series,
       });
