@@ -1,0 +1,341 @@
+/* =============================================
+   HouseGYM — Mi Dieta Styles
+   Extends admin.css
+   ============================================= */
+
+/* ── Page Title ── */
+.page-title {
+  margin-bottom: 28px;
+}
+
+.page-title h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--white);
+}
+
+.page-title h1 span {
+  color: var(--red);
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: var(--gray-dimmer);
+  margin-top: 4px;
+}
+
+/* ── Loading state ── */
+.diet-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 60px 24px;
+  color: var(--gray-dimmer);
+  font-size: 13px;
+}
+
+.diet-loading__spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--gray-border);
+  border-top-color: var(--red);
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Empty state ── */
+.diet-empty-state {
+  background: var(--black-card);
+  border: 1px dashed var(--gray-border2);
+  border-radius: 16px;
+  padding: 48px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.diet-empty-state .empty-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--gray-dark);
+  color: var(--gray-faint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.diet-empty-state h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  color: var(--white-soft);
+}
+
+.diet-empty-state p {
+  font-size: 13px;
+  color: var(--gray-dimmer);
+  max-width: 360px;
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════════════════
+   DIET CARD
+══════════════════════════════════════════ */
+.diet-card {
+  background: var(--black-card);
+  border: 1px solid var(--gray-border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.diet-card:not(.diet-card--open):hover {
+  border-color: rgba(229, 26, 44, 0.35);
+  box-shadow: 0 4px 24px rgba(229, 26, 44, 0.07);
+}
+
+.diet-card--open {
+  border-color: rgba(229, 26, 44, 0.25);
+  box-shadow: 0 0 0 1px rgba(229, 26, 44, 0.1), 0 8px 32px rgba(229, 26, 44, 0.07);
+}
+
+/* ── Trigger row ── */
+.diet-card__trigger {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 22px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.diet-card__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(229, 26, 44, 0.1);
+  color: var(--red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.diet-card--open .diet-card__icon {
+  background: rgba(229, 26, 44, 0.18);
+}
+
+.diet-card__meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.diet-card__label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gray-dimmer);
+  margin-bottom: 3px;
+}
+
+.diet-card__name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.diet-card__desc {
+  font-size: 12.5px;
+  color: var(--gray-dimmer);
+  margin-top: 2px;
+}
+
+.diet-card__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.diet-badge {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(234, 179, 8, 0.1);
+  color: #eab308;
+  border: 1px solid rgba(234, 179, 8, 0.2);
+  padding: 4px 11px;
+  border-radius: 7px;
+}
+
+.diet-card__chevron {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--gray-dark);
+  border: 1px solid var(--gray-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-light);
+  transition: background 0.2s, transform 0.3s, border-color 0.2s;
+  flex-shrink: 0;
+}
+
+.diet-card--open .diet-card__chevron {
+  transform: rotate(180deg);
+  background: rgba(229, 26, 44, 0.1);
+  border-color: rgba(229, 26, 44, 0.3);
+  color: var(--red);
+}
+
+/* ── Expandable body ── */
+.diet-card__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.diet-card--open .diet-card__body {
+  grid-template-rows: 1fr;
+}
+
+.diet-card__body-inner {
+  overflow: hidden;
+}
+
+.diet-card__divider {
+  height: 1px;
+  background: var(--gray-border);
+  opacity: 0;
+  transition: opacity 0.2s 0.1s;
+}
+
+.diet-card--open .diet-card__divider {
+  opacity: 1;
+}
+
+/* ── Viewer area ── */
+.diet-viewer {
+  padding: 20px 22px;
+}
+
+/* Image viewer */
+.viewer-img-wrap {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0a0a0a;
+  border: 1px solid var(--gray-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.viewer-img-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  max-height: 70vh;
+}
+
+/* PDF viewer */
+.viewer-pdf-wrap {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--gray-border);
+}
+
+.viewer-pdf-wrap iframe {
+  width: 100%;
+  height: 70vh;
+  border: none;
+  display: block;
+}
+
+/* No file placeholder */
+.viewer-empty {
+  width: 100%;
+  min-height: 220px;
+  border-radius: 10px;
+  border: 1px dashed var(--gray-border2);
+  background: rgba(255, 255, 255, 0.01);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  padding: 32px;
+}
+
+.viewer-empty__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--gray-dark);
+  color: var(--gray-faint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.viewer-empty p {
+  font-size: 13px;
+  color: var(--gray-dimmer);
+  max-width: 300px;
+  line-height: 1.5;
+}
+
+/* Download button */
+.viewer-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.btn-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: rgba(229, 26, 44, 0.1);
+  border: 1px solid rgba(229, 26, 44, 0.25);
+  color: var(--red);
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btn-download:hover {
+  background: rgba(229, 26, 44, 0.18);
+  border-color: rgba(229, 26, 44, 0.4);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 560px) {
+  .diet-card__trigger { padding: 16px; gap: 12px; }
+  .diet-card__desc    { display: none; }
+  .diet-badge         { display: none; }
+  .diet-viewer        { padding: 14px 16px; }
+  .viewer-pdf-wrap iframe { height: 55vh; }
+}

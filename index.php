@@ -84,6 +84,15 @@ switch ($route) {
         require_once __DIR__ . '/app/Views/usuarios/rutina.php';
         break;
 
+    case 'usuarios_dieta':
+        // Mostrar la vista de dieta (para el usuario cliente)
+        if (($_SESSION['rol'] ?? '') !== 'usuario') {
+            header('Location: index.php?route=login&error=no_autorizado');
+            exit;
+        }
+        require_once __DIR__ . '/app/Views/usuarios/dieta.php';
+        break;
+
     case 'usuarios_maquinas':
         // Mostrar el catálogo de máquinas (solo lectura para el usuario)
         if (($_SESSION['rol'] ?? '') !== 'usuario') {

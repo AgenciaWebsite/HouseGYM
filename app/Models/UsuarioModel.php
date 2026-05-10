@@ -37,6 +37,17 @@ class UsuarioModel
     }
 
     /**
+     * Obtiene los detalles de la dieta asignada.
+     */
+    public function getUserDiet(int $idDieta): ?array
+    {
+        $stmt = $this->pdo->prepare('SELECT tipo, descripcion FROM dietas WHERE id_dieta = ? LIMIT 1');
+        $stmt->execute([$idDieta]);
+        $result = $stmt->fetch();
+        return $result ?: null;
+    }
+
+    /**
      * Obtiene la rutina personalizada de un usuario agrupada por días.
      */
     public function getUserRoutine(int $userId): array

@@ -50,6 +50,9 @@ class UsuarioController
                 case 'global_routine':
                     $this->getGlobalRoutine($method, $userId);
                     break;
+                case 'diet':
+                    $this->getDiet($method, $userId);
+                    break;
                 case 'machines':
                     $this->getMachines($method);
                     break;
@@ -126,6 +129,33 @@ class UsuarioController
         echo json_encode([
             'ok' => true,
             'routine' => $routine
+        ]);
+    }
+
+    private function getDiet(string $method, int $userId): void
+    {
+        if ($method !== 'GET') {
+            $this->sendMethodNotAllowed();
+        }
+
+        $profile = $this->model->getUserProfile($userId);
+        
+        if (!$profile || empty($profile['id_dieta'])) {
+            echo json_encode(['ok' => true, 'diet' => null]);
+            return;
+        }
+
+        $dietDetails = $this->model->getUserDiet((int)$profile['id_dieta']);
+
+        echo json_encode([
+            'ok' => true,
+            'diet' => [
+                'id_dieta' => (int)$profile['id_dieta'],
+                'nombre' => $dietDetails ? $dietDetails['tipo'] : 'Personalizada',
+                'descripcion' => $dietDetails ? $dietDetails['descripcion'] : '',
+                'archivo_url' => null,
+                'archivo_tipo' => null
+            ]
         ]);
     }
 
