@@ -496,15 +496,30 @@ class AdminController
      */
     private function uploadMachinePhoto(): ?string
     {
-        if (empty($_FILES['foto']['tmp_name'])) {
+        // Sin archivo adjunto
+        if (!isset($_FILES['foto']) || $_FILES['foto']['error'] === UPLOAD_ERR_NO_FILE) {
             return null;
         }
 
         $file = $_FILES['foto'];
 
-        // Validar tamaño máximo: 5 MB
-        if ($file['size'] > 5 * 1024 * 1024) {
-            $this->jsonResponse(['ok' => false, 'error' => 'foto_demasiado_grande', 'msg' => 'La imagen no puede superar 5 MB.'], 422);
+        // Manejar errores de PHP antes de procesar
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            $phpErrors = [
+                UPLOAD_ERR_INI_SIZE   => 'La imagen supera el límite configurado en el servidor (upload_max_filesize).',
+                UPLOAD_ERR_FORM_SIZE  => 'La imagen supera el límite del formulario.',
+                UPLOAD_ERR_PARTIAL    => 'La imagen se subió parcialmente. Intenta de nuevo.',
+                UPLOAD_ERR_NO_TMP_DIR => 'No hay directorio temporal en el servidor.',
+                UPLOAD_ERR_CANT_WRITE => 'Error al escribir el archivo temporal.',
+                UPLOAD_ERR_EXTENSION  => 'Una extensión de PHP bloqueó la subida.',
+            ];
+            $msg = $phpErrors[$file['error']] ?? "Error de subida PHP #{$file['error']}.";
+            $this->jsonResponse(['ok' => false, 'error' => 'php_upload_error', 'msg' => $msg], 422);
+        }
+
+        // Validar tamaño máximo: 10 MB
+        if ($file['size'] > 10 * 1024 * 1024) {
+            $this->jsonResponse(['ok' => false, 'error' => 'foto_demasiado_grande', 'msg' => 'La imagen no puede superar 10 MB.'], 422);
         }
 
         // Validar que sea imagen real

@@ -137,8 +137,10 @@
 
         <!-- Foto -->
         <div>
-          <div class="gm-photo-zone" id="photoZone" onclick="triggerFileInput()">
-            <input type="file" id="photoInput" accept="image/*" onchange="previewPhoto(event)">
+          <div class="gm-photo-zone" id="photoZone">
+            <!-- Input invisible que cubre toda la zona (pointer-events se manejan por JS) -->
+            <input type="file" id="photoInput" accept="image/*" onchange="previewPhoto(event)"
+              style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:5;">
 
             <!-- Placeholder (visible sin imagen) -->
             <div id="photoPlaceholder"
@@ -149,12 +151,12 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 15l-5-5L5 21" />
               </svg>
               <span class="gm-photo-zone__label">Subir foto<br>de la máquina</span>
-              <span class="gm-photo-zone__hint">JPG, PNG · Máx 5 MB</span>
+              <span class="gm-photo-zone__hint">JPG, PNG · Máx 10 MB</span>
             </div>
 
             <!-- Preview imagen -->
-            <img id="photoPreview" src="" alt="preview" style="display:none;">
-            <div class="gm-photo-zone__overlay" id="photoOverlay">
+            <img id="photoPreview" src="" alt="preview" style="display:none;pointer-events:none;">
+            <div class="gm-photo-zone__overlay" id="photoOverlay" style="pointer-events:none;">
               <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M15.232 5.232l3.536 3.536M9 13l6.5-6.5a2.121 2.121 0 013 3L12 16H9v-3z" />
@@ -253,8 +255,15 @@
         method: 'POST',
         body: formData,
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return res.json();
+      // Intentar leer JSON siempre (incluso en errores 4xx/5xx)
+      let data;
+      try { data = await res.json(); } catch { data = {}; }
+      if (!res.ok || data.ok === false) {
+        const err = new Error(data.msg || `HTTP ${res.status}`);
+        err.serverData = data;
+        throw err;
+      }
+      return data;
     }
 
     /* ── State ── */
@@ -403,7 +412,8 @@
 
     /* ── Photo preview ── */
     function triggerFileInput() {
-      // El input nativo maneja los clics; esta función es solo un fallback.
+      // Forzar apertura del selector de archivos del sistema
+      document.getElementById('photoInput').click();
     }
 
     function previewPhoto(e) {
@@ -480,7 +490,11 @@
         renderGrid(allMachines);
         setTimeout(closeModal, 1400);
       } catch (e) {
-        showModalMsg('No se pudo guardar. Intenta de nuevo.', true);
+        // Mostrar mensaje específico del servidor (ej. tamaño de imagen, credenciales, etc.)
+        const msg = e.message && e.message !== 'Failed to fetch'
+          ? e.message
+          : 'No se pudo guardar. Intenta de nuevo.';
+        showModalMsg(msg, true);
       } finally {
         saveBtn.disabled = false;
         saveBtn.innerHTML = '<svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Guardar';

@@ -1,0 +1,25 @@
+# ══════════════════════════════════════════
+#  HouseGYM — Apache / PHP Configuration
+# ══════════════════════════════════════════
+
+# ── Límites de subida de archivos ──────────
+# Permite imágenes de hasta 10 MB
+php_value upload_max_filesize 10M
+# post_max_size debe ser mayor que upload_max_filesize
+php_value post_max_size 12M
+# Aumentar tiempo máximo de ejecución para uploads lentos
+php_value max_execution_time 120
+php_value max_input_time 120
+
+# ── Seguridad básica ────────────────────────
+# Ocultar versión de PHP y servidor
+Header always unset X-Powered-By
+
+# Evitar acceso directo al .env
+<Files ".env">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Evitar listado de directorios
+Options -Indexes
