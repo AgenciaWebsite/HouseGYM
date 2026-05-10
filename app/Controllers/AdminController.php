@@ -307,12 +307,12 @@ class AdminController
         }
 
         $nombre = trim((string) ($data['nombre'] ?? ''));
-        $id_grupo = (int) ($data['id_grupo'] ?? 0);
+        $id_grupo = !empty($data['id_grupo']) ? (int) $data['id_grupo'] : null;
         $id_maquina = !empty($data['id_maquina']) ? (int) $data['id_maquina'] : null;
         $descripcion = trim((string) ($data['descripcion'] ?? ''));
         $foto = isset($data['foto']) ? (string) $data['foto'] : null;
 
-        if ($nombre === '' || $id_grupo <= 0) {
+        if ($nombre === '') {
             $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
         }
 
@@ -336,12 +336,12 @@ class AdminController
         }
 
         $nombre = trim((string) ($data['nombre'] ?? ''));
-        $id_grupo = (int) ($data['id_grupo'] ?? 0);
+        $id_grupo = !empty($data['id_grupo']) ? (int) $data['id_grupo'] : null;
         $id_maquina = !empty($data['id_maquina']) ? (int) $data['id_maquina'] : null;
         $descripcion = trim((string) ($data['descripcion'] ?? ''));
         $foto = isset($data['foto']) ? (string) $data['foto'] : null;
 
-        if ($nombre === '' || $id_grupo <= 0) {
+        if ($nombre === '') {
             $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
         }
 

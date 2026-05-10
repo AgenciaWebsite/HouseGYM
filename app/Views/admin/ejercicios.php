@@ -180,8 +180,7 @@
           </div>
 
           <div class="gm-form-group">
-            <label class="gm-form-label" for="ejercicioGrupo">Grupo Muscular <span
-                style="color:#e51a2c;">*</span></label>
+            <label class="gm-form-label" for="ejercicioGrupo">Grupo Muscular (Opcional)</label>
             <select id="ejercicioGrupo" class="gm-form-select">
               <option value="">Seleccionar grupo</option>
               <option value="1">Pierna</option>
@@ -514,10 +513,9 @@
       const descripcion = document.getElementById('ejercicioDesc').value.trim();
       const id_maquina = document.getElementById('ejercicioMaquina').value;
 
-      if (!nombre || !id_grupo) {
+      if (!nombre) {
         document.getElementById('ejercicioName').style.borderColor = !nombre ? 'rgba(229,26,44,0.5)' : '';
-        document.getElementById('ejercicioGrupo').style.borderColor = !id_grupo ? 'rgba(229,26,44,0.5)' : '';
-        showModalMsg('El nombre y grupo muscular son obligatorios.', true);
+        showModalMsg('El nombre es obligatorio.', true);
         return;
       }
       document.getElementById('ejercicioName').style.borderColor = '';

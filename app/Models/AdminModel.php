@@ -290,7 +290,7 @@ class AdminModel
             'SELECT e.id_ejercicio, e.nombre, e.descripcion, e.foto_url AS imagen_url,
                     e.id_grupo, e.id_maquina, g.nombre AS grupo_muscular, m.nombre AS maquina
              FROM ejercicios e
-             JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
+             LEFT JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
              LEFT JOIN maquinas m ON m.id_maquina = e.id_maquina
              ORDER BY e.nombre ASC'
         )->fetchAll();
@@ -299,7 +299,7 @@ class AdminModel
     /**
      * Agrega un nuevo ejercicio.
      */
-    public function addEjercicio(string $nombre, int $id_grupo, ?int $id_maquina, string $descripcion, ?string $fotoBase64): int
+    public function addEjercicio(string $nombre, ?int $id_grupo, ?int $id_maquina, string $descripcion, ?string $fotoBase64): int
     {
         $stmt = $this->pdo->prepare(
             'INSERT INTO ejercicios (nombre, id_grupo, id_maquina, descripcion, foto_url)
@@ -312,7 +312,7 @@ class AdminModel
     /**
      * Actualiza un ejercicio existente.
      */
-    public function updateEjercicio(int $id, string $nombre, int $id_grupo, ?int $id_maquina, string $descripcion, ?string $fotoBase64): void
+    public function updateEjercicio(int $id, string $nombre, ?int $id_grupo, ?int $id_maquina, string $descripcion, ?string $fotoBase64): void
     {
         if ($fotoBase64 !== null) {
             $stmt = $this->pdo->prepare(
