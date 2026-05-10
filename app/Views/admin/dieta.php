@@ -191,9 +191,9 @@
         <div class="gm-form-side">
           <div class="gm-form-group">
             <label class="gm-form-label">Nombre de la Dieta</label>
-            <input type="text" id="dietTypeInput" class="gm-form-input" placeholder="Ej: Dieta...
+            <input type="text" id="dietTypeInput" class="gm-form-input" placeholder="Ej: Dieta.....">
           </div>
-          <div class=" gm-form-group">
+          <div class="gm-form-group">
             <label class="gm-form-label">Descripción</label>
             <textarea id="dietDescInput" class="gm-form-textarea" placeholder="Descripción de la dieta..."></textarea>
           </div>
