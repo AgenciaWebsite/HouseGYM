@@ -7,10 +7,17 @@
 
 /* ── Layout principal ── */
 .gu-layout {
-  display: grid;
-  grid-template-columns: 420px 1fr;
+  display: flex;
   gap: 20px;
   align-items: start;
+}
+
+.gu-panel--list {
+  flex: 0.8;
+}
+
+.gu-panel--detail {
+  flex: 1.2;
 }
 
 /* ── Paneles ── */

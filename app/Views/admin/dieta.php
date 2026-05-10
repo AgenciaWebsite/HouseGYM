@@ -79,10 +79,8 @@
           </div>
 
           <!-- Dieta actualmente asignada -->
-          <div class="dp-assigned-wrap" id="dpAssignedWrap" 
-               ondragover="handleDragOver(event)" 
-               ondragleave="handleDragLeave(event)" 
-               ondrop="handleDrop(event)">
+          <div class="dp-assigned-wrap" id="dpAssignedWrap" ondragover="handleDragOver(event)"
+            ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
             <div class="dp-empty-state" id="dpEmptyState">
               <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.2">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -126,7 +124,7 @@
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" />
               </svg>
-              Nueva Dieta
+              agregar
             </button>
           </div>
 

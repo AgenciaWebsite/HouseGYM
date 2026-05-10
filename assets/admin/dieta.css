@@ -27,10 +27,17 @@
 
 /* â•â• LAYOUT â•â• */
 .dp-layout {
-  display: grid;
-  grid-template-columns: 420px 1fr;
+  display: flex;
   gap: 20px;
   align-items: start;
+}
+
+.dp-panel--left {
+  flex: 0.8;
+}
+
+.dp-panel--right {
+  flex: 1.2;
 }
 
 /* â•â• PANELES BASE â•â• */
@@ -47,11 +54,33 @@
 .dp-panel-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 18px;
+  padding: 10px 18px;
   border-bottom: 1px solid var(--gray-border);
   background: var(--black-card);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.dp-header-user {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
   position: relative;
+}
+
+.dp-header-label {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--gray-faint);
 }
 
 .dp-panel-header--right {
@@ -65,13 +94,7 @@
   flex-shrink: 0;
 }
 
-.dp-header-label {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--gray-faint);
-}
+/* Estilos unificados arriba */
 
 .dp-header-label--main {
   font-size: 12px;
@@ -79,12 +102,7 @@
 }
 
 /* â”€â”€ Selector de usuario â”€â”€ */
-.dp-header-user {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+/* Estilos unificados arriba */
 
 .dp-header-user__name {
   font-family: 'Outfit', sans-serif;

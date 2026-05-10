@@ -350,7 +350,7 @@
             <div class="rg-catalog-card__name">${ej.nombre || 'Ejercicio'}</div>
             <div class="rg-catalog-card__muscle">
               ${ej.grupo_muscular || ''}
-              ${ej.maquina ? ` · <span style="color:var(--red); font-weight:600;">${ej.maquina}</span>` : ''}
+              ${ej.maquina ? ` · <span style="color:#e51a2c; font-weight:600;">${ej.maquina}</span>` : ''}
             </div>
           </div>
         </div>`).join('');
