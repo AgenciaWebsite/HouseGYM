@@ -4,6 +4,14 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
 
+/* ── Scrollbar Rojo Global ── */
+* { scrollbar-width: thin; scrollbar-color: #e51a2c #0a0a0a; }
+*::-webkit-scrollbar { width: 7px; height: 7px; }
+*::-webkit-scrollbar-track { background: #0a0a0a; border-radius: 99px; }
+*::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #ff1a2e, #b01020); border-radius: 99px; border: 2px solid #0a0a0a; }
+*::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #ff3344, #cc1428); }
+*::-webkit-scrollbar-corner { background: #0a0a0a; }
+
 /* ── Variables ── */
 :root {
   --black: #0a0a0a;
