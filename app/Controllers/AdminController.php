@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\AdminModel;
+use App\Core\Cloudinary;
 
 /**
  * Clase AdminController
@@ -118,7 +119,13 @@ class AdminController
             }
 
             if ($method === 'POST' && $resource === 'machines') {
-                $this->addMachine();
+                // El frontend puede enviar _method=PUT en el body multipart para indicar actualización
+                $methodOverride = trim((string) ($_POST['_method'] ?? ''));
+                if (strtoupper($methodOverride) === 'PUT') {
+                    $this->updateMachine();
+                } else {
+                    $this->addMachine();
+                }
             }
 
             if ($method === 'PUT' && $resource === 'machines') {
@@ -415,30 +422,32 @@ class AdminController
 
     /**
      * Agrega una nueva máquina.
+     * Recibe multipart/form-data. Si viene una foto, la sube a Cloudinary
+     * y guarda la URL segura en la base de datos.
      */
     private function addMachine(): void
     {
-        $data = json_decode((string) file_get_contents('php://input'), true);
-        if (!is_array($data)) {
-            $this->jsonResponse(['ok' => false, 'error' => 'datos_invalidos'], 400);
-        }
-
-        $nombre = trim((string) ($data['nombre'] ?? ''));
-        $categoria = trim((string) ($data['categoria'] ?? ''));
-        $descripcion = trim((string) ($data['descripcion'] ?? ''));
-        $ubicacion = trim((string) ($data['ubicacion'] ?? ''));
-        $foto = isset($data['foto']) ? (string) $data['foto'] : null;
+        // Leer campos de texto del formulario multipart
+        $nombre      = trim((string) ($_POST['nombre']      ?? ''));
+        $categoria   = trim((string) ($_POST['categoria']   ?? ''));
+        $descripcion = trim((string) ($_POST['descripcion'] ?? ''));
+        $ubicacion   = trim((string) ($_POST['ubicacion']   ?? ''));
 
         if ($nombre === '') {
             $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
         }
 
-        $id = $this->model->addMachine($nombre, $categoria, $descripcion, $ubicacion, $foto);
-        $this->jsonResponse(['ok' => true, 'id' => $id]);
+        $fotoUrl = $this->uploadMachinePhoto();
+
+        $id = $this->model->addMachine($nombre, $categoria, $descripcion, $ubicacion, $fotoUrl);
+
+        // Devolver también la URL para que el frontend actualice la card sin recargar
+        $this->jsonResponse(['ok' => true, 'id' => $id, 'foto_url' => $fotoUrl]);
     }
 
     /**
      * Actualiza una máquina existente.
+     * Recibe multipart/form-data. Si viene una foto nueva, la sube a Cloudinary.
      */
     private function updateMachine(): void
     {
@@ -447,23 +456,23 @@ class AdminController
             $this->jsonResponse(['ok' => false, 'error' => 'id_invalido'], 422);
         }
 
-        $data = json_decode((string) file_get_contents('php://input'), true);
-        if (!is_array($data)) {
-            $this->jsonResponse(['ok' => false, 'error' => 'datos_invalidos'], 400);
-        }
-
-        $nombre = trim((string) ($data['nombre'] ?? ''));
-        $categoria = trim((string) ($data['categoria'] ?? ''));
-        $descripcion = trim((string) ($data['descripcion'] ?? ''));
-        $ubicacion = trim((string) ($data['ubicacion'] ?? ''));
-        $foto = isset($data['foto']) ? (string) $data['foto'] : null;
+        // PHP no llena $_POST con PUT/PATCH multipart; usamos POST con _method override
+        // o bien el frontend manda PUT como POST con campo ?_method=PUT.
+        // Para simplificar el cliente usa POST para crear/actualizar.
+        $nombre      = trim((string) ($_POST['nombre']      ?? ''));
+        $categoria   = trim((string) ($_POST['categoria']   ?? ''));
+        $descripcion = trim((string) ($_POST['descripcion'] ?? ''));
+        $ubicacion   = trim((string) ($_POST['ubicacion']   ?? ''));
 
         if ($nombre === '') {
             $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
         }
 
-        $this->model->updateMachine($id, $nombre, $categoria, $descripcion, $ubicacion, $foto);
-        $this->jsonResponse(['ok' => true]);
+        // Solo subir foto si el usuario seleccionó una nueva
+        $fotoUrl = $this->uploadMachinePhoto(); // null si no hay archivo
+
+        $this->model->updateMachine($id, $nombre, $categoria, $descripcion, $ubicacion, $fotoUrl);
+        $this->jsonResponse(['ok' => true, 'foto_url' => $fotoUrl]);
     }
 
     /**
@@ -478,6 +487,41 @@ class AdminController
 
         $this->model->deleteMachine($id);
         $this->jsonResponse(['ok' => true]);
+    }
+
+    /**
+     * Sube la foto de máquina a Cloudinary si viene en $_FILES['foto'].
+     *
+     * @return string|null URL segura de Cloudinary, o null si no hay archivo.
+     */
+    private function uploadMachinePhoto(): ?string
+    {
+        if (empty($_FILES['foto']['tmp_name'])) {
+            return null;
+        }
+
+        $file = $_FILES['foto'];
+
+        // Validar tamaño máximo: 5 MB
+        if ($file['size'] > 5 * 1024 * 1024) {
+            $this->jsonResponse(['ok' => false, 'error' => 'foto_demasiado_grande', 'msg' => 'La imagen no puede superar 5 MB.'], 422);
+        }
+
+        // Validar que sea imagen real
+        $mime = mime_content_type($file['tmp_name']);
+        if (!in_array($mime, ['image/jpeg', 'image/png', 'image/webp', 'image/gif'], true)) {
+            $this->jsonResponse(['ok' => false, 'error' => 'tipo_invalido', 'msg' => 'Solo se permiten imágenes (JPG, PNG, WEBP, GIF).'], 422);
+        }
+
+        try {
+            $cloudinary = new Cloudinary();
+            $publicId   = 'maquina_' . uniqid('', true);
+            return $cloudinary->upload($file['tmp_name'], $publicId);
+        } catch (\Throwable $e) {
+            $this->jsonResponse(['ok' => false, 'error' => 'cloudinary_error', 'msg' => $e->getMessage()], 500);
+        }
+
+        return null; // Nunca se alcanza, pero satisface el analizador estático
     }
 
     /**

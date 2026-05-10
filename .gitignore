@@ -1,0 +1,16 @@
+# Credenciales y configuración local
+.env
+
+# PHP y dependencias
+vendor/
+composer.lock
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp

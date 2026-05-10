@@ -220,7 +220,7 @@
           Eliminar
         </button>
         <button class="gm-btn gm-btn--ghost" onclick="closeModal()">Cancelar</button>
-        <button class="gm-btn gm-btn--primary" onclick="saveMachine()">
+        <button class="gm-btn gm-btn--primary" id="saveBtn" onclick="saveMachine()">
           <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
           </svg>
@@ -246,10 +246,21 @@
       return res.json();
     }
 
+    /* ── Petición multipart (para subir fotos) ── */
+    async function apiFormRequest(action, formData) {
+      // NO poner Content-Type: el navegador lo pone con el boundary correcto
+      const res = await fetch(API_BASE + action, {
+        method: 'POST',
+        body: formData,
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    }
+
     /* ── State ── */
     let allMachines = [];
     let currentMachine = null; // null = nueva máquina
-    let photoBase64 = null;
+    let photoFile = null;      // File object seleccionado por el usuario
 
 
 
@@ -345,7 +356,7 @@
     ══════════════════════════════ */
     function openModal(id = null) {
       currentMachine = id ? (allMachines.find(m => m.id_maquina == id) || null) : null;
-      photoBase64 = null;
+      photoFile = null;
 
       // Titles
       document.getElementById('modalTitle').textContent = currentMachine ? 'Editar Máquina' : 'Agregar Máquina';
@@ -383,7 +394,7 @@
       document.getElementById('machineModal').classList.remove('visible');
       document.body.style.overflow = '';
       currentMachine = null;
-      photoBase64 = null;
+      photoFile = null;
     }
 
     function handleOverlayClick(e) {
@@ -392,29 +403,30 @@
 
     /* ── Photo preview ── */
     function triggerFileInput() {
-      // Let the native input handle clicks; this is just a fallback.
+      // El input nativo maneja los clics; esta función es solo un fallback.
     }
 
     function previewPhoto(e) {
       const file = e.target.files[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = ev => {
-        photoBase64 = ev.target.result;
-        const preview = document.getElementById('photoPreview');
-        preview.src = photoBase64;
-        preview.style.display = 'block';
-        document.getElementById('photoPlaceholder').style.display = 'none';
-      };
-      reader.readAsDataURL(file);
+      // Guardar el File object para enviarlo como multipart
+      photoFile = file;
+      // Mostrar preview usando URL.createObjectURL (más eficiente que base64)
+      const preview = document.getElementById('photoPreview');
+      if (preview._objectUrl) URL.revokeObjectURL(preview._objectUrl);
+      const objectUrl = URL.createObjectURL(file);
+      preview._objectUrl = objectUrl;
+      preview.src = objectUrl;
+      preview.style.display = 'block';
+      document.getElementById('photoPlaceholder').style.display = 'none';
     }
 
     /* ── Save ── */
     async function saveMachine() {
-      const nombre = document.getElementById('machineName').value.trim();
-      const categoria = document.getElementById('machineCategory').value;
+      const nombre     = document.getElementById('machineName').value.trim();
+      const categoria  = document.getElementById('machineCategory').value;
       const descripcion = document.getElementById('machineDesc').value.trim();
-      const ubicacion = document.getElementById('machineLocation').value.trim();
+      const ubicacion  = document.getElementById('machineLocation').value.trim();
 
       if (!nombre) {
         document.getElementById('machineName').style.borderColor = 'rgba(229,26,44,0.5)';
@@ -423,24 +435,45 @@
       }
       document.getElementById('machineName').style.borderColor = '';
 
-      const payload = { nombre, categoria, descripcion, ubicacion };
-      if (photoBase64) payload.foto = photoBase64;
+      // Construir FormData para enviar como multipart (necesario para el archivo)
+      const fd = new FormData();
+      fd.append('nombre',      nombre);
+      fd.append('categoria',   categoria);
+      fd.append('descripcion', descripcion);
+      fd.append('ubicacion',   ubicacion);
+      if (photoFile) {
+        fd.append('foto', photoFile);
+      }
+
+      // Deshabilitar botón mientras se procesa (puede tardar por Cloudinary)
+      const saveBtn = document.getElementById('saveBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg> Guardando...';
 
       try {
+        let res;
         if (currentMachine) {
-          await apiRequest(`machines&id=${encodeURIComponent(currentMachine.id_maquina)}`, {
-            method: 'PUT',
-            body: JSON.stringify(payload),
-          });
-          Object.assign(currentMachine, payload);
-          allMachines = allMachines.map(m => m.id_maquina == currentMachine.id_maquina ? { ...m, ...payload } : m);
+          // Editar: usar _method=PUT con POST multipart
+          fd.append('_method', 'PUT');
+          res = await apiFormRequest(
+            `machines&id=${encodeURIComponent(currentMachine.id_maquina)}`,
+            fd
+          );
+          // Actualizar el objeto local con los datos nuevos
+          const fotoActualizada = res.foto_url ?? (photoFile ? null : currentMachine.foto);
+          Object.assign(currentMachine, { nombre, categoria, descripcion, ubicacion });
+          if (fotoActualizada !== null) currentMachine.foto = fotoActualizada;
+          allMachines = allMachines.map(m =>
+            m.id_maquina == currentMachine.id_maquina ? { ...m, ...currentMachine } : m
+          );
           showModalMsg('Máquina actualizada correctamente.');
         } else {
-          const res = await apiRequest('machines', {
-            method: 'POST',
-            body: JSON.stringify(payload),
-          });
-          const newMachine = res.machine || { ...payload, id_maquina: res.id || Date.now() };
+          res = await apiFormRequest('machines', fd);
+          const newMachine = {
+            id_maquina: res.id || Date.now(),
+            nombre, categoria, descripcion, ubicacion,
+            foto: res.foto_url || null,
+          };
           allMachines.unshift(newMachine);
           showModalMsg('Máquina agregada correctamente.');
         }
@@ -448,6 +481,9 @@
         setTimeout(closeModal, 1400);
       } catch (e) {
         showModalMsg('No se pudo guardar. Intenta de nuevo.', true);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Guardar';
       }
     }
 

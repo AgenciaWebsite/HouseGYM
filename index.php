@@ -3,6 +3,37 @@ declare(strict_types=1);
 
 session_start();
 
+// ── Cargar variables de entorno desde .env ──────────────────────────────────
+(function () {
+    $envFile = __DIR__ . '/.env';
+    if (!file_exists($envFile)) {
+        return;
+    }
+    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        $line = trim($line);
+        // Ignorar comentarios
+        if ($line === '' || $line[0] === '#') {
+            continue;
+        }
+        if (strpos($line, '=') === false) {
+            continue;
+        }
+        [$key, $value] = explode('=', $line, 2);
+        $key   = trim($key);
+        $value = trim($value);
+        // Eliminar comillas si las hay
+        if (preg_match('/^(["\']).*\1$/', $value)) {
+            $value = substr($value, 1, -1);
+        }
+        if ($key !== '' && !array_key_exists($key, $_ENV)) {
+            putenv("{$key}={$value}");
+            $_ENV[$key]    = $value;
+            $_SERVER[$key] = $value;
+        }
+    }
+})();
+
 // Autoloader básico para el proyecto
 spl_autoload_register(function ($class) {
     $prefix = 'App\\';
