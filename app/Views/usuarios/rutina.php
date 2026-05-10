@@ -92,6 +92,52 @@
     </div><!-- /content -->
   </div><!-- /main-wrap -->
 
+  <!-- MODAL: DETALLE EJERCICIO -->
+  <div id="exerciseModal" class="ex-modal" onclick="closeExModal(event)">
+    <div class="ex-modal__card" onclick="event.stopPropagation()">
+      <button class="ex-modal__close" onclick="closeExModal()">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div class="ex-modal__header">
+        <div id="modalExPhoto" class="ex-modal__photo"></div>
+      </div>
+
+      <div class="ex-modal__body">
+        <div class="ex-modal__meta">
+          <span id="modalExMuscle" class="ex-modal__muscle"></span>
+        </div>
+        <h2 id="modalExName" class="ex-modal__name"></h2>
+        
+        <div class="ex-modal__stats">
+          <div class="ex-modal__stat">
+            <span class="ex-modal__stat-val" id="modalExSets">--</span>
+            <span class="ex-modal__stat-label">Series</span>
+          </div>
+          <div class="ex-modal__stat-sep"></div>
+          <div class="ex-modal__stat">
+            <span class="ex-modal__stat-val" id="modalExReps">--</span>
+            <span class="ex-modal__stat-label">Reps</span>
+          </div>
+          <div id="modalExMachineWrap" style="display:contents;">
+            <div class="ex-modal__stat-sep"></div>
+            <div class="ex-modal__stat">
+              <span class="ex-modal__stat-val" id="modalExMachine">--</span>
+              <span class="ex-modal__stat-label">Máquina</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-modal__description">
+          <label>Instrucciones / Descripción</label>
+          <p id="modalExDesc">No hay descripción disponible para este ejercicio.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
 
 
@@ -168,6 +214,50 @@
           d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"/>
       </svg>`;
 
+
+    /* ══════════════════════════════════════
+       MODAL DETALLE EJERCICIO
+    ══════════════════════════════════════ */
+    function openExModal(diaIdx, exIdx) {
+      const ej = _routineData[diaIdx].ejercicios[exIdx];
+      const modal = document.getElementById('exerciseModal');
+      const photo = document.getElementById('modalExPhoto');
+      
+      if (ej.imagen_url) {
+        photo.style.backgroundImage = `url('${ej.imagen_url}')`;
+        photo.innerHTML = '';
+      } else {
+        photo.style.backgroundImage = 'none';
+        photo.innerHTML = NO_IMG_ICON;
+      }
+
+      document.getElementById('modalExName').textContent    = ej.nombre;
+      document.getElementById('modalExMuscle').textContent  = ej.grupo_muscular || 'General';
+      document.getElementById('modalExMachine').textContent = ej.maquina ? ` · ${ej.maquina}` : '';
+      document.getElementById('modalExSets').textContent    = ej.series;
+      document.getElementById('modalExReps').textContent    = ej.reps;
+      
+      const machWrap = document.getElementById('modalExMachineWrap');
+      const machVal  = document.getElementById('modalExMachine');
+      if (ej.maquina) {
+        machWrap.style.display = 'contents';
+        machVal.textContent    = ej.maquina;
+      } else {
+        machWrap.style.display = 'none';
+      }
+
+      document.getElementById('modalExDesc').textContent    = ej.descripcion || 'No hay descripción disponible para este ejercicio.';
+
+      modal.classList.add('ex-modal--active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeExModal(e) {
+      const modal = document.getElementById('exerciseModal');
+      modal.classList.remove('ex-modal--active');
+      document.body.style.overflow = '';
+    }
+
     function selectDay(index) {
       if (_activeDay >= 0) {
         document.getElementById('dr-' + _activeDay)?.classList.remove('day-row--active');
@@ -195,10 +285,10 @@
         return;
       }
 
-      const cards = dia.ejercicios.map(ej => {
+      const cards = dia.ejercicios.map((ej, i) => {
         const hasImg = ej.imagen_url && ej.imagen_url.trim() !== '';
         return `
-          <div class="ex-card">
+          <div class="ex-card" onclick="openExModal(${_activeDay}, ${i})">
             <div class="ex-card__photo"${hasImg ? ` style="background-image:url('${ej.imagen_url}')"` : ''}>
               ${hasImg ? '' : NO_IMG_ICON}
               <div class="ex-card__stats"><b>${ej.series}</b>×${ej.reps}</div>

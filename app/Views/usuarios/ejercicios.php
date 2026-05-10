@@ -101,66 +101,44 @@
     </div><!-- /content -->
   </div><!-- /main-wrap -->
 
-  <!-- MODAL: Vista detalle ejercicio (solo lectura) -->
-  <div class="gm-modal-overlay" id="ejercicioModal" onclick="handleOverlayClick(event)">
-    <div class="gm-modal" id="ejercicioModalInner">
+  <!-- MODAL: DETALLE EJERCICIO -->
+  <div id="exerciseModal" class="ex-modal" onclick="closeExModal(event)">
+    <div class="ex-modal__card" onclick="event.stopPropagation()">
+      <button class="ex-modal__close" onclick="closeExModal()">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
 
-      <div class="gm-modal__head">
-        <div>
-          <div class="gm-modal__title" id="modalTitle">Detalle de Ejercicio</div>
-          <div class="gm-modal__subtitle" id="modalSubtitle"></div>
-        </div>
-        <button class="gm-modal__close" onclick="closeModal()" title="Cerrar">&times;</button>
+      <div class="ex-modal__header">
+        <div id="modalExPhoto" class="ex-modal__photo"></div>
       </div>
 
-      <div class="gm-modal__body">
-
-        <!-- Foto -->
-        <div>
-          <div class="gm-photo-zone gm-photo-zone--readonly" id="photoZone">
-            <img id="photoPreview" src="" alt="foto ejercicio" style="display:none;">
-            <div id="photoPlaceholder"
-              style="display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;">
-              <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2" />
-                <circle cx="8.5" cy="8.5" r="1.5" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 15l-5-5L5 21" />
-              </svg>
-              <span class="gm-photo-zone__label">Sin foto</span>
+      <div class="ex-modal__body">
+        <div class="ex-modal__meta">
+          <span id="modalExMuscleTop" class="ex-modal__muscle"></span>
+        </div>
+        <h2 id="modalExName" class="ex-modal__name"></h2>
+        
+        <div class="ex-modal__stats">
+          <div class="ex-modal__stat">
+            <span class="ex-modal__stat-val" id="modalExMuscle">--</span>
+            <span class="ex-modal__stat-label">Músculo</span>
+          </div>
+          <div id="modalExMachineWrap" style="display:contents;">
+            <div class="ex-modal__stat-sep"></div>
+            <div class="ex-modal__stat">
+              <span class="ex-modal__stat-val" id="modalExMachine">--</span>
+              <span class="ex-modal__stat-label">Máquina</span>
             </div>
           </div>
         </div>
 
-        <!-- Info (solo lectura) -->
-        <div class="gm-form-side">
-
-          <div class="gm-form-group">
-            <label class="gm-form-label">Nombre</label>
-            <div class="gm-detail-value" id="detailNombre">—</div>
-          </div>
-
-          <div class="gm-form-group">
-            <label class="gm-form-label">Grupo Muscular</label>
-            <div class="gm-detail-value" id="detailGrupo">—</div>
-          </div>
-
-          <div class="gm-form-group">
-            <label class="gm-form-label">Descripción</label>
-            <div class="gm-detail-value" id="detailDesc">—</div>
-          </div>
-
-          <div class="gm-form-group" id="machineGroup" style="display: none;">
-            <label class="gm-form-label">Máquina Asignada</label>
-            <div class="gm-detail-value" id="detailMaquina">—</div>
-          </div>
-
+        <div class="ex-modal__description">
+          <label>Instrucciones / Descripción</label>
+          <p id="modalExDesc">No hay descripción disponible para este ejercicio.</p>
         </div>
       </div>
-
-      <div class="gm-modal__foot">
-        <button class="gm-btn gm-btn--ghost" onclick="closeModal()">Cerrar</button>
-      </div>
-
     </div>
   </div>
 
@@ -303,47 +281,49 @@
       const m = allEjercicios.find(x => x.id_ejercicio == id);
       if (!m) return;
 
-      document.getElementById('modalTitle').textContent = m.nombre;
-      document.getElementById('modalSubtitle').textContent = m.grupo_muscular || '';
-      document.getElementById('detailNombre').textContent = m.nombre || '—';
-      document.getElementById('detailGrupo').textContent = m.grupo_muscular || '—';
-      document.getElementById('detailDesc').textContent = m.descripcion || '—';
+      const modal = document.getElementById('exerciseModal');
+      const photo = document.getElementById('modalExPhoto');
       
-      const machineGroup = document.getElementById('machineGroup');
+      if (m.imagen_url) {
+        photo.style.backgroundImage = `url('${m.imagen_url}')`;
+        photo.innerHTML = '';
+      } else {
+        photo.style.backgroundImage = 'none';
+        photo.innerHTML = `
+          <svg width="60" height="60" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"/>
+          </svg>`;
+      }
+
+      document.getElementById('modalExName').textContent      = m.nombre;
+      document.getElementById('modalExMuscleTop').textContent = m.grupo_muscular || 'General';
+      document.getElementById('modalExMuscle').textContent    = m.grupo_muscular || 'General';
+      document.getElementById('modalExDesc').textContent      = m.descripcion || 'No hay descripción disponible para este ejercicio.';
+
+      const machWrap = document.getElementById('modalExMachineWrap');
+      const machVal  = document.getElementById('modalExMachine');
+      
       if (m.id_maquina) {
         const maquina = allMachines.find(mac => mac.id_maquina == m.id_maquina);
-        document.getElementById('detailMaquina').textContent = maquina ? maquina.nombre : '—';
-        machineGroup.style.display = 'block';
+        machVal.textContent = maquina ? maquina.nombre : '—';
+        machWrap.style.display = 'contents';
       } else {
-        machineGroup.style.display = 'none';
+        machWrap.style.display = 'none';
       }
 
-      const preview = document.getElementById('photoPreview');
-      const placeholder = document.getElementById('photoPlaceholder');
-      if (m.imagen_url) {
-        preview.src = m.imagen_url;
-        preview.style.display = 'block';
-        placeholder.style.display = 'none';
-      } else {
-        preview.src = '';
-        preview.style.display = 'none';
-        placeholder.style.display = 'flex';
-      }
-
-      document.getElementById('ejercicioModal').classList.add('visible');
+      modal.classList.add('ex-modal--active');
       document.body.style.overflow = 'hidden';
     }
 
-    function closeModal() {
-      document.getElementById('ejercicioModal').classList.remove('visible');
+    function closeExModal() {
+      document.getElementById('exerciseModal').classList.remove('ex-modal--active');
       document.body.style.overflow = '';
     }
 
     function handleOverlayClick(e) {
-      if (e.target === document.getElementById('ejercicioModal')) closeModal();
+      if (e.target.id === 'exerciseModal') closeExModal();
     }
-
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
     /* ── Escape HTML ── */
     function escHtml(str) {

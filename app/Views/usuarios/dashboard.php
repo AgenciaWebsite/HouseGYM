@@ -121,6 +121,52 @@
     </div><!-- /content -->
   </div><!-- /main-wrap -->
 
+  <!-- MODAL: DETALLE EJERCICIO -->
+  <div id="exerciseModal" class="ex-modal" onclick="closeExModal(event)">
+    <div class="ex-modal__card" onclick="event.stopPropagation()">
+      <button class="ex-modal__close" onclick="closeExModal()">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div class="ex-modal__header">
+        <div id="modalExPhoto" class="ex-modal__photo"></div>
+      </div>
+
+      <div class="ex-modal__body">
+        <div class="ex-modal__meta">
+          <span id="modalExMuscle" class="ex-modal__muscle"></span>
+        </div>
+        <h2 id="modalExName" class="ex-modal__name"></h2>
+        
+        <div class="ex-modal__stats">
+          <div class="ex-modal__stat">
+            <span class="ex-modal__stat-val" id="modalExSets">--</span>
+            <span class="ex-modal__stat-label">Series</span>
+          </div>
+          <div class="ex-modal__stat-sep"></div>
+          <div class="ex-modal__stat">
+            <span class="ex-modal__stat-val" id="modalExReps">--</span>
+            <span class="ex-modal__stat-label">Reps</span>
+          </div>
+          <div id="modalExMachineWrap" style="display:contents;">
+            <div class="ex-modal__stat-sep"></div>
+            <div class="ex-modal__stat">
+              <span class="ex-modal__stat-val" id="modalExMachine">--</span>
+              <span class="ex-modal__stat-label">Máquina</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-modal__description">
+          <label>Instrucciones / Descripción</label>
+          <p id="modalExDesc">No hay descripción disponible para este ejercicio.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
 
 
@@ -161,6 +207,56 @@
     function getDietName(id) {
       const diets = { 1: 'Hipercalórica', 2: 'Normocalórica', 3: 'Hipocalórica' };
       return diets[id] || 'Especial';
+    }
+
+    /* ══════════════════════════════════════
+       MODAL STATE & LOGIC
+    ══════════════════════════════════════ */
+    let _activeRoutine = [];
+
+    function openExModal(exIdx) {
+      const ej = _activeRoutine[exIdx];
+      if (!ej) return;
+
+      const modal = document.getElementById('exerciseModal');
+      const photo = document.getElementById('modalExPhoto');
+      
+      if (ej.imagen_url) {
+        photo.style.backgroundImage = `url('${ej.imagen_url}')`;
+        photo.innerHTML = '';
+      } else {
+        photo.style.backgroundImage = 'none';
+        photo.innerHTML = `
+          <svg width="26" height="26" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"/>
+          </svg>`;
+      }
+
+      document.getElementById('modalExName').textContent    = ej.nombre;
+      document.getElementById('modalExMuscle').textContent  = ej.grupo_muscular || 'General';
+      document.getElementById('modalExSets').textContent    = ej.series;
+      document.getElementById('modalExReps').textContent    = ej.reps;
+      
+      const machWrap = document.getElementById('modalExMachineWrap');
+      const machVal  = document.getElementById('modalExMachine');
+      if (ej.maquina) {
+        machWrap.style.display = 'contents';
+        machVal.textContent    = ej.maquina;
+      } else {
+        machWrap.style.display = 'none';
+      }
+
+      document.getElementById('modalExDesc').textContent    = ej.descripcion || 'No hay descripción disponible para este ejercicio.';
+
+      modal.classList.add('ex-modal--active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeExModal() {
+      const modal = document.getElementById('exerciseModal');
+      modal.classList.remove('ex-modal--active');
+      document.body.style.overflow = '';
     }
 
     async function loadDashboard() {
@@ -214,12 +310,17 @@
       }
 
       const dataRoutine = await fetchApi('global_routine&semana=' + semana);
+      const container = document.getElementById('routineDaysContainer');
+      const stateMsg = document.getElementById('routineStateMsg');
+
       if (dataRoutine && dataRoutine.routine && dataRoutine.routine.length > 0) {
-        document.getElementById('routineStateMsg').style.display = 'none';
-        const container = document.getElementById('routineDaysContainer');
+        stateMsg.style.display = 'none';
         container.style.display = 'grid';
 
+        // Reset global state for modal
+        _activeRoutine = [];
         let html = '';
+        
         dataRoutine.routine.forEach((dia, index) => {
           const numEjs = dia.ejercicios.length;
           let ejHtml = '';
@@ -227,19 +328,23 @@
           if (numEjs === 0) {
             ejHtml = '<p class="day-empty">Día de descanso.</p>';
           } else {
-            ejHtml = dia.ejercicios.map(ej => `
-              <div class="exercise-item">
-                <div class="exercise-img" style="background-image: url('${ej.imagen_url || ''}')"></div>
-                <div class="exercise-info">
-                  <h4>${ej.nombre}</h4>
-                  <span>${ej.grupo_muscular} ${ej.maquina ? ` · <strong style="color:var(--red);">${ej.maquina}</strong>` : ''}</span>
+            ejHtml = dia.ejercicios.map(ej => {
+              const currentExIdx = _activeRoutine.length;
+              _activeRoutine.push(ej);
+              return `
+                <div class="exercise-item" onclick="openExModal(${currentExIdx})">
+                  <div class="exercise-img" style="${ej.imagen_url ? `background-image: url('${ej.imagen_url}')` : ''}"></div>
+                  <div class="exercise-info">
+                    <h4>${ej.nombre}</h4>
+                    <span>${ej.grupo_muscular || ''} ${ej.maquina ? ` · <strong style="color:var(--red);">${ej.maquina}</strong>` : ''}</span>
+                  </div>
+                  <div class="exercise-stats">
+                    <div><strong>${ej.series}</strong> Series</div>
+                    <div><strong>${ej.reps}</strong> Reps</div>
+                  </div>
                 </div>
-                <div class="exercise-stats">
-                  <div><strong>${ej.series}</strong> Series</div>
-                  <div><strong>${ej.reps}</strong> Reps</div>
-                </div>
-              </div>
-            `).join('');
+              `;
+            }).join('');
           }
 
           html += `
@@ -256,9 +361,9 @@
         });
         container.innerHTML = html;
       } else {
-        document.getElementById('routineStateMsg').style.display = 'flex';
-        document.getElementById('routineDaysContainer').style.display = 'none';
-        document.getElementById('routineStateMsg').innerHTML = `
+        stateMsg.style.display = 'flex';
+        container.style.display = 'none';
+        stateMsg.innerHTML = `
           <div class="empty-icon">
             <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />

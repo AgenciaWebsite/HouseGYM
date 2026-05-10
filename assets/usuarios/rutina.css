@@ -303,8 +303,15 @@
 }
 
 @keyframes fadeInGrid {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Exercise Card */
@@ -407,5 +414,241 @@
 @media (max-width: 560px) {
   .exercises-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ══════════════════════════════════════════
+   EXERCISE MODAL
+   ══════════════════════════════════════════ */
+.ex-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ex-modal--active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ex-modal__card {
+  background: #1a1a1a;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  position: relative;
+  transform: translateY(30px) scale(0.95);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.ex-modal--active .ex-modal__card {
+  transform: translateY(0) scale(1);
+}
+
+.ex-modal__close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s;
+}
+
+.ex-modal__close:hover {
+  background: var(--red);
+  border-color: var(--red);
+  transform: rotate(90deg);
+}
+
+.ex-modal__header {
+  width: 100%;
+  height: 260px;
+  position: relative;
+  background: #111;
+}
+
+.ex-modal__photo {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ex-modal__photo svg {
+  opacity: 0.2;
+  width: 60px;
+  height: 60px;
+}
+
+.ex-modal__body {
+  padding: 24px;
+}
+
+.ex-modal__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.ex-modal__muscle {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--red);
+  letter-spacing: 1px;
+}
+
+.ex-modal__machine {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-dimmer);
+}
+
+.ex-modal__name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.ex-modal__stats {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ex-modal__stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ex-modal__stat-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  /* Un poco más pequeño para que quepan nombres de máquinas */
+  font-weight: 800;
+  color: white;
+  text-align: center;
+}
+
+.ex-modal__stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--gray-dimmer);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.ex-modal__stat-sep {
+  width: 1px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ex-modal__description {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ex-modal__description label {
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--gray-faint);
+  letter-spacing: 0.5px;
+}
+
+.ex-modal__description p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--gray-light);
+  margin: 0;
+}
+
+@media (max-width: 500px) {
+  .ex-modal {
+    padding: 16px;
+    /* Espacio alrededor para que se vea como pop-up */
+  }
+
+  .ex-modal__card {
+    border-radius: 20px;
+    height: auto;
+    max-height: 85vh;
+    /* Altura máxima para que no toque los bordes */
+    max-width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .ex-modal__header {
+    height: 180px;
+    /* Imagen un poco más pequeña en móvil */
+    flex-shrink: 0;
+  }
+
+  .ex-modal__body {
+    padding: 18px;
+  }
+
+  .ex-modal__stats {
+    flex-direction: row;
+    /* Volvemos a horizontal si cabe */
+    flex-wrap: wrap;
+    /* Pero que baje si no hay espacio */
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .ex-modal__stat {
+    min-width: 60px;
+  }
+
+  .ex-modal__stat-sep {
+    display: none;
+    /* Quitamos separadores si se van a mover */
+  }
+
+  .ex-modal__name {
+    font-size: 19px;
   }
 }

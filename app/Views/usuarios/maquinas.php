@@ -105,66 +105,42 @@
     </div><!-- /content -->
   </div><!-- /main-wrap -->
 
-  <!-- MODAL: Vista detalle máquina (solo lectura) -->
-  <div class="gm-modal-overlay" id="machineModal" onclick="handleOverlayClick(event)">
-    <div class="gm-modal" id="machineModalInner">
+  <!-- MODAL: DETALLE MÁQUINA -->
+  <div id="machineModal" class="ex-modal" onclick="closeExModal(event)">
+    <div class="ex-modal__card" onclick="event.stopPropagation()">
+      <button class="ex-modal__close" onclick="closeExModal()">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
 
-      <div class="gm-modal__head">
-        <div>
-          <div class="gm-modal__title" id="modalTitle">Detalle de Máquina</div>
-          <div class="gm-modal__subtitle" id="modalSubtitle"></div>
-        </div>
-        <button class="gm-modal__close" onclick="closeModal()" title="Cerrar">&times;</button>
+      <div class="ex-modal__header">
+        <div id="modalMachPhoto" class="ex-modal__photo"></div>
       </div>
 
-      <div class="gm-modal__body">
-
-        <!-- Foto -->
-        <div>
-          <div class="gm-photo-zone gm-photo-zone--readonly" id="photoZone">
-            <img id="photoPreview" src="" alt="foto máquina" style="display:none;">
-            <div id="photoPlaceholder"
-              style="display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;">
-              <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2" />
-                <circle cx="8.5" cy="8.5" r="1.5" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 15l-5-5L5 21" />
-              </svg>
-              <span class="gm-photo-zone__label">Sin foto</span>
-            </div>
+      <div class="ex-modal__body">
+        <div class="ex-modal__meta">
+          <span id="modalMachCatTop" class="ex-modal__muscle"></span>
+        </div>
+        <h2 id="modalMachName" class="ex-modal__name"></h2>
+        
+        <div class="ex-modal__stats">
+          <div class="ex-modal__stat">
+            <span class="ex-modal__stat-val" id="modalMachCat">--</span>
+            <span class="ex-modal__stat-label">Categoría</span>
+          </div>
+          <div class="ex-modal__stat-sep"></div>
+          <div class="ex-modal__stat">
+            <span class="ex-modal__stat-val" id="modalMachLoc">--</span>
+            <span class="ex-modal__stat-label">Ubicación</span>
           </div>
         </div>
 
-        <!-- Info (solo lectura) -->
-        <div class="gm-form-side">
-
-          <div class="gm-form-group">
-            <label class="gm-form-label">Nombre</label>
-            <div class="gm-detail-value" id="detailNombre">—</div>
-          </div>
-
-          <div class="gm-form-group">
-            <label class="gm-form-label">Categoría</label>
-            <div class="gm-detail-value" id="detailCategoria">—</div>
-          </div>
-
-          <div class="gm-form-group">
-            <label class="gm-form-label">Descripción</label>
-            <div class="gm-detail-value" id="detailDesc">—</div>
-          </div>
-
-          <div class="gm-form-group">
-            <label class="gm-form-label">Piso / Ubicación</label>
-            <div class="gm-detail-value" id="detailUbicacion">—</div>
-          </div>
-
+        <div class="ex-modal__description">
+          <label>Información / Descripción</label>
+          <p id="modalMachDesc">No hay descripción disponible para esta máquina.</p>
         </div>
       </div>
-
-      <div class="gm-modal__foot">
-        <button class="gm-btn gm-btn--ghost" onclick="closeModal()">Cerrar</button>
-      </div>
-
     </div>
   </div>
 
@@ -263,7 +239,6 @@
             <div class="gm-card__photo">${photoHtml}</div>
             <div class="gm-card__name">${escHtml(m.nombre)}</div>
             ${m.categoria ? `<div class="gm-card__muscle">${escHtml(m.categoria)}</div>` : ''}
-            ${m.ubicacion ? `<div class="gm-card__location"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>${escHtml(m.ubicacion)}</div>` : ''}
           </div>`;
       }).join('');
     }
@@ -300,39 +275,38 @@
       const m = allMachines.find(x => x.id_maquina == id);
       if (!m) return;
 
-      document.getElementById('modalTitle').textContent = m.nombre;
-      document.getElementById('modalSubtitle').textContent = m.categoria || '';
-      document.getElementById('detailNombre').textContent = m.nombre || '—';
-      document.getElementById('detailCategoria').textContent = m.categoria || '—';
-      document.getElementById('detailDesc').textContent = m.descripcion || '—';
-      document.getElementById('detailUbicacion').textContent = m.ubicacion || '—';
-
-      const preview = document.getElementById('photoPreview');
-      const placeholder = document.getElementById('photoPlaceholder');
+      const modal = document.getElementById('machineModal');
+      const photo = document.getElementById('modalMachPhoto');
+      
       if (m.foto) {
-        preview.src = m.foto;
-        preview.style.display = 'block';
-        placeholder.style.display = 'none';
+        photo.style.backgroundImage = `url('${m.foto}')`;
+        photo.innerHTML = '';
       } else {
-        preview.src = '';
-        preview.style.display = 'none';
-        placeholder.style.display = 'flex';
+        photo.style.backgroundImage = 'none';
+        photo.innerHTML = `
+          <svg width="60" height="60" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5v2.25m0-2.25l2.25 1.313M3 16.5l2.25 1.313M3 16.5v-2.25m0 2.25l2.25-1.313m15 0l2.25 1.313m-2.25-1.313v-2.25m2.25 2.25l-2.25-1.313M7.5 21l-1.313-2.25m1.313 2.25h2.25m-2.25 0l1.313-2.25m10.5 0l1.313 2.25m-1.313-2.25h-2.25m2.25 0l-1.313 2.25M16.5 3l1.313 2.25m-1.313-2.25h-2.25m2.25 0l-1.313 2.25M7.5 3L6.187 5.25M7.5 3H5.25m2.25 0L6.187 5.25"/>
+          </svg>`;
       }
 
-      document.getElementById('machineModal').classList.add('visible');
+      document.getElementById('modalMachName').textContent      = m.nombre;
+      document.getElementById('modalMachCatTop').textContent    = m.categoria || 'General';
+      document.getElementById('modalMachCat').textContent       = m.categoria || 'General';
+      document.getElementById('modalMachLoc').textContent       = m.ubicacion || '—';
+      document.getElementById('modalMachDesc').textContent      = m.descripcion || 'No hay descripción disponible para esta máquina.';
+
+      modal.classList.add('ex-modal--active');
       document.body.style.overflow = 'hidden';
     }
 
-    function closeModal() {
-      document.getElementById('machineModal').classList.remove('visible');
+    function closeExModal() {
+      document.getElementById('machineModal').classList.remove('ex-modal--active');
       document.body.style.overflow = '';
     }
 
     function handleOverlayClick(e) {
-      if (e.target === document.getElementById('machineModal')) closeModal();
+      if (e.target.id === 'machineModal') closeExModal();
     }
-
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
     /* ── Escape HTML ── */
     function escHtml(str) {
