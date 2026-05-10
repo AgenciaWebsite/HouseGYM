@@ -208,6 +208,7 @@
     let filteredEjerc = [];   // ejercicios filtrados
     let activeFilter = null;  // grupo muscular activo
     let pendingExercise = null; // ejercicio pendiente de confirmar en modal
+    let pendingInsertionIdx = null; // índice de inserción si se suelta sobre otro ejercicio
     let loadedParams = { genero: 'Hombre', semana: 1 }; // Track current loaded state
 
     /* ══ BOOT ══ */
@@ -279,7 +280,11 @@
 
     function renderExerciseRow(ej, di, ei) {
       return `
-        <div class="rg-exercise-row">
+        <div class="rg-exercise-row" draggable="true" 
+             ondragstart="handleRowDragStart(event, ${di}, ${ei})"
+             ondragover="handleRowDragOver(event)"
+             ondragleave="handleRowDragLeave(event)"
+             ondrop="handleRowDrop(event, ${di}, ${ei})">
           <div class="rg-exercise-img">
             ${ej.imagen_url
           ? `<img src="${ej.imagen_url}" alt="${ej.nombre}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
@@ -335,7 +340,7 @@
         return;
       }
       grid.innerHTML = list.map(ej => `
-        <div class="rg-catalog-card" draggable="true" ondragstart="handleDragStart(event, ${ej.id_ejercicio})" ondragend="handleDragEnd(event)" onclick="openModal(${ej.id_ejercicio})" title="${ej.nombre}">
+        <div class="rg-catalog-card" draggable="true" ondragstart="handleCatalogDragStart(event, ${ej.id_ejercicio})" ondragend="handleDragEnd(event)" onclick="openModal(${ej.id_ejercicio})" title="${ej.nombre}">
           <div class="rg-catalog-card__img">
             ${ej.imagen_url
           ? `<img src="${ej.imagen_url}" alt="${ej.nombre}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
@@ -397,29 +402,110 @@
     }
 
     /* ══ DRAG AND DROP ══ */
-    function handleDragStart(e, id) {
-      e.dataTransfer.setData('text/plain', id);
+    function handleCatalogDragStart(e, id) {
+      e.dataTransfer.setData('text/plain', JSON.stringify({ type: 'catalog', id }));
       e.currentTarget.classList.add('rg-dragging');
     }
+
+    function handleRowDragStart(e, dayIdx, exIdx) {
+      e.dataTransfer.setData('text/plain', JSON.stringify({ type: 'move', dayIdx, exIdx }));
+      e.currentTarget.classList.add('rg-dragging-row');
+    }
+
     function handleDragEnd(e) {
       e.currentTarget.classList.remove('rg-dragging');
+      document.querySelectorAll('.rg-dragging-row').forEach(el => el.classList.remove('rg-dragging-row'));
     }
+
     function handleDragOver(e) {
       e.preventDefault();
       e.currentTarget.classList.add('rg-dragover');
     }
+
     function handleDragLeave(e) {
       e.currentTarget.classList.remove('rg-dragover');
     }
-    function handleDrop(e, dayIdx) {
+
+    function handleRowDragOver(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.currentTarget.classList.add('rg-row-dragover');
+    }
+
+    function handleRowDragLeave(e) {
+      e.currentTarget.classList.remove('rg-row-dragover');
+    }
+
+    function handleDrop(e, targetDayIdx) {
       e.preventDefault();
       e.currentTarget.classList.remove('rg-dragover');
-      const id = e.dataTransfer.getData('text/plain');
-      if (id) openModal(parseInt(id), dayIdx);
+
+      try {
+        const rawData = e.dataTransfer.getData('text/plain');
+        if (!rawData) return;
+        const data = JSON.parse(rawData);
+
+        if (data.type === 'catalog') {
+          openModal(parseInt(data.id), targetDayIdx);
+        } else if (data.type === 'move') {
+          moveExercise(data.dayIdx, data.exIdx, targetDayIdx);
+        }
+      } catch (err) {
+        console.error('Drop error:', err);
+      }
+    }
+
+    function handleRowDrop(e, targetDayIdx, targetExIdx) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.currentTarget.classList.remove('rg-row-dragover');
+
+      try {
+        const rawData = e.dataTransfer.getData('text/plain');
+        if (!rawData) return;
+        const data = JSON.parse(rawData);
+
+        if (data.type === 'catalog') {
+          openModal(parseInt(data.id), targetDayIdx, targetExIdx);
+        } else if (data.type === 'move') {
+          reorderOrMoveExercise(data.dayIdx, data.exIdx, targetDayIdx, targetExIdx);
+        }
+      } catch (err) {
+        console.error('Row drop error:', err);
+      }
+    }
+
+    function moveExercise(fromDay, fromIdx, toDay) {
+      const exercise = rutinaDays[fromDay].ejercicios[fromIdx];
+      if (fromDay === toDay) return;
+
+      rutinaDays[fromDay].ejercicios.splice(fromIdx, 1);
+      rutinaDays[toDay].ejercicios.push(exercise);
+      renderDays();
+    }
+
+    function reorderOrMoveExercise(fromDay, fromIdx, toDay, toIdx) {
+      const exercise = rutinaDays[fromDay].ejercicios[fromIdx];
+      
+      // Quitar de origen
+      rutinaDays[fromDay].ejercicios.splice(fromIdx, 1);
+      
+      // Si el movimiento es en el mismo día y el índice de destino era mayor al de origen, 
+      // al quitarlo el índice de destino se ha desplazado.
+      let adjustedToIdx = toIdx;
+      if (fromDay === toDay && fromIdx < toIdx) {
+        // No hace falta ajustar si usamos splice directamente, 
+        // pero debemos tener cuidado con el orden de las operaciones.
+      }
+
+      // Insertar en destino
+      rutinaDays[toDay].ejercicios.splice(adjustedToIdx, 0, exercise);
+      
+      renderDays();
     }
 
     /* ══ MODAL reps/series ══ */
-    function openModal(ejercicioId, dayIdx = null) {
+    function openModal(ejercicioId, dayIdx = null, insertionIdx = null) {
       if (!rutinaDays || rutinaDays.length === 0) {
         alert('Cargando la rutina... por favor espera.');
         return;
@@ -427,6 +513,8 @@
 
       pendingExercise = allEjercicios.find(e => e.id_ejercicio == ejercicioId) || null;
       if (!pendingExercise) return;
+
+      pendingInsertionIdx = insertionIdx;
 
       document.getElementById('modalTitle').textContent = pendingExercise.nombre || 'Ejercicio';
       document.getElementById('modalPreview').innerHTML = `
@@ -465,7 +553,7 @@
 
       if (!rutinaDays[dayIdx].ejercicios) rutinaDays[dayIdx].ejercicios = [];
 
-      rutinaDays[dayIdx].ejercicios.push({
+      const newEj = {
         id_ejercicio: pendingExercise.id_ejercicio,
         nombre: pendingExercise.nombre,
         imagen_url: pendingExercise.imagen_url,
@@ -473,7 +561,13 @@
         maquina: pendingExercise.maquina,
         reps: reps,
         series: series,
-      });
+      };
+
+      if (pendingInsertionIdx !== null) {
+        rutinaDays[dayIdx].ejercicios.splice(pendingInsertionIdx, 0, newEj);
+      } else {
+        rutinaDays[dayIdx].ejercicios.push(newEj);
+      }
 
       closeModal();
       renderDays();

@@ -304,11 +304,23 @@
 }
 
 .rp-day-label {
-  font-size: 10px;
-  font-weight: 800;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
-  color: var(--gray-dim);
+}
+
+.rp-day-label::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red);
 }
 
 .rp-day-remove {
@@ -399,25 +411,24 @@
 }
 
 .rp-exercise-name {
-  font-size: 12.5px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
   font-weight: 700;
-  color: var(--white-soft);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+  color: #fff;
+  margin-bottom: 2px;
+  text-transform: capitalize;
 }
 
 .rp-exercise-meta {
-  font-size: 11px;
-  color: var(--gray-dim);
-  margin-top: 3px;
+  font-size: 12px;
+  color: #888;
+  display: flex;
+  gap: 12px;
 }
 
 .rp-exercise-meta span {
-  color: var(--white-soft);
-  font-weight: 600;
+  color: var(--red);
+  font-weight: 700;
 }
 
 .rp-exercise-muscle {
@@ -1027,4 +1038,28 @@
   .rp-modal__fields {
     grid-template-columns: 1fr;
   }
+}
+
+/* -- DRAG & DROP FEEDBACK -- */
+.rp-catalog-card.rp-dragging {
+  opacity: 0.4;
+  border: 1px dashed var(--red);
+  transform: scale(0.95);
+}
+
+.rp-day-card.rp-dragover {
+  border-color: var(--red) !important;
+  background: rgba(229, 26, 44, 0.05) !important;
+  box-shadow: 0 0 20px rgba(229, 26, 44, 0.2);
+}
+
+.rp-exercise-row.rp-dragging-row {
+  opacity: 0.5;
+  border: 1px dashed var(--red);
+  cursor: grabbing;
+}
+
+.rp-exercise-row.rp-row-dragover {
+  border-top: 3px solid var(--red);
+  margin-top: 4px;
 }

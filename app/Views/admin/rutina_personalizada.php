@@ -221,6 +221,7 @@
     let activeFilter = null; // grupo muscular activo
     let pendingExercise = null; // ejercicio pendiente de confirmar en modal
     let pendingDayIdx = null; // día al que se va a agregar
+    let pendingInsertionIdx = null; // índice de inserción si se suelta sobre otro ejercicio
 
     /* ══ BOOT ══ */
     apiRequest('session')
@@ -337,7 +338,11 @@
 
     function renderExerciseRow(ej, di, ei) {
       return `
-        <div class="rp-exercise-row">
+        <div class="rp-exercise-row" draggable="true" 
+             ondragstart="handleRowDragStart(event, ${di}, ${ei})"
+             ondragover="handleRowDragOver(event)"
+             ondragleave="handleRowDragLeave(event)"
+             ondrop="handleRowDrop(event, ${di}, ${ei})">
           <div class="rp-exercise-img">
             ${ej.imagen_url
           ? `<img src="${ej.imagen_url}" alt="${ej.nombre}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
@@ -413,7 +418,7 @@
         return;
       }
       grid.innerHTML = list.map(ej => `
-        <div class="rp-catalog-card" draggable="true" ondragstart="handleDragStart(event, ${ej.id_ejercicio})" ondragend="handleDragEnd(event)" onclick="openModal(${ej.id_ejercicio})" title="${ej.nombre}">
+        <div class="rp-catalog-card" draggable="true" ondragstart="handleCatalogDragStart(event, ${ej.id_ejercicio})" ondragend="handleDragEnd(event)" onclick="openModal(${ej.id_ejercicio})" title="${ej.nombre}">
           <div class="rp-catalog-card__img">
             ${ej.imagen_url
           ? `<img src="${ej.imagen_url}" alt="${ej.nombre}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
@@ -475,29 +480,102 @@
     }
 
     /* ══ DRAG AND DROP ══ */
-    function handleDragStart(e, id) {
-      e.dataTransfer.setData('text/plain', id);
+    function handleCatalogDragStart(e, id) {
+      e.dataTransfer.setData('text/plain', JSON.stringify({ type: 'catalog', id }));
       e.currentTarget.classList.add('rp-dragging');
     }
+
+    function handleRowDragStart(e, dayIdx, exIdx) {
+      e.dataTransfer.setData('text/plain', JSON.stringify({ type: 'move', dayIdx, exIdx }));
+      e.currentTarget.classList.add('rp-dragging-row');
+    }
+
     function handleDragEnd(e) {
       e.currentTarget.classList.remove('rp-dragging');
+      document.querySelectorAll('.rp-dragging-row').forEach(el => el.classList.remove('rp-dragging-row'));
     }
+
     function handleDragOver(e) {
       e.preventDefault();
       e.currentTarget.classList.add('rp-dragover');
     }
+
     function handleDragLeave(e) {
       e.currentTarget.classList.remove('rp-dragover');
     }
-    function handleDrop(e, dayIdx) {
+
+    function handleRowDragOver(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.currentTarget.classList.add('rp-row-dragover');
+    }
+
+    function handleRowDragLeave(e) {
+      e.currentTarget.classList.remove('rp-row-dragover');
+    }
+
+    function handleDrop(e, targetDayIdx) {
       e.preventDefault();
       e.currentTarget.classList.remove('rp-dragover');
-      const id = e.dataTransfer.getData('text/plain');
-      if (id) openModal(parseInt(id), dayIdx);
+
+      try {
+        const rawData = e.dataTransfer.getData('text/plain');
+        if (!rawData) return;
+        const data = JSON.parse(rawData);
+
+        if (data.type === 'catalog') {
+          openModal(parseInt(data.id), targetDayIdx);
+        } else if (data.type === 'move') {
+          moveExercise(data.dayIdx, data.exIdx, targetDayIdx);
+        }
+      } catch (err) {
+        console.error('Drop error:', err);
+      }
+    }
+
+    function handleRowDrop(e, targetDayIdx, targetExIdx) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.currentTarget.classList.remove('rp-row-dragover');
+
+      try {
+        const rawData = e.dataTransfer.getData('text/plain');
+        if (!rawData) return;
+        const data = JSON.parse(rawData);
+
+        if (data.type === 'catalog') {
+          openModal(parseInt(data.id), targetDayIdx, targetExIdx);
+        } else if (data.type === 'move') {
+          reorderOrMoveExercise(data.dayIdx, data.exIdx, targetDayIdx, targetExIdx);
+        }
+      } catch (err) {
+        console.error('Row drop error:', err);
+      }
+    }
+
+    function moveExercise(fromDay, fromIdx, toDay) {
+      const exercise = rutinaDays[fromDay].ejercicios[fromIdx];
+      if (fromDay === toDay) return;
+
+      rutinaDays[fromDay].ejercicios.splice(fromIdx, 1);
+      rutinaDays[toDay].ejercicios.push(exercise);
+      
+      renderDays();
+      saveRutina();
+    }
+
+    function reorderOrMoveExercise(fromDay, fromIdx, toDay, toIdx) {
+      const exercise = rutinaDays[fromDay].ejercicios[fromIdx];
+      
+      rutinaDays[fromDay].ejercicios.splice(fromIdx, 1);
+      rutinaDays[toDay].ejercicios.splice(toIdx, 0, exercise);
+      
+      renderDays();
+      saveRutina();
     }
 
     /* ══ MODAL reps/series ══ */
-    function openModal(ejercicioId, dayIdx = null) {
+    function openModal(ejercicioId, dayIdx = null, insertionIdx = null) {
       if (!currentUser) {
         alert('Primero selecciona un usuario.');
         return;
@@ -508,6 +586,8 @@
       }
       pendingExercise = allEjercicios.find(e => e.id_ejercicio == ejercicioId) || null;
       if (!pendingExercise) return;
+
+      pendingInsertionIdx = insertionIdx;
 
       document.getElementById('modalTitle').textContent = pendingExercise.nombre || 'Ejercicio';
       document.getElementById('modalPreview').innerHTML = `
@@ -551,7 +631,7 @@
         : 0;
 
       if (!rutinaDays[dayIdx].ejercicios) rutinaDays[dayIdx].ejercicios = [];
-      rutinaDays[dayIdx].ejercicios.push({
+      const newEj = {
         id_ejercicio: pendingExercise.id_ejercicio,
         nombre: pendingExercise.nombre,
         imagen_url: pendingExercise.imagen_url,
@@ -559,7 +639,13 @@
         maquina: pendingExercise.maquina,
         reps,
         series,
-      });
+      };
+
+      if (pendingInsertionIdx !== null) {
+        rutinaDays[dayIdx].ejercicios.splice(pendingInsertionIdx, 0, newEj);
+      } else {
+        rutinaDays[dayIdx].ejercicios.push(newEj);
+      }
 
       closeModal();
       renderDays();
