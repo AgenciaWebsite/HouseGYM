@@ -205,7 +205,10 @@
       });
       if (response.status === 401) { window.location.href = 'index.php?route=login&error=no_autorizado'; return null; }
       const data = await response.json();
-      if (!response.ok || !data.ok) throw new Error(data.error || 'request_failed');
+      if (!response.ok || !data.ok) {
+        const errorMsg = data.msg ? `${data.error}: ${data.msg}` : (data.error || 'request_failed');
+        throw new Error(errorMsg);
+      }
       return data;
     }
 

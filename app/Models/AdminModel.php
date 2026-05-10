@@ -394,7 +394,7 @@ class AdminModel
                     e.nombre, e.foto_url AS imagen_url, g.nombre AS grupo_muscular, m.nombre AS maquina
              FROM rutina_global_detalle rgd
              JOIN ejercicios e ON e.id_ejercicio = rgd.id_ejercicio
-             JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
+             LEFT JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
              LEFT JOIN maquinas m ON m.id_maquina = e.id_maquina
              WHERE rgd.id_rutina_global = ?
              ORDER BY rgd.dia ASC, rgd.orden ASC, rgd.id ASC'
@@ -518,7 +518,7 @@ class AdminModel
                     e.nombre, e.foto_url AS imagen_url, g.nombre AS grupo_muscular
              FROM rutina_personalizada_detalle d
              JOIN ejercicios e ON e.id_ejercicio = d.id_ejercicio
-             JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
+             LEFT JOIN grupo_muscular g ON g.id_grupo = e.id_grupo
              WHERE d.id_rutina_pers = ?
              ORDER BY d.dia ASC, d.id ASC'
         );

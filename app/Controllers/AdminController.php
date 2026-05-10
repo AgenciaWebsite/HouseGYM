@@ -165,7 +165,7 @@ class AdminController
 
         } catch (\PDOException $e) {
             $status = $e->getCode() === '23000' ? 409 : 500;
-            $this->jsonResponse(['ok' => false, 'error' => 'base_de_datos'], $status);
+            $this->jsonResponse(['ok' => false, 'error' => 'base_de_datos', 'msg' => $e->getMessage()], $status);
         } catch (\Throwable $e) {
             $this->jsonResponse(['ok' => false, 'error' => 'servidor', 'msg' => $e->getMessage()], 500);
         }

@@ -15,7 +15,8 @@
   <div class="bg-glow bg-glow--top-right"></div>
   <div class="bg-glow bg-glow--bottom-left"></div>
 
-  <?php $current_page = 'rutina_global'; include 'sidebar.php'; ?>
+  <?php $current_page = 'rutina_global';
+  include 'sidebar.php'; ?>
 
   <!-- MAIN -->
   <div class="main-wrap">
@@ -194,7 +195,10 @@
       });
       if (response.status === 401) { window.location.href = 'index.php?route=login&error=no_autorizado'; return null; }
       const data = await response.json();
-      if (!response.ok || !data.ok) throw new Error(data.error || 'request_failed');
+      if (!response.ok || !data.ok) {
+        const errorMsg = data.msg ? `${data.error}: ${data.msg}` : (data.error || 'request_failed');
+        throw new Error(errorMsg);
+      }
       return data;
     }
 
@@ -365,7 +369,7 @@
     function buildFilterMenu() {
       const fixedGroups = ['Pierna', 'Pecho', 'Espalda', 'Brazo', 'Hombros', 'Biceps', 'Triceps', 'Gluteos', 'Pantorrilla', 'Abdomen', 'Cardio', 'Funcional'];
       const currentGroups = [...new Set(allEjercicios.map(e => e.grupo_muscular).filter(Boolean))];
-      
+
       const combined = [...new Set([...fixedGroups, ...currentGroups])].sort();
 
       document.getElementById('rgFilterList').innerHTML = combined.map(g => `
@@ -437,7 +441,7 @@
           <div style="margin-top: 12px;">
             <label class="rg-modal__label">Agregar al día</label>
             <select class="rg-modal__select" id="modalDaySelect" style="margin-top: 4px;">
-              ${rutinaDays.map(d => `<option value="${d.dia - 1}" ${ (d.dia - 1) === dayIdx ? 'selected' : '' }>Día ${d.dia}</option>`).join('')}
+              ${rutinaDays.map(d => `<option value="${d.dia - 1}" ${(d.dia - 1) === dayIdx ? 'selected' : ''}>Día ${d.dia}</option>`).join('')}
             </select>
           </div>
         </div>`;
@@ -503,7 +507,7 @@
           btn.disabled = false;
         }, 2000);
       } catch (e) {
-        alert('Error al guardar la rutina: ' + e.message);
+        alert('Error al guardar la rutina: ' + (e.message || 'base_de_datos'));
         btn.innerHTML = originalText;
         btn.disabled = false;
       }
