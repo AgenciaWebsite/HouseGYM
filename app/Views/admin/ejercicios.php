@@ -140,8 +140,10 @@
 
         <!-- Foto -->
         <div>
-          <div class="gm-photo-zone" id="photoZone" onclick="triggerFileInput()">
-            <input type="file" id="photoInput" accept="image/*" onchange="previewPhoto(event)">
+          <div class="gm-photo-zone" id="photoZone">
+            <!-- Input invisible que cubre toda la zona -->
+            <input type="file" id="photoInput" accept="image/*" onchange="previewPhoto(event)"
+              style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:5;">
 
             <!-- Placeholder (visible sin imagen) -->
             <div id="photoPlaceholder"
@@ -152,12 +154,12 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 15l-5-5L5 21" />
               </svg>
               <span class="gm-photo-zone__label">Subir foto<br>del ejercicio</span>
-              <span class="gm-photo-zone__hint">JPG, PNG · Máx 5 MB</span>
+              <span class="gm-photo-zone__hint">JPG, PNG · Máx 10 MB</span>
             </div>
 
             <!-- Preview imagen -->
-            <img id="photoPreview" src="" alt="preview" style="display:none;">
-            <div class="gm-photo-zone__overlay" id="photoOverlay">
+            <img id="photoPreview" src="" alt="preview" style="display:none;pointer-events:none;">
+            <div class="gm-photo-zone__overlay" id="photoOverlay" style="pointer-events:none;">
               <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M15.232 5.232l3.536 3.536M9 13l6.5-6.5a2.121 2.121 0 013 3L12 16H9v-3z" />
@@ -241,7 +243,7 @@
           Eliminar
         </button>
         <button class="gm-btn gm-btn--ghost" onclick="closeModal()">Cancelar</button>
-        <button class="gm-btn gm-btn--primary" onclick="saveEjercicio()">
+        <button class="gm-btn gm-btn--primary" id="saveEjercicioBtn" onclick="saveEjercicio()">
           <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
           </svg>
@@ -267,10 +269,26 @@
       return res.json();
     }
 
+    /* ── Petición multipart (para subir fotos) ── */
+    async function apiFormRequest(action, formData) {
+      const res = await fetch(API_BASE + action, {
+        method: 'POST',
+        body: formData,
+      });
+      let data;
+      try { data = await res.json(); } catch { data = {}; }
+      if (!res.ok || data.ok === false) {
+        const err = new Error(data.msg || `HTTP ${res.status}`);
+        err.serverData = data;
+        throw err;
+      }
+      return data;
+    }
+
     /* ── State ── */
     let allEjercicios = [];
     let currentEjercicio = null; // null = nuevo ejercicio
-    let photoBase64 = null;
+    let photoFile = null;        // File object seleccionado por el usuario
     let allMachines = [];
 
 
@@ -437,7 +455,7 @@
     ══════════════════════════════ */
     function openModal(id = null) {
       currentEjercicio = id ? (allEjercicios.find(m => m.id_ejercicio == id) || null) : null;
-      photoBase64 = null;
+      photoFile = null;
 
       // Titles
       document.getElementById('modalTitle').textContent = currentEjercicio ? 'Editar Ejercicio' : 'Agregar Ejercicio';
@@ -482,7 +500,7 @@
       document.getElementById('ejercicioModal').classList.remove('visible');
       document.body.style.overflow = '';
       currentEjercicio = null;
-      photoBase64 = null;
+      photoFile = null;
     }
 
     function handleOverlayClick(e) {
@@ -490,64 +508,84 @@
     }
 
     /* ── Photo preview ── */
-    function triggerFileInput() {
-      // Let the native input handle clicks; this is just a fallback.
-    }
-
     function previewPhoto(e) {
       const file = e.target.files[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = ev => {
-        photoBase64 = ev.target.result;
-        const preview = document.getElementById('photoPreview');
-        preview.src = photoBase64;
-        preview.style.display = 'block';
-        document.getElementById('photoPlaceholder').style.display = 'none';
-      };
-      reader.readAsDataURL(file);
+      // Guardar el File object para enviarlo como multipart
+      photoFile = file;
+      // Preview con ObjectURL (más eficiente que base64)
+      const preview = document.getElementById('photoPreview');
+      if (preview._objectUrl) URL.revokeObjectURL(preview._objectUrl);
+      const objectUrl = URL.createObjectURL(file);
+      preview._objectUrl = objectUrl;
+      preview.src = objectUrl;
+      preview.style.display = 'block';
+      document.getElementById('photoPlaceholder').style.display = 'none';
     }
 
     /* ── Save ── */
     async function saveEjercicio() {
-      const nombre = document.getElementById('ejercicioName').value.trim();
-      const id_grupo = document.getElementById('ejercicioGrupo').value;
+      const nombre      = document.getElementById('ejercicioName').value.trim();
+      const id_grupo    = document.getElementById('ejercicioGrupo').value;
       const descripcion = document.getElementById('ejercicioDesc').value.trim();
-      const id_maquina = document.getElementById('ejercicioMaquina').value;
+      const id_maquina  = document.getElementById('ejercicioMaquina').value;
 
       if (!nombre) {
-        document.getElementById('ejercicioName').style.borderColor = !nombre ? 'rgba(229,26,44,0.5)' : '';
+        document.getElementById('ejercicioName').style.borderColor = 'rgba(229,26,44,0.5)';
         showModalMsg('El nombre es obligatorio.', true);
         return;
       }
       document.getElementById('ejercicioName').style.borderColor = '';
-      document.getElementById('ejercicioGrupo').style.borderColor = '';
 
-      const payload = { nombre, id_grupo, descripcion, id_maquina };
-      if (photoBase64) payload.foto = photoBase64;
+      // Construir FormData (necesario para enviar el archivo)
+      const fd = new FormData();
+      fd.append('nombre',      nombre);
+      fd.append('id_grupo',    id_grupo);
+      fd.append('descripcion', descripcion);
+      fd.append('id_maquina',  id_maquina);
+      if (photoFile) {
+        fd.append('foto', photoFile);
+      }
+
+      // Deshabilitar botón mientras se procesa
+      const saveBtn = document.getElementById('saveEjercicioBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg> Guardando...';
 
       try {
+        let res;
         if (currentEjercicio) {
-          await apiRequest(`ejercicios&id=${encodeURIComponent(currentEjercicio.id_ejercicio)}`, {
-            method: 'PUT',
-            body: JSON.stringify(payload),
-          });
-
+          // Editar: POST con _method=PUT
+          fd.append('_method', 'PUT');
+          res = await apiFormRequest(
+            `ejercicios&id=${encodeURIComponent(currentEjercicio.id_ejercicio)}`,
+            fd
+          );
+          // Actualizar datos locales
+          const fotoActualizada = res.foto_url ?? (photoFile ? null : currentEjercicio.imagen_url);
+          Object.assign(currentEjercicio, { nombre, id_grupo, descripcion, id_maquina });
+          if (fotoActualizada !== null) currentEjercicio.imagen_url = fotoActualizada;
+          allEjercicios = allEjercicios.map(m =>
+            m.id_ejercicio == currentEjercicio.id_ejercicio ? { ...m, ...currentEjercicio } : m
+          );
           showModalMsg('Ejercicio actualizado correctamente.');
         } else {
-          await apiRequest('ejercicios', {
-            method: 'POST',
-            body: JSON.stringify(payload),
-          });
+          res = await apiFormRequest('ejercicios', fd);
+          // Recargar lista para obtener datos completos (grupo muscular, máquina, etc.)
+          await loadEjercicios();
           showModalMsg('Ejercicio agregado correctamente.');
         }
 
-        // Recargar la lista de ejercicios para asegurar datos frescos
-        loadEjercicios();
-
+        renderGrid(allEjercicios);
         setTimeout(closeModal, 1400);
       } catch (e) {
-        showModalMsg('No se pudo guardar. Intenta de nuevo.', true);
+        const msg = e.message && e.message !== 'Failed to fetch'
+          ? e.message
+          : 'No se pudo guardar. Intenta de nuevo.';
+        showModalMsg(msg, true);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Guardar';
       }
     }
 

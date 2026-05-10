@@ -95,7 +95,13 @@ class AdminController
             }
 
             if ($method === 'POST' && $resource === 'ejercicios') {
-                $this->addEjercicio();
+                // Soporte para _method=PUT enviado como multipart
+                $methodOverride = trim((string) ($_POST['_method'] ?? ''));
+                if (strtoupper($methodOverride) === 'PUT') {
+                    $this->updateEjercicio();
+                } else {
+                    $this->addEjercicio();
+                }
             }
 
             if ($method === 'PUT' && $resource === 'ejercicios') {
@@ -313,30 +319,28 @@ class AdminController
 
     /**
      * Agrega un nuevo ejercicio.
+     * Recibe multipart/form-data. Si viene una foto, la sube a Cloudinary.
      */
     private function addEjercicio(): void
     {
-        $data = json_decode((string) file_get_contents('php://input'), true);
-        if (!is_array($data)) {
-            $this->jsonResponse(['ok' => false, 'error' => 'datos_invalidos'], 400);
-        }
-
-        $nombre = trim((string) ($data['nombre'] ?? ''));
-        $id_grupo = !empty($data['id_grupo']) ? (int) $data['id_grupo'] : null;
-        $id_maquina = !empty($data['id_maquina']) ? (int) $data['id_maquina'] : null;
-        $descripcion = trim((string) ($data['descripcion'] ?? ''));
-        $foto = isset($data['foto']) ? (string) $data['foto'] : null;
+        $nombre      = trim((string) ($_POST['nombre']      ?? ''));
+        $id_grupo    = !empty($_POST['id_grupo'])   ? (int) $_POST['id_grupo']   : null;
+        $id_maquina  = !empty($_POST['id_maquina']) ? (int) $_POST['id_maquina'] : null;
+        $descripcion = trim((string) ($_POST['descripcion'] ?? ''));
 
         if ($nombre === '') {
             $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
         }
 
-        $id = $this->model->addEjercicio($nombre, $id_grupo, $id_maquina, $descripcion, $foto);
-        $this->jsonResponse(['ok' => true, 'id' => $id]);
+        $fotoUrl = $this->uploadEjercicioPhoto();
+
+        $id = $this->model->addEjercicio($nombre, $id_grupo, $id_maquina, $descripcion, $fotoUrl);
+        $this->jsonResponse(['ok' => true, 'id' => $id, 'foto_url' => $fotoUrl]);
     }
 
     /**
      * Actualiza un ejercicio.
+     * Recibe multipart/form-data. Si viene una foto nueva, la sube a Cloudinary.
      */
     private function updateEjercicio(): void
     {
@@ -345,23 +349,19 @@ class AdminController
             $this->jsonResponse(['ok' => false, 'error' => 'id_invalido'], 422);
         }
 
-        $data = json_decode((string) file_get_contents('php://input'), true);
-        if (!is_array($data)) {
-            $this->jsonResponse(['ok' => false, 'error' => 'datos_invalidos'], 400);
-        }
-
-        $nombre = trim((string) ($data['nombre'] ?? ''));
-        $id_grupo = !empty($data['id_grupo']) ? (int) $data['id_grupo'] : null;
-        $id_maquina = !empty($data['id_maquina']) ? (int) $data['id_maquina'] : null;
-        $descripcion = trim((string) ($data['descripcion'] ?? ''));
-        $foto = isset($data['foto']) ? (string) $data['foto'] : null;
+        $nombre      = trim((string) ($_POST['nombre']      ?? ''));
+        $id_grupo    = !empty($_POST['id_grupo'])   ? (int) $_POST['id_grupo']   : null;
+        $id_maquina  = !empty($_POST['id_maquina']) ? (int) $_POST['id_maquina'] : null;
+        $descripcion = trim((string) ($_POST['descripcion'] ?? ''));
 
         if ($nombre === '') {
             $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
         }
 
-        $this->model->updateEjercicio($id, $nombre, $id_grupo, $id_maquina, $descripcion, $foto);
-        $this->jsonResponse(['ok' => true]);
+        $fotoUrl = $this->uploadEjercicioPhoto(); // null si no hay foto nueva
+
+        $this->model->updateEjercicio($id, $nombre, $id_grupo, $id_maquina, $descripcion, $fotoUrl);
+        $this->jsonResponse(['ok' => true, 'foto_url' => $fotoUrl]);
     }
 
     /**
@@ -376,6 +376,52 @@ class AdminController
 
         $this->model->deleteEjercicio($id);
         $this->jsonResponse(['ok' => true]);
+    }
+
+    /**
+     * Sube la foto de ejercicio a Cloudinary si viene en $_FILES['foto'].
+     *
+     * @return string|null URL segura de Cloudinary, o null si no hay archivo.
+     */
+    private function uploadEjercicioPhoto(): ?string
+    {
+        if (!isset($_FILES['foto']) || $_FILES['foto']['error'] === UPLOAD_ERR_NO_FILE) {
+            return null;
+        }
+
+        $file = $_FILES['foto'];
+
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            $phpErrors = [
+                UPLOAD_ERR_INI_SIZE   => 'La imagen supera el límite configurado en el servidor (upload_max_filesize).',
+                UPLOAD_ERR_FORM_SIZE  => 'La imagen supera el límite del formulario.',
+                UPLOAD_ERR_PARTIAL    => 'La imagen se subió parcialmente. Intenta de nuevo.',
+                UPLOAD_ERR_NO_TMP_DIR => 'No hay directorio temporal en el servidor.',
+                UPLOAD_ERR_CANT_WRITE => 'Error al escribir el archivo temporal.',
+                UPLOAD_ERR_EXTENSION  => 'Una extensión de PHP bloqueó la subida.',
+            ];
+            $msg = $phpErrors[$file['error']] ?? "Error de subida PHP #{$file['error']}.";
+            $this->jsonResponse(['ok' => false, 'error' => 'php_upload_error', 'msg' => $msg], 422);
+        }
+
+        if ($file['size'] > 10 * 1024 * 1024) {
+            $this->jsonResponse(['ok' => false, 'error' => 'foto_demasiado_grande', 'msg' => 'La imagen no puede superar 10 MB.'], 422);
+        }
+
+        $mime = mime_content_type($file['tmp_name']);
+        if (!in_array($mime, ['image/jpeg', 'image/png', 'image/webp', 'image/gif'], true)) {
+            $this->jsonResponse(['ok' => false, 'error' => 'tipo_invalido', 'msg' => 'Solo se permiten imágenes (JPG, PNG, WEBP, GIF).'], 422);
+        }
+
+        try {
+            $cloudinary = new Cloudinary();
+            $publicId   = 'ejercicio_' . uniqid('', true);
+            return $cloudinary->upload($file['tmp_name'], $publicId);
+        } catch (\Throwable $e) {
+            $this->jsonResponse(['ok' => false, 'error' => 'cloudinary_error', 'msg' => $e->getMessage()], 500);
+        }
+
+        return null;
     }
 
     /**
