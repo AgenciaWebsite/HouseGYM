@@ -221,6 +221,7 @@ class AdminController
         $cedula = trim((string) ($data['cedula'] ?? ''));
         $password = (string) ($data['contrasena'] ?? $data['password'] ?? '');
         $plan = !empty($data['plan_personalizado']) ? 1 : 0;
+        $genero = trim((string) ($data['genero'] ?? 'Hombre')); // Default Hombre
 
         // Ahora dieta puede ser un id_dieta en lugar de un booleano (0 si es false/vacio)
         $id_dieta = !empty($data['dieta']) ? (int) $data['dieta'] : null;
@@ -229,7 +230,7 @@ class AdminController
             $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
         }
 
-        $userId = $this->model->addUser($nombre, $cedula, $password, $plan, $id_dieta);
+        $userId = $this->model->addUser($nombre, $cedula, $password, $plan, $id_dieta, $genero);
 
         $this->jsonResponse(['ok' => true, 'id_usuario' => $userId], 201);
     }

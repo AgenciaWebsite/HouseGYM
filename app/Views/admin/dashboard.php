@@ -376,6 +376,7 @@
       document.getElementById('userNombre').value = '';
       document.getElementById('userCedula').value = '';
       document.getElementById('userPassword').value = '';
+      document.getElementById('selectGenero').value = '';
       document.getElementById('toggleRutina').checked = false;
       document.getElementById('toggleDieta').checked = false;
       document.getElementById('dietaSelectContainer').style.display = 'none';
@@ -391,15 +392,19 @@
       const nombre = document.getElementById('userNombre');
       const cedula = document.getElementById('userCedula');
       const password = document.getElementById('userPassword');
+      const generoSelect = document.getElementById('selectGenero');
       let ok = true;
 
-      [nombre, cedula, password].forEach(input => {
+      [nombre, cedula, password, generoSelect].forEach(input => {
         const empty = !input.value.trim();
         input.style.borderColor = empty ? 'rgba(229,26,44,0.5)' : '';
         if (empty) ok = false;
       });
 
       if (!ok) return;
+
+      let generoVal = 'Hombre';
+      if (generoSelect.value === 'femenino') generoVal = 'Mujer';
 
       try {
         await apiRequest('users', {
@@ -408,6 +413,7 @@
             nombre: nombre.value.trim(),
             cedula: cedula.value.trim(),
             contrasena: password.value,
+            genero: generoVal,
             plan_personalizado: document.getElementById('toggleRutina').checked ? 1 : 0,
             dieta: document.getElementById('toggleDieta').checked ? document.getElementById('selectDieta').value : 0,
           }),

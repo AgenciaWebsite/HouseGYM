@@ -146,17 +146,17 @@ class AdminModel
      * @param int|null $id_dieta El ID de la dieta seleccionada (null si no tiene dieta).
      * @return int El ID del usuario insertado.
      */
-    public function addUser(string $nombre, string $cedula, string $password, int $plan_personalizado, ?int $id_dieta): int
+    public function addUser(string $nombre, string $cedula, string $password, int $plan_personalizado, ?int $id_dieta, string $genero = 'Hombre'): int
     {
         $this->pdo->beginTransaction();
 
         try {
             // Insertar usuario
             $stmt = $this->pdo->prepare(
-                'INSERT INTO usuarios (nombre, cedula, contrasena, activo, plan_personalizado)
-                 VALUES (?, ?, ?, 1, ?)'
+                'INSERT INTO usuarios (nombre, cedula, contrasena, activo, plan_personalizado, genero)
+                 VALUES (?, ?, ?, 1, ?, ?)'
             );
-            $stmt->execute([$nombre, $cedula, $password, $plan_personalizado]);
+            $stmt->execute([$nombre, $cedula, $password, $plan_personalizado, $genero]);
             $userId = (int) $this->pdo->lastInsertId();
 
             // Insertar rutina si tiene plan o dieta
