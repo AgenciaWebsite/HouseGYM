@@ -114,7 +114,7 @@ class AdminModel
         // Buscar máquinas
         $stmt = $this->pdo->prepare(
             "SELECT 'maquina' AS tipo, id_maquina AS id, nombre AS titulo,
-                    CONCAT('Piso ', piso, ' · Maquina') AS detalle
+                    CONCAT(categoria, ' · ', ubicacion) AS detalle
              FROM maquinas
              WHERE nombre LIKE ?
              LIMIT 5"
