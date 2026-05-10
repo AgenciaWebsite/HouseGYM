@@ -43,7 +43,7 @@
     <div class="content">
 
       <div class="page-title">
-        <h1>Rutina global<span>General</span></h1>
+        <h1>Rutina <span>Global</span></h1>
         <p class="page-subtitle">Editor de ejercicios por género y semana — define las rutinas predeterminadas</p>
       </div>
 
