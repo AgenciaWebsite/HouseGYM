@@ -79,8 +79,14 @@
             <option value="Pecho">Pecho</option>
             <option value="Espalda">Espalda</option>
             <option value="Brazo">Brazo</option>
-            <option value="Cardio">Cardio</option>
+            <option value="Hombros">Hombros</option>
+            <option value="Biceps">Biceps</option>
+            <option value="Triceps">Triceps</option>
+            <option value="Gluteos">Gluteos</option>
+            <option value="Pantorrilla">Pantorrilla</option>
             <option value="Abdomen">Abdomen</option>
+            <option value="Cardio">Cardio</option>
+            <option value="Funcional">Funcional</option>
           </select>
           <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18M7 10h10M11 16h2" />
@@ -177,8 +183,14 @@
               <option value="2">Pecho</option>
               <option value="3">Espalda</option>
               <option value="4">Brazo</option>
-              <option value="5">Cardio</option>
+              <option value="7">Hombros</option>
+              <option value="8">Biceps</option>
+              <option value="9">Triceps</option>
+              <option value="10">Gluteos</option>
+              <option value="11">Pantorrilla</option>
               <option value="6">Abdomen</option>
+              <option value="5">Cardio</option>
+              <option value="12">Funcional</option>
             </select>
           </div>
 

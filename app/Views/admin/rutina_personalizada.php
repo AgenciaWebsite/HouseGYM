@@ -442,8 +442,12 @@
     }
 
     function buildFilterMenu() {
-      const groups = [...new Set(allEjercicios.map(e => e.grupo_muscular).filter(Boolean))].sort();
-      document.getElementById('rpFilterList').innerHTML = groups.map(g => `
+      const fixedGroups = ['Pierna', 'Pecho', 'Espalda', 'Brazo', 'Hombros', 'Biceps', 'Triceps', 'Gluteos', 'Pantorrilla', 'Abdomen', 'Cardio', 'Funcional'];
+      const currentGroups = [...new Set(allEjercicios.map(e => e.grupo_muscular).filter(Boolean))];
+      
+      const combined = [...new Set([...fixedGroups, ...currentGroups])].sort();
+
+      document.getElementById('rpFilterList').innerHTML = combined.map(g => `
         <div class="rp-filter-option" onclick="applyFilter('${g}')">${g}</div>`).join('');
     }
 
