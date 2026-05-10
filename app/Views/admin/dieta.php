@@ -14,7 +14,8 @@
   <div class="bg-glow bg-glow--top-right"></div>
   <div class="bg-glow bg-glow--bottom-left"></div>
 
-  <?php $current_page = 'dietas'; include 'sidebar.php'; ?>
+  <?php $current_page = 'dietas';
+  include 'sidebar.php'; ?>
 
   <!-- MAIN -->
   <div class="main-wrap">
@@ -27,17 +28,7 @@
         </svg>
       </button>
 
-      <!-- Search global -->
-      <div class="search-wrap">
-        <svg class="search-wrap__icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-          <circle cx="11" cy="11" r="8" />
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35" />
-        </svg>
-        <input type="text" class="search-input" id="globalSearch" placeholder="Buscar usuario, dieta..."
-          oninput="handleSearch(this.value)">
-        <button class="search-clear-btn" onclick="clearSearch()">&#x2022;</button>
-        <div class="search-results hidden" id="searchResults"></div>
-      </div>
+      <?php include 'search.php'; ?>
 
       <!-- User info -->
       <div class="topbar-user">
@@ -181,7 +172,7 @@
         <button class="gm-modal__close" onclick="closeManageDietModal()">&times;</button>
       </div>
       <div class="gm-modal__body" style="grid-template-columns: 1fr; gap: 14px;">
-        
+
         <!-- Foto zone parecida a máquinas -->
         <div class="gm-photo-zone" id="dietPhotoZone" onclick="document.getElementById('dietPhotoInput').click()">
           <input type="file" id="dietPhotoInput" accept="image/*" onchange="previewDietPhoto(event)">
@@ -209,15 +200,17 @@
 
       </div>
       <div class="gm-modal__foot">
-        <button class="gm-btn gm-btn--danger" id="deleteDietBtn" onclick="deleteDiet()" style="display:none; margin-right:auto; text-transform:uppercase; letter-spacing:1px; padding: 12px 24px;">
-           <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-           </svg> ELIMINAR
+        <button class="gm-btn gm-btn--danger" id="deleteDietBtn" onclick="deleteDiet()"
+          style="display:none; margin-right:auto; text-transform:uppercase; letter-spacing:1px; padding: 12px 24px;">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg> ELIMINAR
         </button>
         <button class="gm-btn gm-btn--ghost" onclick="closeManageDietModal()">Cancelar</button>
         <button class="gm-btn gm-btn--primary" onclick="saveManageDiet()">
           <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
           </svg>
           Guardar
         </button>
@@ -248,10 +241,10 @@
     }
 
     /* ══ STATE ══ */
-    let allUsers   = [];
+    let allUsers = [];
     let currentUser = null;
     let assignedDiet = null;   // { id_dieta, ... } | null
-    let allDiets   = [];
+    let allDiets = [];
     let filteredDiets = [];
     let pendingDiet = null;    // dieta pendiente de confirmar
 
@@ -304,9 +297,9 @@
       const filtered = q.trim().length < 1
         ? allUsers
         : allUsers.filter(u =>
-            (u.nombre || '').toLowerCase().includes(q.toLowerCase()) ||
-            String(u.cedula || '').includes(q)
-          );
+          (u.nombre || '').toLowerCase().includes(q.toLowerCase()) ||
+          String(u.cedula || '').includes(q)
+        );
       renderPickerList(filtered);
     }
 
@@ -409,10 +402,10 @@
       } catch (e) {
         // Fallback con dietas por defecto si la API no responde aún
         allDiets = [
-          { id_dieta: 1, tipo: 'Hipercalórica',   descripcion: 'Alta en calorías para ganar masa muscular.' },
-          { id_dieta: 2, tipo: 'Normocalórica',   descripcion: 'Balance calórico para mantenimiento.' },
-          { id_dieta: 3, tipo: 'Hipocalórica',    descripcion: 'Déficit calórico para perder grasa.' },
-          { id_dieta: 4, tipo: 'Personalizada',   descripcion: 'Plan diseñado a medida por el entrenador.' },
+          { id_dieta: 1, tipo: 'Hipercalórica', descripcion: 'Alta en calorías para ganar masa muscular.' },
+          { id_dieta: 2, tipo: 'Normocalórica', descripcion: 'Balance calórico para mantenimiento.' },
+          { id_dieta: 3, tipo: 'Hipocalórica', descripcion: 'Déficit calórico para perder grasa.' },
+          { id_dieta: 4, tipo: 'Personalizada', descripcion: 'Plan diseñado a medida por el entrenador.' },
         ];
         filteredDiets = [...allDiets];
         renderCatalog(filteredDiets);
@@ -435,9 +428,9 @@
         const typeClass = getDietTypeClass(diet.id_dieta);
         const typeLabel = getDietTypeLabel(diet.id_dieta);
 
-        const heroContent = diet.foto_url 
-            ? `<img src="${diet.foto_url}" class="dp-hero-image">`
-            : `<div class="dp-diet-card__hero-icon">${getDietIcon(diet.id_dieta)}</div>`;
+        const heroContent = diet.foto_url
+          ? `<img src="${diet.foto_url}" class="dp-hero-image">`
+          : `<div class="dp-diet-card__hero-icon">${getDietIcon(diet.id_dieta)}</div>`;
 
         return `
           <div class="dp-diet-card ${isAssigned ? 'dp-diet-card--assigned' : ''}" style="position:relative;" title="${name}">
@@ -464,9 +457,9 @@
       filteredDiets = q.trim().length < 1
         ? allDiets
         : allDiets.filter(d =>
-            (d.tipo || d.nombre || '').toLowerCase().includes(q.toLowerCase()) ||
-            getDietDesc(d.id_dieta, d.descripcion).toLowerCase().includes(q.toLowerCase())
-          );
+          (d.tipo || d.nombre || '').toLowerCase().includes(q.toLowerCase()) ||
+          getDietDesc(d.id_dieta, d.descripcion).toLowerCase().includes(q.toLowerCase())
+        );
       renderCatalog(filteredDiets);
     }
 
@@ -523,10 +516,10 @@
       const userName = currentUser.nombre || `Usuario ${currentUser.id_usuario}`;
 
       document.getElementById('modalTitle').textContent = 'Asignar dieta';
-      
-      const heroContent = pendingDiet.foto_url 
-            ? `<img src="${pendingDiet.foto_url}" class="dp-hero-image">`
-            : `<div class="dp-modal__preview-icon">${getDietIcon(pendingDiet.id_dieta)}</div>`;
+
+      const heroContent = pendingDiet.foto_url
+        ? `<img src="${pendingDiet.foto_url}" class="dp-hero-image">`
+        : `<div class="dp-modal__preview-icon">${getDietIcon(pendingDiet.id_dieta)}</div>`;
 
       document.getElementById('modalPreview').innerHTML = `
         ${heroContent}
@@ -574,7 +567,7 @@
 
       const preview = document.getElementById('dietPhotoPreview');
       const placeholder = document.getElementById('dietPhotoPlaceholder');
-      
+
       if (currentEditDiet && currentEditDiet.foto_url) {
         preview.src = currentEditDiet.foto_url;
         preview.style.display = 'block';
@@ -642,11 +635,11 @@
           };
           allDiets.unshift(newDiet);
         }
-        
+
         filterDiets(document.getElementById('dietSearch').value);
-        if(assignedDiet && currentEditDiet && assignedDiet.id_dieta == currentEditDiet.id_dieta) {
-           assignedDiet = currentEditDiet;
-           renderAssigned();
+        if (assignedDiet && currentEditDiet && assignedDiet.id_dieta == currentEditDiet.id_dieta) {
+          assignedDiet = currentEditDiet;
+          renderAssigned();
         }
         closeManageDietModal();
       } catch (e) {
@@ -665,8 +658,8 @@
         allDiets = allDiets.filter(d => d.id_dieta != currentEditDiet.id_dieta);
         filterDiets(document.getElementById('dietSearch').value);
         if (assignedDiet && assignedDiet.id_dieta == currentEditDiet.id_dieta) {
-            assignedDiet = null;
-            renderAssigned();
+          assignedDiet = null;
+          renderAssigned();
         }
         closeManageDietModal();
       } catch (e) {
@@ -722,44 +715,9 @@
       }
     }
 
-    /* ══ GLOBAL SEARCH ══ */
-    function renderSearchResults(results) {
-      const box = document.getElementById('searchResults');
-      if (!results.length) {
-        box.innerHTML = '<div class="search-result-item"><div style="font-size:13px;color:#5a5a5a;">Sin resultados</div></div>';
-        return;
-      }
-      box.innerHTML = results.map(item => `
-        <div class="search-result-item">
-          <div class="search-result-avatar">${String(item.tipo || '?').charAt(0).toUpperCase()}</div>
-          <div>
-            <div class="search-result-title">${item.titulo}</div>
-            <div class="search-result-detail">${item.detalle}</div>
-          </div>
-          <span class="search-result-badge">${item.tipo}</span>
-        </div>`).join('');
-    }
 
-    let searchTimer = null;
-    function handleSearch(val) {
-      const box = document.getElementById('searchResults');
-      clearTimeout(searchTimer);
-      if (val.trim().length < 2) { box.classList.add('hidden'); box.innerHTML = ''; return; }
-      box.classList.remove('hidden');
-      searchTimer = setTimeout(async () => {
-        try {
-          const data = await apiRequest(`search&q=${encodeURIComponent(val.trim())}`);
-          if (data) renderSearchResults(data.results || []);
-        } catch (e) { renderSearchResults([]); }
-      }, 250);
-    }
 
-    function clearSearch() {
-      document.getElementById('globalSearch').value = '';
-      const box = document.getElementById('searchResults');
-      box.classList.add('hidden');
-      box.innerHTML = '';
-    }
+
 
     /* ══ SIDEBAR MOBILE ══ */
     function isMobileView() { return window.innerWidth <= 900; }
@@ -792,4 +750,5 @@
   </script>
 
 </body>
+
 </html>
