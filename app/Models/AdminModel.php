@@ -693,4 +693,53 @@ class AdminModel
         $stmt = $this->pdo->prepare('DELETE FROM dietas WHERE id_dieta = ?');
         $stmt->execute([$id]);
     }
+
+    /**
+     * Obtiene la dieta asignada a un usuario.
+     */
+    public function getDietaUsuario(int $userId): ?array
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT rp.id_dieta, d.tipo AS nombre, d.descripcion 
+             FROM rutina_personalizada rp
+             LEFT JOIN dietas d ON rp.id_dieta = d.id_dieta
+             WHERE rp.id_usuario = ? AND rp.activa = 1
+             LIMIT 1'
+        );
+        $stmt->execute([$userId]);
+        $result = $stmt->fetch();
+        return $result ?: null;
+    }
+
+    /**
+     * Guarda o actualiza la dieta asignada a un usuario.
+     */
+    public function saveDietaUsuario(int $userId, ?int $idDieta): void
+    {
+        $this->pdo->beginTransaction();
+        try {
+            // Verificar si existe una rutina_personalizada activa
+            $stmt = $this->pdo->prepare('SELECT id_rutina_pers FROM rutina_personalizada WHERE id_usuario = ? AND activa = 1 LIMIT 1');
+            $stmt->execute([$userId]);
+            $rutinaId = $stmt->fetchColumn();
+
+            if ($rutinaId) {
+                // Actualizar la existente
+                $stmtUpdate = $this->pdo->prepare('UPDATE rutina_personalizada SET id_dieta = ? WHERE id_rutina_pers = ?');
+                $stmtUpdate->execute([$idDieta, $rutinaId]);
+            } else {
+                // Crear una nueva, pero el usuario debe tener plan_personalizado
+                $stmtInsert = $this->pdo->prepare('INSERT INTO rutina_personalizada (id_usuario, nombre, activa, id_dieta) VALUES (?, "Plan Personalizado", 1, ?)');
+                $stmtInsert->execute([$userId, $idDieta]);
+                
+                // También asegurar que el usuario tenga plan_personalizado = 1
+                $stmtUser = $this->pdo->prepare('UPDATE usuarios SET plan_personalizado = 1 WHERE id_usuario = ?');
+                $stmtUser->execute([$userId]);
+            }
+            $this->pdo->commit();
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
+    }
 }

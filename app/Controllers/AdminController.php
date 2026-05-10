@@ -153,6 +153,14 @@ class AdminController
                 $this->deleteDieta();
             }
 
+            if ($method === 'GET' && $resource === 'dieta_usuario') {
+                $this->getDietaUsuario();
+            }
+
+            if ($method === 'POST' && $resource === 'dieta_usuario') {
+                $this->saveDietaUsuario();
+            }
+
             $this->jsonResponse(['ok' => false, 'error' => 'recurso_no_soportado'], 404);
 
         } catch (\PDOException $e) {
@@ -588,6 +596,41 @@ class AdminController
         }
 
         $this->model->deleteDieta($id);
+        $this->jsonResponse(['ok' => true]);
+    }
+
+    /**
+     * Obtiene la dieta asignada a un usuario.
+     */
+    private function getDietaUsuario(): void
+    {
+        $userId = (int) ($_GET['user_id'] ?? 0);
+        if ($userId <= 0) {
+            $this->jsonResponse(['ok' => false, 'error' => 'user_id_invalido'], 422);
+        }
+
+        $diet = $this->model->getDietaUsuario($userId);
+        $this->jsonResponse(['ok' => true, 'diet' => $diet]);
+    }
+
+    /**
+     * Guarda o actualiza la dieta asignada a un usuario.
+     */
+    private function saveDietaUsuario(): void
+    {
+        $userId = (int) ($_GET['user_id'] ?? 0);
+        if ($userId <= 0) {
+            $this->jsonResponse(['ok' => false, 'error' => 'user_id_invalido'], 422);
+        }
+
+        $data = json_decode((string) file_get_contents('php://input'), true);
+        if (!is_array($data) || !array_key_exists('id_dieta', $data)) {
+            $this->jsonResponse(['ok' => false, 'error' => 'datos_invalidos'], 400);
+        }
+
+        $idDieta = $data['id_dieta'] ? (int) $data['id_dieta'] : null;
+
+        $this->model->saveDietaUsuario($userId, $idDieta);
         $this->jsonResponse(['ok' => true]);
     }
 }
