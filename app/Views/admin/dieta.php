@@ -118,9 +118,9 @@
             <span class="dp-header-label dp-header-label--main">catálogo de dietas</span>
           </div>
 
-          <!-- Búsqueda -->
-          <div class="dp-catalog-search">
-            <div class="dp-search-bar">
+          <!-- Búsqueda y Agregar -->
+          <div class="dp-catalog-actions">
+            <div class="dp-search-bar" style="margin-bottom:0;">
               <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                 <circle cx="11" cy="11" r="8" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35" />
@@ -128,6 +128,12 @@
               <input type="text" id="dietSearch" class="dp-search-input" placeholder="Buscar dieta..."
                 oninput="filterDiets(this.value)" autocomplete="off">
             </div>
+            <button class="btn btn--primary dp-btn-add" onclick="openManageDietModal()">
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" />
+              </svg>
+              Nueva Dieta
+            </button>
           </div>
 
           <!-- Grid de dietas -->
@@ -160,6 +166,60 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
           </svg>
           Asignar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: gestionar dieta -->
+  <div class="gm-modal-overlay" id="manageDietModalOverlay" onclick="closeManageDietModal()">
+    <div class="gm-modal" onclick="event.stopPropagation()">
+      <div class="gm-modal__head">
+        <div>
+          <span class="gm-modal__title" id="manageModalTitle">Agregar Dieta</span>
+        </div>
+        <button class="gm-modal__close" onclick="closeManageDietModal()">&times;</button>
+      </div>
+      <div class="gm-modal__body" style="grid-template-columns: 1fr; gap: 14px;">
+        
+        <!-- Foto zone parecida a máquinas -->
+        <div class="gm-photo-zone" id="dietPhotoZone" onclick="document.getElementById('dietPhotoInput').click()">
+          <input type="file" id="dietPhotoInput" accept="image/*" onchange="previewDietPhoto(event)">
+          <div id="dietPhotoPlaceholder" style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+            <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 15l-5-5L5 21" />
+            </svg>
+            <span class="gm-photo-zone__label">Subir foto<br>de la dieta</span>
+          </div>
+          <img id="dietPhotoPreview" src="" alt="preview" style="display:none;">
+        </div>
+
+        <div class="gm-form-side">
+          <div class="gm-form-group">
+            <label class="gm-form-label">Nombre de la Dieta</label>
+            <input type="text" id="dietTypeInput" class="gm-form-input" placeholder="Ej: Dieta Keto">
+          </div>
+          <div class="gm-form-group">
+            <label class="gm-form-label">Descripción</label>
+            <textarea id="dietDescInput" class="gm-form-textarea" placeholder="Descripción de la dieta..."></textarea>
+          </div>
+        </div>
+
+      </div>
+      <div class="gm-modal__foot">
+        <button class="gm-btn gm-btn--danger" id="deleteDietBtn" onclick="deleteDiet()" style="display:none; margin-right:auto; text-transform:uppercase; letter-spacing:1px; padding: 12px 24px;">
+           <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+           </svg> ELIMINAR
+        </button>
+        <button class="gm-btn gm-btn--ghost" onclick="closeManageDietModal()">Cancelar</button>
+        <button class="gm-btn gm-btn--primary" onclick="saveManageDiet()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          Guardar
         </button>
       </div>
     </div>
@@ -375,17 +435,23 @@
         const typeClass = getDietTypeClass(diet.id_dieta);
         const typeLabel = getDietTypeLabel(diet.id_dieta);
 
+        const heroContent = diet.foto_url 
+            ? `<img src="${diet.foto_url}" class="dp-hero-image">`
+            : `<div class="dp-diet-card__hero-icon">${getDietIcon(diet.id_dieta)}</div>`;
+
         return `
-          <div class="dp-diet-card ${isAssigned ? 'dp-diet-card--assigned' : ''}"
-               onclick="openModal(${diet.id_dieta})" title="${name}">
+          <div class="dp-diet-card ${isAssigned ? 'dp-diet-card--assigned' : ''}" style="position:relative;" title="${name}">
             <span class="dp-diet-card__chip">Asignada</span>
-            <div class="dp-diet-card__accent"></div>
-            <div class="dp-diet-card__hero">
-              <div class="dp-diet-card__hero-icon">
-                ${getDietIcon(diet.id_dieta)}
-              </div>
+            <button class="dp-diet-edit-btn" onclick="openManageDietModal(${diet.id_dieta}); event.stopPropagation();" title="Editar Dieta">
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+            </button>
+            <div class="dp-diet-card__accent" onclick="openModal(${diet.id_dieta})"></div>
+            <div class="dp-diet-card__hero" onclick="openModal(${diet.id_dieta})">
+              ${heroContent}
             </div>
-            <div class="dp-diet-card__info">
+            <div class="dp-diet-card__info" onclick="openModal(${diet.id_dieta})">
               <div class="dp-diet-card__name">${name}</div>
               <div class="dp-diet-card__desc">${desc}</div>
               <span class="dp-diet-card__type ${typeClass}">${typeLabel}</span>
@@ -457,10 +523,13 @@
       const userName = currentUser.nombre || `Usuario ${currentUser.id_usuario}`;
 
       document.getElementById('modalTitle').textContent = 'Asignar dieta';
+      
+      const heroContent = pendingDiet.foto_url 
+            ? `<img src="${pendingDiet.foto_url}" class="dp-hero-image">`
+            : `<div class="dp-modal__preview-icon">${getDietIcon(pendingDiet.id_dieta)}</div>`;
+
       document.getElementById('modalPreview').innerHTML = `
-        <div class="dp-modal__preview-icon">
-          ${getDietIcon(pendingDiet.id_dieta)}
-        </div>
+        ${heroContent}
         <div>
           <div class="dp-modal__preview-name">${name}</div>
           <div class="dp-modal__preview-desc">${desc}</div>
@@ -486,6 +555,123 @@
       renderAssigned();
       renderCatalog(filteredDiets);
       saveDiet();
+    }
+
+    /* ══ GESTIÓN DEL CATÁLOGO DE DIETAS (CRUD) ══ */
+    let currentEditDiet = null;
+    let newDietPhotoBase64 = null;
+
+    function openManageDietModal(dietId = null) {
+      currentEditDiet = dietId ? allDiets.find(d => d.id_dieta == dietId) : null;
+      newDietPhotoBase64 = null;
+
+      document.getElementById('manageModalTitle').textContent = currentEditDiet ? 'Editar Dieta' : 'Nueva Dieta';
+      document.getElementById('deleteDietBtn').style.display = currentEditDiet ? 'block' : 'none';
+
+      document.getElementById('dietTypeInput').value = currentEditDiet ? (currentEditDiet.tipo || currentEditDiet.nombre || '') : '';
+      document.getElementById('dietDescInput').value = currentEditDiet ? (currentEditDiet.descripcion || '') : '';
+      document.getElementById('dietPhotoInput').value = '';
+
+      const preview = document.getElementById('dietPhotoPreview');
+      const placeholder = document.getElementById('dietPhotoPlaceholder');
+      
+      if (currentEditDiet && currentEditDiet.foto_url) {
+        preview.src = currentEditDiet.foto_url;
+        preview.style.display = 'block';
+        placeholder.style.display = 'none';
+      } else {
+        preview.src = '';
+        preview.style.display = 'none';
+        placeholder.style.display = 'flex';
+      }
+
+      document.getElementById('manageDietModalOverlay').classList.add('visible');
+    }
+
+    function closeManageDietModal() {
+      document.getElementById('manageDietModalOverlay').classList.remove('visible');
+      currentEditDiet = null;
+      newDietPhotoBase64 = null;
+    }
+
+    function previewDietPhoto(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        newDietPhotoBase64 = ev.target.result;
+        const preview = document.getElementById('dietPhotoPreview');
+        preview.src = newDietPhotoBase64;
+        preview.style.display = 'block';
+        document.getElementById('dietPhotoPlaceholder').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function saveManageDiet() {
+      const tipo = document.getElementById('dietTypeInput').value.trim();
+      const descripcion = document.getElementById('dietDescInput').value.trim();
+
+      if (!tipo) {
+        alert('El nombre de la dieta es obligatorio.');
+        return;
+      }
+
+      const payload = { tipo, descripcion };
+      if (newDietPhotoBase64) payload.foto = newDietPhotoBase64;
+
+      try {
+        if (currentEditDiet) {
+          await apiRequest(`dietas&id=${currentEditDiet.id_dieta}`, {
+            method: 'PUT',
+            body: JSON.stringify(payload),
+          });
+          // Update local
+          Object.assign(currentEditDiet, payload);
+          if (newDietPhotoBase64) currentEditDiet.foto_url = newDietPhotoBase64;
+        } else {
+          const res = await apiRequest('dietas', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+          });
+          const newDiet = {
+            id_dieta: res.id || Date.now(),
+            tipo: payload.tipo,
+            descripcion: payload.descripcion,
+            foto_url: newDietPhotoBase64 || null
+          };
+          allDiets.unshift(newDiet);
+        }
+        
+        filterDiets(document.getElementById('dietSearch').value);
+        if(assignedDiet && currentEditDiet && assignedDiet.id_dieta == currentEditDiet.id_dieta) {
+           assignedDiet = currentEditDiet;
+           renderAssigned();
+        }
+        closeManageDietModal();
+      } catch (e) {
+        alert('Hubo un error al guardar la dieta.');
+      }
+    }
+
+    async function deleteDiet() {
+      if (!currentEditDiet) return;
+      if (!confirm(`¿Estás seguro de eliminar la dieta "${currentEditDiet.tipo}"?`)) return;
+
+      try {
+        await apiRequest(`dietas&id=${currentEditDiet.id_dieta}`, {
+          method: 'DELETE',
+        });
+        allDiets = allDiets.filter(d => d.id_dieta != currentEditDiet.id_dieta);
+        filterDiets(document.getElementById('dietSearch').value);
+        if (assignedDiet && assignedDiet.id_dieta == currentEditDiet.id_dieta) {
+            assignedDiet = null;
+            renderAssigned();
+        }
+        closeManageDietModal();
+      } catch (e) {
+        alert('No se pudo eliminar la dieta.');
+      }
     }
 
     /* ══ GUARDAR ══ */

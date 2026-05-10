@@ -1,9 +1,9 @@
-/* =============================================
-   HouseGYM — Admin Dieta Personalizada Styles
+﻿/* =============================================
+   HouseGYM â€” Admin Dieta Personalizada Styles
    Extends admin.css / dashboard.css
    ============================================= */
 
-/* ══ PAGE TITLE ══ */
+/* â•â• PAGE TITLE â•â• */
 .page-title { margin-bottom: 28px; }
 .page-title h1 {
   font-family: 'Outfit', sans-serif;
@@ -12,7 +12,7 @@
 .page-title h1 span { color: var(--red); }
 .page-subtitle { font-size: 13px; color: var(--gray-dimmer); margin-top: 4px; }
 
-/* ══ LAYOUT ══ */
+/* â•â• LAYOUT â•â• */
 .dp-layout {
   display: grid;
   grid-template-columns: 380px 1fr;
@@ -20,7 +20,7 @@
   align-items: start;
 }
 
-/* ══ PANELES BASE ══ */
+/* â•â• PANELES BASE â•â• */
 .dp-panel {
   background-color: var(--black-card);
   border: 1px solid var(--gray-border2);
@@ -30,7 +30,7 @@
   flex-direction: column;
 }
 
-/* ══ PANEL HEADER ══ */
+/* â•â• PANEL HEADER â•â• */
 .dp-panel-header {
   display: flex;
   align-items: center;
@@ -51,7 +51,7 @@
 }
 .dp-header-label--main { font-size: 12px; color: var(--gray-dim); }
 
-/* ── Selector de usuario ── */
+/* â”€â”€ Selector de usuario â”€â”€ */
 .dp-header-user {
   position: relative;
   display: flex; align-items: center; gap: 8px;
@@ -70,7 +70,7 @@
 }
 .dp-header-user__btn:hover { color: var(--gray-light); }
 
-/* ── Dropdown picker usuarios ── */
+/* â”€â”€ Dropdown picker usuarios â”€â”€ */
 .dp-user-picker {
   position: absolute;
   top: calc(100% + 8px); left: 0; z-index: 60;
@@ -124,7 +124,7 @@
   color: var(--gray-faint); text-align: center;
 }
 
-/* ══ PANEL IZQUIERDO ══ */
+/* â•â• PANEL IZQUIERDO â•â• */
 .dp-panel--left { max-height: calc(100vh - 180px); }
 
 .dp-assigned-wrap {
@@ -135,7 +135,7 @@
 .dp-assigned-wrap::-webkit-scrollbar { width: 4px; }
 .dp-assigned-wrap::-webkit-scrollbar-thumb { background: var(--gray-mid); border-radius: 2px; }
 
-/* Estado vacío */
+/* Estado vacÃ­o */
 .dp-empty-state {
   flex: 1; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
@@ -151,7 +151,7 @@
   font-size: 13px; color: var(--gray-faint);
 }
 
-/* ── Card de dieta asignada ── */
+/* â”€â”€ Card de dieta asignada â”€â”€ */
 .dp-assigned-card {
   background: var(--gray-dark);
   border: 1px solid var(--gray-border2);
@@ -250,10 +250,10 @@
 }
 .dp-save-btn:active { transform: translateY(0); }
 
-/* ══ PANEL DERECHO: catálogo de dietas ══ */
+/* â•â• PANEL DERECHO: catÃ¡logo de dietas â•â• */
 .dp-panel--right { max-height: calc(100vh - 180px); }
 
-/* Barra búsqueda */
+/* Barra bÃºsqueda */
 .dp-catalog-search {
   display: flex; align-items: center; gap: 8px;
   padding: 12px 14px;
@@ -300,7 +300,7 @@
   text-align: center; font-size: 13px; color: var(--gray-faint);
 }
 
-/* Card de dieta en catálogo */
+/* Card de dieta en catÃ¡logo */
 .dp-diet-card {
   background: var(--gray-dark);
   border: 1px solid var(--gray-border2);
@@ -333,7 +333,7 @@
 }
 .dp-diet-card--assigned .dp-diet-card__chip { display: block; }
 
-/* Imagen / ícono hero */
+/* Imagen / Ã­cono hero */
 .dp-diet-card__hero {
   width: 100%;
   aspect-ratio: 4 / 3;
@@ -379,7 +379,7 @@
   font-size: 13px; font-weight: 700;
   color: var(--white-soft);
   text-transform: uppercase; letter-spacing: .3px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; white-space: normal;
 }
 .dp-diet-card__desc {
   font-size: 10.5px; color: var(--gray-faint);
@@ -395,7 +395,7 @@
 .dp-diet-card__type--hipo   { background: rgba(59,130,246,.1); color: #3b82f6; border: 1px solid rgba(59,130,246,.2); }
 .dp-diet-card__type--custom { background: rgba(168,85,247,.1); color: #a855f7; border: 1px solid rgba(168,85,247,.2); }
 
-/* ══ MODAL CONFIRMAR ASIGNACIÓN ══ */
+/* â•â• MODAL CONFIRMAR ASIGNACIÃ“N â•â• */
 .dp-modal-overlay {
   position: fixed; inset: 0; z-index: 100;
   background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
@@ -463,7 +463,7 @@
   padding: 14px 20px; border-top: 1px solid var(--gray-border);
 }
 
-/* Botones genéricos reutilizados */
+/* Botones genÃ©ricos reutilizados */
 .btn {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 8px 16px; border-radius: 8px;
@@ -484,7 +484,7 @@
   transform: translateY(-1px);
 }
 
-/* ══ RESPONSIVE ══ */
+/* â•â• RESPONSIVE â•â• */
 @media (max-width: 1200px) {
   .dp-layout { grid-template-columns: 320px 1fr; }
   .dp-catalog-grid { grid-template-columns: repeat(2, 1fr); }
@@ -498,3 +498,89 @@
 @media (max-width: 520px) {
   .dp-catalog-grid { grid-template-columns: repeat(2, 1fr); }
 }
+/* -- MODAL DE GESTIÓN (Heredado de ejercicios) -- */
+.gm-modal-overlay {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(3px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+}
+.gm-modal-overlay.visible { opacity: 1; pointer-events: auto; }
+.gm-modal {
+  background: var(--black-card); border: 1px solid var(--gray-border2);
+  border-radius: 18px; width: 100%; max-width: 450px; max-height: 90vh;
+  overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--gray-mid) transparent;
+  transform: translateY(12px) scale(0.98); transition: transform 0.25s ease;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+.gm-modal-overlay.visible .gm-modal { transform: translateY(0) scale(1); }
+.gm-modal__head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px 16px; border-bottom: 1px solid var(--gray-border);
+  position: sticky; top: 0; background: var(--black-card); z-index: 2;
+}
+.gm-modal__title { font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: var(--white); }
+.gm-modal__close {
+  background: var(--gray-dark); border: 1px solid var(--gray-border2);
+  color: var(--gray-light); width: 32px; height: 32px; border-radius: 8px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 18px; transition: color 0.2s, background 0.2s;
+}
+.gm-modal__close:hover { color: var(--white); background: var(--gray-mid); }
+.gm-modal__body { display: flex; flex-direction: column; gap: 16px; padding: 20px; }
+.gm-modal__foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 14px 20px 18px; border-top: 1px solid var(--gray-border);
+}
+/* Photo zone styles */
+.gm-photo-zone {
+  aspect-ratio: 4 / 3; background: var(--gray-dark); border: 2px dashed var(--gray-border2);
+  border-radius: 12px; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 10px; cursor: pointer; overflow: hidden;
+  position: relative; transition: border-color 0.2s, background 0.2s;
+}
+.gm-photo-zone:hover { border-color: rgba(229, 26, 44, 0.4); background: rgba(229, 26, 44, 0.03); }
+.gm-photo-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.gm-photo-zone__label { font-size: 12px; font-weight: 600; color: var(--gray-dim); text-align: center; pointer-events: none; }
+.gm-photo-zone img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; border-radius: 10px; }
+/* Form elements */
+.gm-form-label { font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--gray-dim); margin-bottom: 6px; display: block; }
+.gm-form-input, .gm-form-textarea {
+  background: var(--gray-dark); border: 1px solid var(--gray-border2); border-radius: 10px;
+  padding: 10px 14px; font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--white-soft); outline: none; width: 100%;
+}
+.gm-form-input:focus, .gm-form-textarea:focus { border-color: rgba(229, 26, 44, 0.4); box-shadow: 0 0 0 3px rgba(229, 26, 44, 0.06); }
+.gm-form-textarea { resize: vertical; min-height: 90px; }
+
+/* Helper classes for manage UI */
+.dp-catalog-actions { display: flex; gap: 10px; margin-bottom: 16px; align-items: center; }
+.dp-btn-add { padding: 0 16px; font-size: 13px; display: flex; align-items: center; gap: 6px; height: 38px; }
+.dp-diet-edit-btn {
+  position: absolute; top: 8px; right: 8px; z-index: 10;
+  background: rgba(0,0,0,0.4); backdrop-filter: blur(2px);
+  border: none; border-radius: 4px; padding: 6px; color: #fff;
+  cursor: pointer; display: flex; transition: background 0.2s;
+}
+.dp-diet-edit-btn:hover { background: rgba(0,0,0,0.6); }
+.dp-hero-image { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+/* Modal Buttons */
+.gm-btn {
+  display: flex; align-items: center; gap: 7px;
+  padding: 9px 18px; border-radius: 10px;
+  font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 600;
+  cursor: pointer; transition: opacity 0.2s, transform 0.15s; border: none;
+}
+.gm-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+.gm-btn:active { transform: translateY(0); }
+.gm-btn--primary {
+  background: linear-gradient(135deg, var(--red-bright), var(--red-dark));
+  color: var(--white); box-shadow: 0 4px 14px rgba(229, 26, 44, 0.25);
+}
+.gm-btn--ghost {
+  background: var(--gray-dark); border: 1px solid var(--gray-border2); color: var(--gray-light);
+}
+.gm-btn--ghost:hover { color: var(--white); background: var(--gray-mid); opacity: 1; }
+.gm-btn--danger {
+  background: var(--red); color: var(--white); border: none; box-shadow: 0 4px 14px rgba(229, 26, 44, 0.25);
+}
+.gm-btn--danger:hover { opacity: 0.85; transform: translateY(-1px); }

@@ -550,12 +550,13 @@ class AdminController
 
         $tipo = trim((string) ($data['tipo'] ?? ''));
         $descripcion = trim((string) ($data['descripcion'] ?? ''));
+        $foto = isset($data['foto']) ? (string) $data['foto'] : null;
 
         if ($tipo === '') {
             $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
         }
 
-        $id = $this->model->addDieta($tipo, $descripcion);
+        $id = $this->model->addDieta($tipo, $descripcion, $foto);
         $this->jsonResponse(['ok' => true, 'id' => $id]);
     }
 
@@ -576,12 +577,13 @@ class AdminController
 
         $tipo = trim((string) ($data['tipo'] ?? ''));
         $descripcion = trim((string) ($data['descripcion'] ?? ''));
+        $foto = isset($data['foto']) ? (string) $data['foto'] : null;
 
         if ($tipo === '') {
             $this->jsonResponse(['ok' => false, 'error' => 'faltan_datos'], 422);
         }
 
-        $this->model->updateDieta($id, $tipo, $descripcion);
+        $this->model->updateDieta($id, $tipo, $descripcion, $foto);
         $this->jsonResponse(['ok' => true]);
     }
 

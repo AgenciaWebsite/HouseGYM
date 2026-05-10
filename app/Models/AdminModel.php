@@ -669,20 +669,25 @@ class AdminModel
     /**
      * Agrega una nueva dieta
      */
-    public function addDieta(string $tipo, ?string $descripcion): int
+    public function addDieta(string $tipo, ?string $descripcion, ?string $fotoBase64 = null): int
     {
-        $stmt = $this->pdo->prepare('INSERT INTO dietas (tipo, descripcion) VALUES (?, ?)');
-        $stmt->execute([$tipo, $descripcion]);
+        $stmt = $this->pdo->prepare('INSERT INTO dietas (tipo, descripcion, foto_url) VALUES (?, ?, ?)');
+        $stmt->execute([$tipo, $descripcion, $fotoBase64]);
         return (int) $this->pdo->lastInsertId();
     }
 
     /**
      * Actualiza una dieta existente
      */
-    public function updateDieta(int $id, string $tipo, ?string $descripcion): void
+    public function updateDieta(int $id, string $tipo, ?string $descripcion, ?string $fotoBase64 = null): void
     {
-        $stmt = $this->pdo->prepare('UPDATE dietas SET tipo = ?, descripcion = ? WHERE id_dieta = ?');
-        $stmt->execute([$tipo, $descripcion, $id]);
+        if ($fotoBase64 !== null) {
+            $stmt = $this->pdo->prepare('UPDATE dietas SET tipo = ?, descripcion = ?, foto_url = ? WHERE id_dieta = ?');
+            $stmt->execute([$tipo, $descripcion, $fotoBase64, $id]);
+        } else {
+            $stmt = $this->pdo->prepare('UPDATE dietas SET tipo = ?, descripcion = ? WHERE id_dieta = ?');
+            $stmt->execute([$tipo, $descripcion, $id]);
+        }
     }
 
     /**
