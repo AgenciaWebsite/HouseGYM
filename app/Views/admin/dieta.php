@@ -79,7 +79,10 @@
           </div>
 
           <!-- Dieta actualmente asignada -->
-          <div class="dp-assigned-wrap" id="dpAssignedWrap">
+          <div class="dp-assigned-wrap" id="dpAssignedWrap" 
+               ondragover="handleDragOver(event)" 
+               ondragleave="handleDragLeave(event)" 
+               ondrop="handleDrop(event)">
             <div class="dp-empty-state" id="dpEmptyState">
               <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.2">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -433,7 +436,11 @@
           : `<div class="dp-diet-card__hero-icon">${getDietIcon(diet.id_dieta)}</div>`;
 
         return `
-          <div class="dp-diet-card ${isAssigned ? 'dp-diet-card--assigned' : ''}" style="position:relative;" title="${name}">
+          <div class="dp-diet-card ${isAssigned ? 'dp-diet-card--assigned' : ''}" 
+               style="position:relative;" title="${name}"
+               draggable="true" 
+               ondragstart="handleDragStart(event, ${diet.id_dieta})"
+               ondragend="handleDragEnd(event)">
             <span class="dp-diet-card__chip">Asignada</span>
             <button class="dp-diet-edit-btn" onclick="openManageDietModal(${diet.id_dieta}); event.stopPropagation();" title="Editar Dieta">
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -501,6 +508,28 @@
         <path stroke-linecap="round" stroke-linejoin="round"
           d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
       </svg>`;
+    }
+
+    /* ══ DRAG AND DROP ══ */
+    function handleDragStart(e, dietId) {
+      e.dataTransfer.setData('text/plain', dietId);
+      e.currentTarget.style.opacity = '0.5';
+    }
+    function handleDragEnd(e) {
+      e.currentTarget.style.opacity = '1';
+    }
+    function handleDragOver(e) {
+      e.preventDefault();
+      document.getElementById('dpAssignedWrap').classList.add('dp-dragover');
+    }
+    function handleDragLeave(e) {
+      document.getElementById('dpAssignedWrap').classList.remove('dp-dragover');
+    }
+    function handleDrop(e) {
+      e.preventDefault();
+      document.getElementById('dpAssignedWrap').classList.remove('dp-dragover');
+      const dietId = e.dataTransfer.getData('text/plain');
+      if (dietId) openModal(parseInt(dietId));
     }
 
     /* ══ MODAL CONFIRMAR ASIGNACIÓN ══ */
