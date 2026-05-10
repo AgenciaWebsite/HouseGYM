@@ -28,7 +28,7 @@
 /* â•â• LAYOUT â•â• */
 .dp-layout {
   display: grid;
-  grid-template-columns: 380px 1fr;
+  grid-template-columns: 420px 1fr;
   gap: 20px;
   align-items: start;
 }
