@@ -41,7 +41,7 @@ class UsuarioModel
      */
     public function getUserDiet(int $idDieta): ?array
     {
-        $stmt = $this->pdo->prepare('SELECT tipo, descripcion FROM dietas WHERE id_dieta = ? LIMIT 1');
+        $stmt = $this->pdo->prepare('SELECT tipo, descripcion, foto_url FROM dietas WHERE id_dieta = ? LIMIT 1');
         $stmt->execute([$idDieta]);
         $result = $stmt->fetch();
         return $result ?: null;

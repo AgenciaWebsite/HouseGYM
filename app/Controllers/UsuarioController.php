@@ -150,11 +150,10 @@ class UsuarioController
         echo json_encode([
             'ok' => true,
             'diet' => [
-                'id_dieta' => (int)$profile['id_dieta'],
-                'nombre' => $dietDetails ? $dietDetails['tipo'] : 'Personalizada',
+                'id_dieta'    => (int)$profile['id_dieta'],
+                'nombre'      => $dietDetails ? $dietDetails['tipo'] : 'Personalizada',
                 'descripcion' => $dietDetails ? $dietDetails['descripcion'] : '',
-                'archivo_url' => null,
-                'archivo_tipo' => null
+                'foto_url'    => $dietDetails ? ($dietDetails['foto_url'] ?? null) : null,
             ]
         ]);
     }
