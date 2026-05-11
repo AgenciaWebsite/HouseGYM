@@ -980,7 +980,8 @@
 .gm-modal__foot {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
+  flex-wrap: wrap;
   gap: 10px;
   padding: 14px 20px 18px;
   border-top: 1px solid var(--gray-border);
@@ -1165,4 +1166,59 @@
 .gm-btn--danger:hover {
   opacity: 0.85;
   transform: translateY(-1px);
+}
+
+/* ── Photo zone overlay (cambiar foto) ── */
+.gm-photo-zone__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--white);
+  border-radius: 10px;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.gm-photo-zone:hover .gm-photo-zone__overlay {
+  display: flex;
+}
+
+/* ── Photo zone hint text ── */
+.gm-photo-zone__hint {
+  font-size: 10.5px;
+  color: var(--gray-faint);
+  pointer-events: none;
+}
+
+/* ── Form group wrapper ── */
+.gm-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Modal feedback messages ── */
+.gm-feedback {
+  font-size: 12.5px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: none;
+  flex: 1;
+}
+
+.gm-feedback--success {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.gm-feedback--error {
+  background: rgba(229, 26, 44, 0.1);
+  color: var(--red-bright);
+  border: 1px solid rgba(229, 26, 44, 0.2);
 }

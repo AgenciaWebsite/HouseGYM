@@ -175,17 +175,26 @@
       <div class="gm-modal__body" style="grid-template-columns: 1fr; gap: 14px;">
 
         <!-- Foto zone parecida a máquinas -->
-        <div class="gm-photo-zone" id="dietPhotoZone" onclick="document.getElementById('dietPhotoInput').click()">
-          <input type="file" id="dietPhotoInput" accept="image/*" onchange="previewDietPhoto(event)">
-          <div id="dietPhotoPlaceholder" style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+        <div class="gm-photo-zone" id="dietPhotoZone">
+          <input type="file" id="dietPhotoInput" accept="image/*" onchange="previewDietPhoto(event)"
+            style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:5;">
+          <div id="dietPhotoPlaceholder" style="display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;">
             <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
               <rect x="3" y="3" width="18" height="18" rx="2" />
               <circle cx="8.5" cy="8.5" r="1.5" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 15l-5-5L5 21" />
             </svg>
             <span class="gm-photo-zone__label">Subir foto<br>de la dieta</span>
+            <span class="gm-photo-zone__hint">JPG, PNG · Máx 10 MB</span>
           </div>
-          <img id="dietPhotoPreview" src="" alt="preview" style="display:none;">
+          <img id="dietPhotoPreview" src="" alt="preview" style="display:none;pointer-events:none;">
+          <div class="gm-photo-zone__overlay" id="dietPhotoOverlay" style="pointer-events:none;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15.232 5.232l3.536 3.536M9 13l6.5-6.5a2.121 2.121 0 013 3L12 16H9v-3z" />
+            </svg>
+            Cambiar foto
+          </div>
         </div>
 
         <div class="gm-form-side">
@@ -208,8 +217,9 @@
               d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
           </svg> ELIMINAR
         </button>
+        <div class="gm-feedback" id="dietModalFeedback"></div>
         <button class="gm-btn gm-btn--ghost" onclick="closeManageDietModal()">Cancelar</button>
-        <button class="gm-btn gm-btn--primary" onclick="saveManageDiet()">
+        <button class="gm-btn gm-btn--primary" id="dietSaveBtn" onclick="saveManageDiet()">
           <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
           </svg>
@@ -238,6 +248,24 @@
       }
       const data = await response.json();
       if (!response.ok || !data.ok) throw new Error(data.error || 'request_failed');
+      return data;
+    }
+
+    /* ── Petición multipart (para subir fotos) ── */
+    async function apiFormRequest(resource, formData) {
+      // NO poner Content-Type: el navegador lo pone con el boundary correcto
+      const res = await fetch(`${API_URL}?route=admin_api&resource=${resource}`, {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: formData,
+      });
+      let data;
+      try { data = await res.json(); } catch { data = {}; }
+      if (!res.ok || data.ok === false) {
+        const err = new Error(data.msg || `HTTP ${res.status}`);
+        err.serverData = data;
+        throw err;
+      }
       return data;
     }
 
@@ -579,11 +607,11 @@
 
     /* ══ GESTIÓN DEL CATÁLOGO DE DIETAS (CRUD) ══ */
     let currentEditDiet = null;
-    let newDietPhotoBase64 = null;
+    let dietPhotoFile = null; // File object seleccionado por el usuario
 
     function openManageDietModal(dietId = null) {
       currentEditDiet = dietId ? allDiets.find(d => d.id_dieta == dietId) : null;
-      newDietPhotoBase64 = null;
+      dietPhotoFile = null;
 
       document.getElementById('manageModalTitle').textContent = currentEditDiet ? 'Editar Dieta' : 'Nueva Dieta';
       document.getElementById('deleteDietBtn').style.display = currentEditDiet ? 'block' : 'none';
@@ -594,15 +622,18 @@
 
       const preview = document.getElementById('dietPhotoPreview');
       const placeholder = document.getElementById('dietPhotoPlaceholder');
+      const overlay = document.getElementById('dietPhotoOverlay');
 
       if (currentEditDiet && currentEditDiet.foto_url) {
         preview.src = currentEditDiet.foto_url;
         preview.style.display = 'block';
         placeholder.style.display = 'none';
+        if (overlay) overlay.style.display = 'flex';
       } else {
         preview.src = '';
         preview.style.display = 'none';
         placeholder.style.display = 'flex';
+        if (overlay) overlay.style.display = 'none';
       }
 
       document.getElementById('manageDietModalOverlay').classList.add('visible');
@@ -611,21 +642,24 @@
     function closeManageDietModal() {
       document.getElementById('manageDietModalOverlay').classList.remove('visible');
       currentEditDiet = null;
-      newDietPhotoBase64 = null;
+      dietPhotoFile = null;
     }
 
     function previewDietPhoto(e) {
       const file = e.target.files[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = ev => {
-        newDietPhotoBase64 = ev.target.result;
-        const preview = document.getElementById('dietPhotoPreview');
-        preview.src = newDietPhotoBase64;
-        preview.style.display = 'block';
-        document.getElementById('dietPhotoPlaceholder').style.display = 'none';
-      };
-      reader.readAsDataURL(file);
+      // Guardar el File object para enviarlo como multipart
+      dietPhotoFile = file;
+      // Mostrar preview con createObjectURL (más eficiente que base64)
+      const preview = document.getElementById('dietPhotoPreview');
+      if (preview._objectUrl) URL.revokeObjectURL(preview._objectUrl);
+      const objectUrl = URL.createObjectURL(file);
+      preview._objectUrl = objectUrl;
+      preview.src = objectUrl;
+      preview.style.display = 'block';
+      document.getElementById('dietPhotoPlaceholder').style.display = 'none';
+      const overlay = document.getElementById('dietPhotoOverlay');
+      if (overlay) overlay.style.display = 'flex';
     }
 
     async function saveManageDiet() {
@@ -637,30 +671,46 @@
         return;
       }
 
-      const payload = { tipo, descripcion };
-      if (newDietPhotoBase64) payload.foto = newDietPhotoBase64;
+      // Construir FormData para enviar como multipart (necesario para el archivo)
+      const fd = new FormData();
+      fd.append('tipo', tipo);
+      fd.append('descripcion', descripcion);
+      if (dietPhotoFile) {
+        fd.append('foto', dietPhotoFile);
+      }
+
+      // Deshabilitar botón mientras se procesa (puede tardar por Cloudinary)
+      const saveBtn = document.getElementById('dietSaveBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg> Guardando...';
 
       try {
+        let res;
         if (currentEditDiet) {
-          await apiRequest(`dietas&id=${currentEditDiet.id_dieta}`, {
-            method: 'PUT',
-            body: JSON.stringify(payload),
-          });
-          // Update local
-          Object.assign(currentEditDiet, payload);
-          if (newDietPhotoBase64) currentEditDiet.foto_url = newDietPhotoBase64;
+          // Editar: usar _method=PUT con POST multipart
+          fd.append('_method', 'PUT');
+          res = await apiFormRequest(
+            `dietas&id=${encodeURIComponent(currentEditDiet.id_dieta)}`,
+            fd
+          );
+          // Actualizar objeto local
+          const fotoActualizada = res.foto_url ?? (dietPhotoFile ? null : currentEditDiet.foto_url);
+          Object.assign(currentEditDiet, { tipo, descripcion });
+          if (fotoActualizada !== null) currentEditDiet.foto_url = fotoActualizada;
+          allDiets = allDiets.map(d =>
+            d.id_dieta == currentEditDiet.id_dieta ? { ...d, ...currentEditDiet } : d
+          );
+          showDietModalMsg('Dieta actualizada correctamente.');
         } else {
-          const res = await apiRequest('dietas', {
-            method: 'POST',
-            body: JSON.stringify(payload),
-          });
+          res = await apiFormRequest('dietas', fd);
           const newDiet = {
             id_dieta: res.id || Date.now(),
-            tipo: payload.tipo,
-            descripcion: payload.descripcion,
-            foto_url: newDietPhotoBase64 || null
+            tipo: tipo,
+            descripcion: descripcion,
+            foto_url: res.foto_url || null,
           };
           allDiets.unshift(newDiet);
+          showDietModalMsg('Dieta agregada correctamente.');
         }
 
         filterDiets(document.getElementById('dietSearch').value);
@@ -668,10 +718,25 @@
           assignedDiet = currentEditDiet;
           renderAssigned();
         }
-        closeManageDietModal();
+        setTimeout(closeManageDietModal, 1400);
       } catch (e) {
-        alert('Hubo un error al guardar la dieta.');
+        const msg = e.message && e.message !== 'Failed to fetch'
+          ? e.message
+          : 'Hubo un error al guardar la dieta.';
+        showDietModalMsg(msg, true);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Guardar';
       }
+    }
+
+    function showDietModalMsg(text, isError = false) {
+      const el = document.getElementById('dietModalFeedback');
+      if (!el) return;
+      el.textContent = text;
+      el.className = `gm-feedback ${isError ? 'gm-feedback--error' : 'gm-feedback--success'}`;
+      el.style.display = 'block';
+      if (!isError) setTimeout(() => { el.style.display = 'none'; }, 3000);
     }
 
     async function deleteDiet() {
